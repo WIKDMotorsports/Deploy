@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Dark Map with Leaflet</title>
+
+    <!-- 1. Include Leaflet's CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+    <style>
+        /* The component will now fill its parent container in Framer */
+        html, body, #container {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Main container for the map and text block */
+        #container {
+            display: flex;
+            border: 1px solid #000000; /* Set border to black to blend with the page */
+            background-color: #000000;
+        }
+
+        /* New wrapper for the map and its overlay */
+        #map-wrapper {
+            width: 75%;
+            height: 100%;
+            position: relative; /* Establishes a positioning context for the overlay */
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            /* This makes the map tiles look sharper on high-res screens */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        /* New dedicated element for the border overlay */
+        #map-border-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 1); /* Updated inner stroke to match new background */
+            pointer-events: none; /* Allows clicks to go through to the map */
+            z-index: 1001; /* High z-index to ensure it's on top of everything, including Leaflet controls */
+        }
+
+
+        /* Container for the text block */
+        #text-container {
+            width: 25%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the text block vertically */
+            color: #f0f0f0;
+            background-color: #000000; /* Match container background */
+        }
+
+        #text-block {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        #text-block h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .directions-button {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 8px 16px;
+            border: 1px solid #ff3b30;
+            color: #ff3b30;
+            background-color: transparent;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .directions-button:hover {
+            background-color: #ff3b30;
+            color: #ffffff;
+        }
+
+        /* --- Custom Ping Marker Styles --- */
+        .ping-container {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ping-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #ff3b30;
+            border-radius: 50%;
+            box-shadow: 0 0 8px 3px rgba(255, 59, 48, 0.7);
+            position: absolute;
+            transform: scale(1);
+            opacity: 1;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.1s, opacity 0.3s ease 0.1s;
+        }
+        .ping-circle {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ff3b30;
+            border-radius: 50%;
+            box-shadow: inset 0 0 4px 1px rgba(255, 59, 48, 0.5), 0 0 8px 2px rgba(255, 59, 48, 0.7);
+            position: absolute;
+            animation: ping-animation 0.75s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s ease;
+        }
+        
+        .crosshair-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .crosshair-dot {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background-color: #ff3b30;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.1s, opacity 0.4s ease 0.1s;
+        }
+        .crosshair-line {
+            position: absolute;
+            background-color: #ff3b30;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dot-top .crosshair-line { width: 1px; height: 10px; bottom: 0; left: 0; transform-origin: bottom; transform: scaleY(0); }
+        .dot-bottom .crosshair-line { width: 1px; height: 10px; top: 0; left: 0; transform-origin: top; transform: scaleY(0); }
+        .dot-left .crosshair-line { width: 10px; height: 1px; right: 0; top: 0; transform-origin: right; transform: scaleX(0); }
+        .dot-right .crosshair-line { width: 10px; height: 1px; left: 0; top: 0; transform-origin: left; transform: scaleX(0); }
+
+
+        /* HOVER STATE STYLES */
+        .ping-container.crosshair-active .ping-circle {
+            opacity: 0;
+        }
+        .ping-container.crosshair-active .ping-dot {
+            transform: scale(0.5);
+        }
+        .ping-container.crosshair-active .crosshair-wrapper {
+            animation: rotate-animation 4s linear infinite;
+        }
+        .ping-container.crosshair-active .crosshair-dot {
+            opacity: 1;
+        }
+        .ping-container.crosshair-active .dot-top { transform: translate(-50%, -20px); }
+        .ping-container.crosshair-active .dot-bottom { transform: translate(-50%, 20px); }
+        .ping-container.crosshair-active .dot-left { transform: translate(-20px, -50%); }
+        .ping-container.crosshair-active .dot-right { transform: translate(20px, -50%); }
+
+        /* PUNCH-IN STAGE */
+        .ping-container.punch-in-active .crosshair-line {
+            transform: scaleX(1) scaleY(1);
+        }
+
+        @keyframes ping-animation {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            80% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.25);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes rotate-animation {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- Custom Info Box Styles --- */
+        .custom-info-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            visibility: hidden;
+            pointer-events: none;
+            z-index: 1002;
+        }
+        .custom-info-box.visible {
+            visibility: visible;
+            pointer-events: all;
+        }
+        
+        .line-connector {
+            position: absolute;
+            bottom: 0;
+            left: -0.5px; /* Centered 1px line */
+            width: 1px; /* Thinner line */
+            height: 40px; /* Extended line */
+            background-color: white;
+            transform-origin: bottom;
+            transform: rotate(45deg) scaleY(0);
+            transition: transform 0.15s ease-out; /* Faster animation */
+        }
+        
+        .info-content {
+            position: absolute;
+            /* Recalculated position for alignment and moved down 5px */
+            bottom: 23.28px; 
+            left: 28.28px;
+            color: white;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.15s ease 0.15s; /* Faster appearance */
+        }
+
+        .info-content h1 { font-size: 14px; margin: 0 0 4px; }
+        .info-content p { margin: 0; }
+        .info-content a { color: #ff3b30; text-decoration: none; font-weight: bold; }
+        .info-content a:hover { text-decoration: underline; }
+
+        .custom-info-box.visible .line-connector {
+             transform: rotate(45deg) scaleY(1);
+        }
+        .custom-info-box.visible .info-content {
+            opacity: 1;
+        }
+        
+        /* Sequential text animation */
+        .info-content span {
+            opacity: 0;
+            animation: fadeInLetter 0.5s forwards;
+        }
+        
+        @keyframes fadeInLetter {
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
+     <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head><body>
+
+    <div id="container">
+        <!-- Text block container -->
+        <div id="text-container">
+            <div id="text-block">
+                <h2>THE WIKD GARAGE</h2>
+                <p>
+                    417 Metro Park Dr,<br>
+                    McKinney, TX 75071<br>
+                    844-232-9453<br>
+                    <br>
+                    Mon - Fri, 8:30 AM - 4:30 PM<br>
+                    Saturday, Closed<br>
+                    Sunday, Closed
+                </p>
+                <a href="https://maps.google.com/?daddr=417%20Metro%20Park%20Dr,%20McKinney,%20TX%2075071" class="directions-button" target="_blank">Get Directions</a>
+            </div>
+        </div>
+        <!-- New map wrapper -->
+        <div id="map-wrapper">
+            <div id="map"></div>
+            <div id="map-border-overlay"></div>
+        </div>
+    </div>
+
+    <!-- 2. Include Leaflet's JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+    <script>
+        // The location to center the map on (Updated Coordinates)
+        const targetLocation = [33.21339760266058, -96.61098700657736];
+        const defaultZoom = 16;
+        const hoverZoom = 17;
+        const punchInZoom = 18; // Final zoom level
+
+        // 3. Initialize the map and set its view, removing all zoom controls
+        const map = L.map('map', {
+            zoomControl: false,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            dragging: false
+        }).setView(targetLocation, defaultZoom);
+
+        // 4. Add the tile layer from CARTO (Dark Matter style)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 20, // Increased max zoom to allow for punch-in
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }).addTo(map);
+
+        // 5. Create a custom HTML marker
+        const customPingIcon = L.divIcon({
+            className: '', // Use an empty class name
+            html: `<div class="ping-container">
+                        <div class="ping-circle"></div>
+                        <div class="ping-dot"></div>
+                        <div class="crosshair-wrapper">
+                            <div class="crosshair-dot dot-top"><div class="crosshair-line"></div></div>
+                            <div class="crosshair-dot dot-right"><div class="crosshair-line"></div></div>
+                            <div class="crosshair-dot dot-bottom"><div class="crosshair-line"></div></div>
+                            <div class="crosshair-dot dot-left"><div class="crosshair-line"></div></div>
+                        </div>
+                        <div class="custom-info-box">
+                           <div class="line-connector"></div>
+                           <div class="info-content"></div>
+                       </div>
+                       </div>`,
+            iconSize: [50, 50],
+            iconAnchor: [25, 25]
+        });
+
+        const marker = L.marker(targetLocation, { icon: customPingIcon }).addTo(map);
+
+        // 6. Create the content for the popup
+        const textForInfoBox = [
+            "<h1>THE WIKD GARAGE</h1>",
+            "<p>417 Metro Park Dr, McKinney, TX 75071</p>",
+            `<a href="https://maps.app.goo.gl/NsUqVwPzAWZhKiFJ8" target="_blank">Get Directions on Google Maps</a>`
+        ].join('');
+        
+        // --- HOVER LOGIC ---
+        const mapWrapper = document.getElementById('map-wrapper');
+        const pingCircle = document.querySelector('.ping-circle');
+        const pingContainer = document.querySelector('.ping-container');
+        let isMapHovered = false;
+        let punchInTimeout;
+
+        mapWrapper.addEventListener('mouseenter', () => {
+            isMapHovered = true;
+            map.flyTo(targetLocation, hoverZoom, { animate: true, duration: 0.25 });
+        });
+
+        mapWrapper.addEventListener('mouseleave', () => {
+            isMapHovered = false;
+            clearTimeout(punchInTimeout); // Clear any pending punch-in
+            pingContainer.classList.remove('crosshair-active', 'punch-in-active');
+            pingCircle.style.animationPlayState = 'running';
+            map.flyTo(targetLocation, defaultZoom, { animate: true, duration: 0.25 });
+        });
+        
+        pingCircle.addEventListener('animationiteration', () => {
+            if (isMapHovered) {
+                pingCircle.style.animationPlayState = 'paused';
+                pingContainer.classList.add('crosshair-active');
+
+                // Set a timer to trigger the punch-in effect
+                punchInTimeout = setTimeout(() => {
+                    if (isMapHovered) { // Only punch in if still hovering
+                        pingContainer.classList.add('punch-in-active');
+                        map.flyTo(targetLocation, punchInZoom, { animate: true, duration: 0.4 });
+                    }
+                }, 600); // Delay after dots reach position (500ms transition + 100ms buffer)
+            }
+        });
+        
+        // --- CUSTOM POPUP LOGIC ---
+        const infoBox = document.querySelector('.custom-info-box');
+        const infoContent = document.querySelector('.info-content');
+
+        function animateText(htmlString) {
+            infoContent.innerHTML = htmlString;
+            const elementsToAnimate = infoContent.querySelectorAll('h1, p, a');
+            let totalDelay = 0;
+            elementsToAnimate.forEach(el => {
+                const text = el.textContent;
+                el.innerHTML = '';
+                text.split('').forEach(letter => {
+                    const span = document.createElement('span');
+                    span.innerHTML = letter === ' ' ? '&nbsp;' : letter;
+                    span.style.animationDelay = `${totalDelay * 0.005}s`; // Snappier animation
+                    el.appendChild(span);
+                    totalDelay++;
+                });
+            });
+        }
+
+        marker.on('click', () => {
+            const isVisible = infoBox.classList.toggle('visible');
+            if (isVisible) {
+                animateText(textForInfoBox);
+            }
+        });
+
+    </script>
+
+</body>
+</html>
