@@ -24,8 +24,8 @@
         /* Main container for the map and text block */
         #container {
             display: flex;
-            border: 1px solid #000000; /* Set border to black to blend with the page */
-            background-color: #000000;
+            border: 1px solid #0A0A0A; /* Set border to blend with the new background */
+            background-color: #0A0A0A; /* Updated background color */
         }
 
         /* New wrapper for the map and its overlay */
@@ -51,7 +51,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 1); /* Updated inner stroke to match new background */
+            box-shadow: inset 0 0 0 20px rgba(10, 10, 10, 1); /* Updated inner stroke to match new background */
             pointer-events: none; /* Allows clicks to go through to the map */
             z-index: 1001; /* High z-index to ensure it's on top of everything, including Leaflet controls */
         }
@@ -67,7 +67,7 @@
             flex-direction: column;
             justify-content: center; /* Center the text block vertically */
             color: #f0f0f0;
-            background-color: #000000; /* Match container background */
+            background-color: #0A0A0A; /* Match container background */
         }
 
         #text-block {
@@ -346,7 +346,7 @@
                         <div class="custom-info-box">
                            <div class="line-connector"></div>
                            <div class="info-content"></div>
-                       </div>
+                        </div>
                        </div>`,
             iconSize: [50, 50],
             iconAnchor: [25, 25]
