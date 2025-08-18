@@ -10,28 +10,25 @@
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
 
-    <!-- Google Fonts for a modern look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
     <style>
-        /* The component will now fill its parent container */
-        html, body, #container {
+        /* The component will now fill its parent container in Framer */
+        html, body {
             height: 100%;
             width: 100%;
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
             box-sizing: border-box;
-            overflow: hidden; /* Prevent any potential scrollbars on the body */
+            overflow: hidden; /* Disable scroll bars */
         }
 
         /* Main container for the map and text block */
         #container {
             display: flex;
-            border: 1px solid #0A0A0A; /* Set border to blend with the new background */
-            background-color: #0A0A0A; /* Updated background color */
+            height: 100%;
+            width: 100%;
+            border: 1px solid #000000; /* Set border to black to blend with the page */
+            background-color: #000000;
         }
 
         /* New wrapper for the map and its overlay */
@@ -57,7 +54,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            box-shadow: inset 0 0 0 20px rgba(10, 10, 10, 1); /* Updated inner stroke to match new background */
+            box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 1); /* Updated inner stroke to match new background */
             pointer-events: none; /* Allows clicks to go through to the map */
             z-index: 1001; /* High z-index to ensure it's on top of everything, including Leaflet controls */
         }
@@ -73,7 +70,7 @@
             flex-direction: column;
             justify-content: center; /* Center the text block vertically */
             color: #f0f0f0;
-            background-color: #0A0A0A; /* Match container background */
+            background-color: #000000; /* Match container background */
         }
 
         #text-block {
@@ -280,53 +277,35 @@
             }
         }
 
-        /* --- RESPONSIVE STYLES FOR MOBILE --- */
+        /* --- Responsive Styles for Mobile --- */
         @media (max-width: 768px) {
-            /* Change the main container to a column layout */
             #container {
-                flex-direction: column;
+                flex-direction: column; /* Stack items vertically */
             }
 
-            /* Make both children take up the full width */
-            #text-container,
-            #map-wrapper {
-                width: 100%;
-            }
-
-            /* Adjust heights for the new column layout */
             #text-container {
-                height: auto; /* Let it size based on its content */
-                justify-content: flex-start; /* Align text to the top */
-                padding: 20px; /* Adjust padding for top position */
-                text-align: center; /* Center the content horizontally */
+                width: 100%; /* Take full width */
+                height: 35%;  /* Allocate 35% of the screen height */
+                text-align: center; /* Center align the text */
+                justify-content: center;
             }
-            
+
             #text-block {
-                text-align: center; /* Ensure inner block is also centered */
+                text-align: center; /* Center the content within the text block */
             }
 
             #map-wrapper {
-               flex-grow: 1; /* Make the map fill the remaining vertical space */
-               height: 100%; /* Ensure it fills the available space */
-            }
-            
-            .directions-button {
-                margin-top: 1rem;
-                margin-bottom: 1rem; /* Add space below button before map */
-            }
-
-            /* Adjust the border overlay for smaller screens */
-            #map-border-overlay {
-                box-shadow: inset 0 15px 0 0 rgba(10, 10, 10, 1),   /* 15px top */
-                            inset 0 -30px 0 0 rgba(10, 10, 10, 1),  /* 30px bottom */
-                            inset 15px 0 0 0 rgba(10, 10, 10, 1),   /* 15px left */
-                            inset -15px 0 0 0 rgba(10, 10, 10, 1);  /* 15px right */
+                width: 100%; /* Take full width */
+                height: 65%;  /* Allocate the remaining 65% of the screen height */
             }
         }
 
     </style>
-</head>
-<body>
+     <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head><body>
 
     <div id="container">
         <!-- Text block container -->
@@ -369,9 +348,7 @@
             zoomControl: false,
             scrollWheelZoom: false,
             doubleClickZoom: false,
-            dragging: false,
-            // Disable touch zoom to prevent interference on mobile
-            touchZoom: false,
+            dragging: false
         }).setView(targetLocation, defaultZoom);
 
         // 4. Add the tile layer from CARTO (Dark Matter style)
@@ -417,41 +394,33 @@
         let isMapHovered = false;
         let punchInTimeout;
 
-        // Function to check if it's a touch device
-        function isTouchDevice() {
-            return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-        }
+        mapWrapper.addEventListener('mouseenter', () => {
+            isMapHovered = true;
+            map.flyTo(targetLocation, hoverZoom, { animate: true, duration: 0.25 });
+        });
 
-        // Only add hover listeners on non-touch devices
-        if (!isTouchDevice()) {
-            mapWrapper.addEventListener('mouseenter', () => {
-                isMapHovered = true;
-                map.flyTo(targetLocation, hoverZoom, { animate: true, duration: 0.25 });
-            });
+        mapWrapper.addEventListener('mouseleave', () => {
+            isMapHovered = false;
+            clearTimeout(punchInTimeout); // Clear any pending punch-in
+            pingContainer.classList.remove('crosshair-active', 'punch-in-active');
+            pingCircle.style.animationPlayState = 'running';
+            map.flyTo(targetLocation, defaultZoom, { animate: true, duration: 0.25 });
+        });
+        
+        pingCircle.addEventListener('animationiteration', () => {
+            if (isMapHovered) {
+                pingCircle.style.animationPlayState = 'paused';
+                pingContainer.classList.add('crosshair-active');
 
-            mapWrapper.addEventListener('mouseleave', () => {
-                isMapHovered = false;
-                clearTimeout(punchInTimeout); // Clear any pending punch-in
-                pingContainer.classList.remove('crosshair-active', 'punch-in-active');
-                pingCircle.style.animationPlayState = 'running';
-                map.flyTo(targetLocation, defaultZoom, { animate: true, duration: 0.25 });
-            });
-            
-            pingCircle.addEventListener('animationiteration', () => {
-                if (isMapHovered) {
-                    pingCircle.style.animationPlayState = 'paused';
-                    pingContainer.classList.add('crosshair-active');
-
-                    // Set a timer to trigger the punch-in effect
-                    punchInTimeout = setTimeout(() => {
-                        if (isMapHovered) { // Only punch in if still hovering
-                            pingContainer.classList.add('punch-in-active');
-                            map.flyTo(targetLocation, punchInZoom, { animate: true, duration: 0.4 });
-                        }
-                    }, 600); // Delay after dots reach position (500ms transition + 100ms buffer)
-                }
-            });
-        }
+                // Set a timer to trigger the punch-in effect
+                punchInTimeout = setTimeout(() => {
+                    if (isMapHovered) { // Only punch in if still hovering
+                        pingContainer.classList.add('punch-in-active');
+                        map.flyTo(targetLocation, punchInZoom, { animate: true, duration: 0.4 });
+                    }
+                }, 600); // Delay after dots reach position (500ms transition + 100ms buffer)
+            }
+        });
         
         // --- CUSTOM POPUP LOGIC ---
         const infoBox = document.querySelector('.custom-info-box');
@@ -480,21 +449,6 @@
                 animateText(textForInfoBox);
             }
         });
-
-        // --- MAP RESIZE HANDLING ---
-        // This ensures the map redraws correctly when its container size changes,
-        // for example when the browser window is resized on a desktop.
-        const mapContainer = document.getElementById('map');
-        const resizeObserver = new ResizeObserver(() => {
-            // We use a short timeout to ensure any CSS transitions have completed
-            // before the map recalculates its size.
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 100); 
-        });
-
-        // Start observing the map container for size changes.
-        resizeObserver.observe(mapContainer);
 
     </script>
 
