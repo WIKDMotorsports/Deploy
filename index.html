@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF--8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WIKD Motorsports - Gallery</title>
+    <title>WIKD Motorsports - Configurator & Packages</title>
 
+    <!-- Google Fonts: Rajdhani for headings, Inter for body -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* --- CSS RESET & BASE STYLES --- */
@@ -30,7 +34,7 @@
 
         html {
             scroll-behavior: smooth;
-            scroll-padding-top: 80px;
+            scroll-padding-top: 80px; /* Offset for fixed header */
         }
 
         body {
@@ -48,7 +52,7 @@
             text-transform: uppercase;
         }
 
-        img, video {
+        img, video, iframe {
             max-width: 100%;
             height: auto;
             display: block;
@@ -60,14 +64,20 @@
         }
 
         .section {
-            padding: 100px 5%;
+            padding: 60px 5%; /* Adjusted vertical padding */
             overflow: hidden;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0; /* Removed horizontal padding for consistency */
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 60px;
         }
 
         /* --- HEADER / NAVIGATION --- */
@@ -86,7 +96,7 @@
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--color-border);
         }
-
+        
         .logo { height: 40px; width: auto; }
         .main-nav ul { display: flex; list-style: none; gap: 40px; }
         .main-nav a {
@@ -108,419 +118,420 @@
         .main-nav a:hover::after, .main-nav a.active::after { transform: scaleX(1); transform-origin: left; }
         .mobile-nav-toggle { display: none; }
 
-        /* --- GALLERY SECTION --- */
-        .gallery-section {
-            padding-top: 150px;
-        }
-
-        .page-title {
-            text-align: center;
-            font-size: clamp(3rem, 8vw, 6rem);
-            margin-bottom: 20px;
-            color: white;
-        }
-        
-        .gallery-filter-menu {
+        /* --- HERO SLIDESHOW SECTION --- */
+        .hero {
+            padding-top: 120px; /* Adjusted for full page view */
+            padding-bottom: 50px;
+            padding-left: 5%;
+            padding-right: 5%;
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 60px;
+            align-items: center;
         }
-        
-        .btn {
-            display: inline-block;
-            font-family: var(--font-heading);
-            font-weight: 600;
-            text-transform: uppercase;
-            background-color: transparent;
-            border: 2px solid var(--color-border);
+
+        .hero-wrapper {
             position: relative;
-            overflow: hidden;
-            transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
-            cursor: pointer;
+            width: 100%;
+            max-width: 1400px;
+            aspect-ratio: 16 / 7;
+            border-radius: 16px;
+            transition: box-shadow 0.8s ease-in-out;
         }
-        .btn.filter-btn {
-            padding: 10px 24px;
-            font-size: 16px;
-            color: var(--color-text-muted);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 88%);
-        }
-        .btn span {
-            position: relative;
-            z-index: 2;
-        }
-        .btn::before {
-            content: '';
+
+        /* --- THEME-BASED GLOW EFFECT --- */
+        .hero-wrapper.theme-exhaust { box-shadow: 0 0 60px -10px #8A2BE2; }
+        .hero-wrapper.theme-packages { box-shadow: 0 0 60px -10px #ff1a00; }
+        .hero-wrapper.theme-wheels { box-shadow: 0 0 60px -10px #008000; }
+        .hero-wrapper.theme-cooling { box-shadow: 0 0 60px -10px #00c5ff; }
+
+        .slideshow-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--color-primary);
+            border-radius: 16px;
+            overflow: hidden;
             z-index: 1;
-            transform: translateX(-101%);
-            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-        }
-        .btn:hover::before {
-            transform: translateX(0);
-        }
-        .btn.filter-btn:hover {
-            color: white;
-            border-color: var(--color-primary);
-        }
-        .btn.filter-btn.active {
-            color: white;
-            border-color: var(--color-primary);
-        }
-        .btn.filter-btn.active::before {
-            transform: translateX(0);
-        }
-        .btn.filter-btn.wikd-filter {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-        .btn.filter-btn.wikd-filter:hover,
-        .btn.filter-btn.wikd-filter.active {
-            color: black;
-            box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
-        }
-        .btn.filter-btn.wikd-filter.active::before {
-            background-color: var(--color-primary);
-        }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            justify-items: center;
+            background: #000;
         }
 
-        /* --- CARD STYLES --- */
-        .gallery-card-wrapper {
-            max-width: 420px; /* Increased max-width for wider cards */
-            width: 100%;
-        }
-        
-        .gallery-card-wrapper[data-wikd="true"] {
-            perspective: 1000px;
-        }
-
-        .gallery-card {
-            display: block;
-            position: relative;
-            aspect-ratio: 4 / 3; /* CHANGED: Wider aspect ratio */
-            overflow: hidden;
-            border-radius: 8px;
-            border: 1px solid var(--color-border);
-            text-decoration: none;
-            isolation: isolate;
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-        }
-
-        .gallery-card[data-wikd="true"] {
-            transform-style: preserve-3d;
-        }
-        
-        /* Simple hover for non-WIKD cards */
-        .gallery-card:not([data-wikd="true"]):hover {
-            transform: scale(1.03);
-            border-color: var(--color-text);
-        }
-
-        .gallery-card:not([data-wikd="true"]):hover .gallery-card-bg {
-            transform: scale(1.1);
-            filter: grayscale(0%);
-        }
-
-        .gallery-card-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%);
-            transition: transform 0.6s cubic-bezier(0.3, 1, 0.4, 1), filter 0.6s ease;
-        }
-        
-        @keyframes wikdPerformanceSubtleShake {
-            0%, 100% { transform: translate(0, 0); }
-            20%, 60% { transform: translate(1px, -1px); }
-            40%, 80% { transform: translate(-1px, 1px); }
-        }
-
-        .card-shaker {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-        }
-
-        .gallery-card[data-wikd="true"]:hover .card-shaker {
-            animation: wikdPerformanceSubtleShake 0.3s ease-in-out;
-        }
-
-        .card-media-container {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            border-radius: 8px;
-            transform-style: preserve-3d;
-        }
-        
-        .card-media-container img,
-        .card-media-container video {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), filter 0.6s ease;
-        }
-        
-        .media-bg {
-            z-index: 1;
-            filter: grayscale(100%);
-        }
-        
-        .gallery-card[data-wikd="true"]:hover .media-bg {
-             filter: grayscale(100%) brightness(0.3);
-        }
-
-        .gallery-card-video-overlay {
-            z-index: 2;
-            mix-blend-mode: screen;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateZ(40px); /* Pushed back for depth */
-        }
-
-        .gallery-card[data-wikd="true"]:hover .gallery-card-video-overlay {
-            opacity: 1;
-        }
-
-        .media-fg {
-            z-index: 3;
-            opacity: 0;
-            pointer-events: none;
-            filter: grayscale(100%);
-            transform: translateZ(60px);
-        }
-        
-        .gallery-card[data-wikd="true"]:hover .media-fg {
-            opacity: 1;
-        }
-
-        /* --- CARD OVERLAYS AND TEXT --- */
-        .gallery-card-overlay {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
-            transform-style: preserve-3d; /* Enable 3D for children */
-        }
-        
-        .gallery-card[data-wikd="true"] .gallery-card-overlay {
-            position: relative;
-            z-index: 5;
-            transform: translateZ(100px);
-            padding: 15px;
-        }
-        
-        .gallery-card:not([data-wikd="true"]) .gallery-card-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
-            padding: 25px;
-        }
-
-        .gallery-card-title-block, .card-badge-container {
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); /* Smooth transition for 3D pop */
-        }
-
-        .gallery-card-title-block {
-            align-self: flex-start;
-        }
-
-        .gallery-card:not([data-wikd="true"]) .gallery-card-title-block {
-            padding: 0;
-            align-self: flex-start;
-        }
-        
-        .gallery-card-title {
-            font-size: 1.75rem;
-            color: white;
-            margin: 0;
-            line-height: 1.2;
-            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
-            transition: color 0.3s ease;
-        }
-        
-        .gallery-card[data-wikd="true"]:hover .gallery-card-title {
-            background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
-            background-size: 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: lavaFlow 4s ease-in-out infinite;
-            text-shadow: none;
-            filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.7));
-        }
-
-        .gallery-card-subtitle {
-            font-size: 1rem;
-            color: white;
-            font-family: var(--font-body);
-            font-weight: 500;
-            text-transform: none;
-            margin-top: 5px;
-            display: block;
-            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
-        }
-        
-        .card-badge-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-start;
-        }
-
-        .card-brand-badge {
-            display: inline-block;
-            padding: 6px 15px 8px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: white;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
-        }
-        
-        .wikd-sub-badge {
-            display: inline-block;
-            background-color: rgba(255, 59, 48, 0.7);
-            color: white;
-            padding: 6px 18px 8px;
-            font-size: 12px;
-            font-weight: 600;
-            font-style: italic;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .wikd-sub-badge::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -150%;
-            width: 75%;
-            height: 200%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: rotate(30deg);
-            animation: constant-shine 3s ease-in-out infinite;
-            animation-delay: 0.5s;
-        }
-
-        @keyframes constant-shine {
-            0% { left: -150%; }
-            100% { left: 150%; }
-        }
-        
-        .card-brand-badge[data-brand-badge="audi"] { background-color: rgba(100, 100, 100, 0.6); }
-        .card-brand-badge[data-brand-badge="bentley"] { background-color: rgba(51, 51, 51, 0.6); }
-        .card-brand-badge[data-brand-badge="bmw"] { background-color: rgba(0, 102, 178, 0.6); }
-        .card-brand-badge[data-brand-badge="cadillac"] { background-color: rgba(175, 141, 45, 0.6); }
-        .card-brand-badge[data-brand-badge="chevrolet"] { background-color: rgba(250, 208, 2, 0.6); }
-        .card-brand-badge[data-brand-badge="ford"] { background-color: rgba(0, 17, 107, 0.6); }
-        .card-brand-badge[data-brand-badge="lamborghini"] { background-color: rgba(255, 140, 0, 0.6); }
-        .card-brand-badge[data-brand-badge="mclaren"] { background-color: rgba(255, 136, 0, 0.6); }
-        .card-brand-badge[data-brand-badge="mercedes-benz"] { background-color: rgba(36, 178, 169, 0.6); }
-        .card-brand-badge[data-brand-badge="pontiac"] { background-color: rgba(206, 24, 30, 0.6); }
-        .card-brand-badge[data-brand-badge="porsche"] { background-color: rgba(180, 180, 180, 0.6); }
-
-        /* --- WIKD CARD SPECIAL EFFECTS --- */
-        .gallery-card[data-wikd="true"] {
-            border-color: transparent;
-        }
-
-        .gallery-card[data-wikd="true"]::before {
+        .slideshow-container::before {
             content: "";
             position: absolute;
             inset: 0;
-            border-radius: 8px;
+            border-radius: 16px;
             padding: 2px;
-            background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
             background-size: 300%;
-            animation: lavaFlow 4s ease-in-out infinite;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            animation: colorFlow 4s ease-in-out infinite;
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
-            z-index: 6;
+            z-index: 4;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: background-image 0.8s ease-in-out;
         }
 
-        .gallery-card[data-wikd="true"]:hover::before {
-            opacity: 1;
-        }
-
-        .gallery-card[data-wikd="true"]::after {
-            content: '';
+        .slide {
             position: absolute;
             top: 0;
-            left: -150%;
-            width: 50%;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-25deg);
-            z-index: 4;
-            transition: left 0.6s ease-out;
-        }
-
-        .gallery-card[data-wikd="true"]:hover {
-            box-shadow: 0 0 25px rgba(255, 59, 48, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            z-index: 1;
         }
         
-        .gallery-card[data-wikd="true"]:hover::after {
-            left: 150%;
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            text-align: left;
+            padding: 40px;
+            height: 100%;
         }
 
-        @keyframes lavaFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .slide-content::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 70%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            z-index: -1;
+        }
+
+        .slide-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .slide-background.video-fit-height {
+            width: auto;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .slide-background.iframe-fit-height {
+            border: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-title-group {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        .slide h1 {
+            font-weight: 700;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: colorFlow 4s ease-in-out infinite;
+            margin: 0;
+            transition: background-image 0.8s ease-in-out;
+        }
+        
+        .slide.active .slide-title-group {
+            transform: translateY(0);
+            opacity: 1;
+            transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s, opacity 0.8s ease 0.3s;
+        }
+
+        @keyframes colorFlow {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* MRS.WIKD Card Specific Styles */
-        [data-special-build="mrs-wikd"] .wikd-sub-badge {
-            background-color: hsla(322, 100%, 50%, 0.7);
+        /* --- THEMES --- */
+        .slideshow-container.theme-exhaust::before,
+        .slideshow-container.theme-exhaust .slide.active h1 {
+            background-image: linear-gradient(90deg, #4B0082, #800000, #8A2BE2, #800000, #4B0082);
         }
-    
-        [data-special-build="mrs-wikd"].gallery-card-wrapper .gallery-card[data-wikd="true"]::before {
-            background: linear-gradient(90deg, #B30075, #FF00A6, #FF4DBC, #FF00A6, #B30075);
-            background-size: 300%;
-            animation: lavaFlow 4s ease-in-out infinite;
+        .slideshow-container.theme-packages::before,
+        .slideshow-container.theme-packages .slide.active h1 {
+            background-image: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
         }
-        
-        [data-special-build="mrs-wikd"].gallery-card-wrapper .gallery-card[data-wikd="true"]:hover {
-            box-shadow: 0 0 25px hsla(322, 100%, 50%, 0.5);
+        .slideshow-container.theme-wheels::before,
+        .slideshow-container.theme-wheels .slide.active h1 {
+            background-image: linear-gradient(90deg, #004d00, #008000, #90ee90, #008000, #004d00);
         }
-    
-        [data-special-build="mrs-wikd"].gallery-card-wrapper .gallery-card[data-wikd="true"]:hover .gallery-card-title {
-            background: linear-gradient(90deg, #B30075, #FF00A6, #FF4DBC, #FF00A6, #B30075);
-            background-size: 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .slideshow-container.theme-cooling::before,
+        .slideshow-container.theme-cooling .slide.active h1 {
+            background-image: linear-gradient(90deg, #00c5ff, #ffffff, #afeeee, #ffffff, #00c5ff);
         }
 
-        /* --- FOOTER & RESPONSIVE STYLES --- */
+        /* --- UNIFIED BUTTON STYLE --- */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--color-text);
+            background-color: transparent;
+            border: 2px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 85%);
+            text-decoration: none;
+            flex-shrink: 0; /* Prevent button from shrinking */
+        }
+        .btn span { position: relative; z-index: 2; }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            transform: translateX(-101%);
+            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1), background-color 0.4s ease-in-out;
+        }
+        .btn:hover {
+            color: white;
+        }
+       .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        /* --- THEME-SPECIFIC BUTTON HOVERS --- */
+        .slide[data-theme="theme-exhaust"] .btn:hover { border-color: #8A2BE2; }
+        .slide[data-theme="theme-exhaust"] .btn::before { background-color: #8A2BE2; }
+
+        .slide[data-theme="theme-packages"] .btn:hover { border-color: #ff1a00; }
+        .slide[data-theme="theme-packages"] .btn::before { background-color: #ff1a00; }
+
+        .slide[data-theme="theme-wheels"] .btn:hover { border-color: #008000; }
+        .slide[data-theme="theme-wheels"] .btn::before { background-color: #008000; }
+
+        .slide[data-theme="theme-cooling"] .btn:hover { border-color: #00c5ff; }
+        .slide[data-theme="theme-cooling"] .btn::before { background-color: #00c5ff; }
+
+        /* --- EMBEDDED QUESTIONNAIRE SECTION --- */
+        #questionnaire-section {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        #questionnaire-section .container {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .questionnaire-iframe {
+            border: none;
+            width: 100%;
+            display: block;
+            background-color: transparent;
+            transition: height 0.2s ease-out; /* Smooth height transition */
+        }
+
+        /* --- PERFORMANCE PACKAGES SECTION --- */
+        .packages-section {
+            background-color: var(--color-background); /* Match other sections */
+        }
+        .packages-section .container {
+            position: relative;
+            z-index: 1;
+        }
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .package-card {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+        }
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .package-card-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .package-card:hover .package-card-bg { transform: scale(1.05); }
+        .package-card-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 25px;
+        }
+        .package-card-title {
+            font-size: 2rem; color: white;
+            transform: translateY(20px); opacity: 0;
+            transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
+        }
+        .package-card-link {
+            font-size: 1rem; color: var(--color-primary);
+            text-transform: uppercase; font-weight: 600;
+            transform: translateY(20px); opacity: 0;
+            transition: transform 0.4s ease 0.2s, opacity 0.4s ease 0.2s;
+        }
+        .package-card:hover .package-card-title,
+        .package-card:hover .package-card-link {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- EXHAUSTS TICKER SECTION --- */
+        .ticker-section {
+            padding: 60px 0;
+            background-color: var(--color-background);
+        }
+        .ticker-wrap {
+            max-width: 1400px; /* Match hero banner max-width */
+            margin: 0 auto;     /* Center the ticker container */
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        .ticker-wrap::before, .ticker-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            z-index: 2;
+        }
+        .ticker-wrap::before {
+            left: 0;
+            background: linear-gradient(to right, var(--color-background) 0%, transparent 100%);
+        }
+        .ticker-wrap::after {
+            right: 0;
+            background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
+        }
+        .ticker-move {
+            display: inline-flex;
+            animation: ticker 60s linear infinite;
+        }
+        .exhaust-card {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-surface);
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: var(--color-text);
+            width: 380px;
+            margin: 0 20px;
+            flex-shrink: 0;
+        }
+        .exhaust-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .exhaust-card-image-wrapper {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+        .exhaust-card-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.3, 1, 0.4, 1);
+        }
+        .exhaust-card:hover .exhaust-card-bg {
+            transform: scale(1.05);
+        }
+        .exhaust-card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .exhaust-card-title {
+            font-size: 1.2rem;
+            line-height: 1.4;
+            margin: 0 0 10px 0;
+            flex-grow: 1;
+            text-transform: none;
+            color: var(--color-text);
+        }
+        .exhaust-card-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-top: auto;
+            font-family: var(--font-heading);
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- GALLERY GRID SECTION --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+        }
+        .gallery-item img {
+            transition: transform 0.4s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* --- MAP & LOCATION SECTION --- */
+        #location-section { 
+            padding-top: 60px; /* Adjusted vertical padding */
+            padding-bottom: 60px; /* Adjusted vertical padding */
+            background-color: var(--color-background);
+        }
+        .map-iframe {
+            border: none;
+            width: 100%;
+            display: block;
+            background-color: transparent;
+            height: 600px; /* Fixed height for the map */
+            border-radius: 16px;
+        }
+        
+        /* --- FOOTER --- */
         .main-footer {
             background-color: var(--color-surface);
             padding: 60px 5%;
             border-top: 1px solid var(--color-border);
-            margin-top: 100px;
         }
         .footer-grid {
             display: grid;
@@ -534,47 +545,51 @@
         .footer-col ul a { color: var(--color-text-muted); transition: color 0.3s ease; }
         .footer-col ul a:hover { color: var(--color-primary); }
         .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding-top: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px; padding-top: 30px;
             border-top: 1px solid var(--color-border);
-            color: var(--color-text-muted);
-            font-size: 14px;
+            color: var(--color-text-muted); font-size: 14px;
         }
         .social-links { display: flex; gap: 20px; }
-        .social-links a { color: var(--color-text-muted); transition: color 0.3s ease; }
+        .social-links a { color: var(--color-text-muted); font-size: 24px; transition: color 0.3s ease; }
         .social-links a:hover { color: var(--color-primary); }
-        .social-links svg { width: 24px; height: 24px; }
-        
+
+        /* --- LIGHTBOX --- */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+        .lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
+        .lightbox-content img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+        .lightbox-close, .lightbox-prev, .lightbox-next {
+            position: absolute; background: none; border: none;
+            color: white; font-size: 3rem; cursor: pointer; z-index: 2001;
+            transition: color 0.3s ease;
+        }
+        .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { color: var(--color-primary); }
+        .lightbox-close { top: 20px; right: 30px; }
+        .lightbox-prev { top: 50%; left: 20px; transform: translateY(-50%); }
+        .lightbox-next { top: 50%; right: 20px; transform: translateY(-50%); }
+
+        /* --- RESPONSIVE STYLES --- */
         @media (max-width: 900px) {
             .mobile-nav-toggle {
-                display: block;
-                background: none;
-                border: none;
-                cursor: pointer;
-                z-index: 1001;
+                display: block; background: none; border: none;
+                cursor: pointer; z-index: 1001;
             }
             .mobile-nav-toggle .icon-bar {
-                display: block;
-                width: 25px;
-                height: 3px;
-                background-color: white;
-                margin: 5px 0;
+                display: block; width: 25px; height: 3px;
+                background-color: white; margin: 5px 0;
                 transition: transform 0.3s ease, opacity 0.3s ease;
             }
             .main-nav {
-                position: fixed;
-                top: 0;
-                right: 0;
-                width: 100%;
-                height: 100vh;
+                position: fixed; top: 0; right: 0; width: 100%; height: 100vh;
                 background: var(--color-background);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
+                flex-direction: column; justify-content: center; align-items: center;
                 transform: translateX(100%);
                 transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
                 display: flex;
@@ -582,22 +597,25 @@
             .main-nav.active { transform: translateX(0); }
             .main-nav ul { flex-direction: column; text-align: center; gap: 30px; }
             .main-nav a { font-size: 24px; }
+            
+            .hero { padding-top: 100px; }
+            .hero-wrapper, .slideshow-container { aspect-ratio: 16 / 9; }
         }
-
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <header class="main-header" id="mainHeader">
         <a href="index.html"><img src="https://github.com/WIKDMotorsports/TestSite/blob/main/White%20Logo.png?raw=true" alt="WIKD Logo" class="logo"></a>
         <nav class="main-nav" id="mainNav">
             <ul>
-                <li><a href="index.html#packages">Performance Packages</a></li>
+                <li><a href="#packages">Performance Packages</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
                 <li><a href="videos.html">Videos</a></li>
                 <li><a href="aboutus.html">About Us</a></li>
-                <li><a href="index.html#location">Contact</a></li>
+                <li><a href="#location">Contact</a></li>
             </ul>
         </nav>
         <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
@@ -608,327 +626,487 @@
     </header>
 
     <main>
-        <section class="section gallery-section">
-            <div class="container">
-                <h1 class="page-title">Featured Builds</h1>
-                
-                <nav class="gallery-filter-menu" id="galleryFilter">
-                    <button class="btn filter-btn active" data-filter="all"><span>All</span></button>
-                    <button class="btn filter-btn wikd-filter" data-filter="wikd"><span>WIKD</span></button>
-                    <button class="btn filter-btn" data-filter="audi"><span>Audi</span></button>
-                    <button class="btn filter-btn" data-filter="bentley"><span>Bentley</span></button>
-                    <button class="btn filter-btn" data-filter="bmw"><span>BMW</span></button>
-                    <button class="btn filter-btn" data-filter="cadillac"><span>Cadillac</span></button>
-                    <button class="btn filter-btn" data-filter="chevrolet"><span>Chevrolet</span></button>
-                    <button class="btn filter-btn" data-filter="ford"><span>Ford</span></button>
-                    <button class="btn filter-btn" data-filter="lamborghini"><span>Lamborghini</span></button>
-                    <button class="btn filter-btn" data-filter="mclaren"><span>McLaren</span></button>
-                    <button class="btn filter-btn" data-filter="mercedes-benz"><span>Mercedes-Benz</span></button>
-                    <button class="btn filter-btn" data-filter="pontiac"><span>Pontiac</span></button>
-                    <button class="btn filter-btn" data-filter="porsche"><span>Porsche</span></button>
-                </nav>
+        <!-- HERO SLIDESHOW SECTION -->
+        <section class="hero">
+            <div class="hero-wrapper">
+                <div class="slideshow-container" id="slideshow">
+                    
+                    <div class="slide" data-theme="theme-exhaust">
+                        <video class="slide-background video-fit-height" id="exhaust-video" muted playsinline>
+                            <source src="https://github.com/WIKDMotorsports/TestSite/raw/refs/heads/main/5-8mbps.mp4" type="video/mp4">
+                        </video>
+                        <div class="slide-content">
+                            <div class="slide-title-group">
+                                <h1>Titanium Exhausts</h1>
+                                <a href="#" class="btn"><span>Learn More</span></a>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- Gallery items will be dynamically inserted here -->
-                <div class="gallery-grid" id="galleryGrid">
-                    <!-- Example of a loading message -->
-                    <p style="color: white; text-align: center; grid-column: 1 / -1;">Loading WIKD Builds...</p>
+                    <div class="slide" data-theme="theme-packages">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/WIKDonDyno.jpg?v=1752603899" alt="Performance Packages" class="slide-background">
+                        <div class="slide-content">
+                            <div class="slide-title-group">
+                                <h1>Performance Packages</h1>
+                                <a href="#packages" class="btn"><span>Explore</span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide" data-theme="theme-wheels">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/f450.jpg?v=1750445422" alt="F-450 Wheel & Tire Package" class="slide-background">
+                        <div class="slide-content">
+                            <div class="slide-title-group">
+                                <h1>F-450 Wheel & Tire</h1>
+                                <a href="https://www.wikdmotorsports.com/pages/f450-wheel-tire-package" class="btn"><span>View Package</span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide" data-theme="theme-cooling">
+                        <iframe class="slide-background iframe-fit-height" id="cooling-fan-iframe" srcdoc='
+                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Interactive Video</title>
+                                <style>
+                                    html, body {
+                                        height: 100%; width: 100%; margin: 0; padding: 0;
+                                        font-family: "Inter", sans-serif; display: flex;
+                                        justify-content: center; align-items: center;
+                                        background-color: #000; box-sizing: border-box;
+                                        overflow: hidden;
+                                    }
+                                    .video-container {
+                                        position: relative; width: 100%; max-width: 1600px;
+                                        background-color: #000; opacity: 0;
+                                        transform: scale(0.98) translateY(8px);
+                                        animation: fadeInZoomUp 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                                        transform-origin: center center;
+                                    }
+                                    @keyframes fadeInZoomUp {
+                                        from { opacity: 0; transform: scale(0.98) translateY(8px); }
+                                        to { opacity: 1; transform: scale(1) translateY(0); }
+                                    }
+                                    video { width: 100%; height: auto; display: block; cursor: pointer; }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="video-container">
+                                    <video id="interactiveVideo" preload="metadata">
+                                        <source src="https://github.com/WIKDMotorsports/TestSite/raw/refs/heads/main/FanInteract.mp4" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        const video = document.getElementById("interactiveVideo");
+                                        const framesToLoop = 16, frameRate = 22, initialPlayFrames = 4, reversePlayFrames = 4;
+                                        let loopStartTime = 0, initialPlayTriggerTime = 0;
+                                        let isHovering = false, isHolding = false, holdTimeout = null;
+                                        const holdDelay = 200;
+                                        let isPlayingInitialSegment = false, isReversing = false, animationFrameId = null;
+                                        const isTouchDevice = () => ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+                                        function stopReversePlayback() {
+                                            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                                            animationFrameId = null; isReversing = false;
+                                        }
+                                        function playReverseFrames() {
+                                            stopReversePlayback(); isReversing = true; video.pause();
+                                            const targetReverseTime = Math.max(0, video.currentTime - (reversePlayFrames / frameRate));
+                                            const reverseStep = () => {
+                                                if (!isReversing || video.currentTime <= targetReverseTime) {
+                                                    video.currentTime = 0; video.pause(); stopReversePlayback(); return;
+                                                }
+                                                video.currentTime = Math.max(0, video.currentTime - (1 / frameRate));
+                                                if (isReversing) animationFrameId = requestAnimationFrame(reverseStep);
+                                            };
+                                            animationFrameId = requestAnimationFrame(reverseStep);
+                                        }
+                                        video.addEventListener("loadedmetadata", () => {
+                                            const loopDuration = framesToLoop / frameRate;
+                                            loopStartTime = video.duration - loopDuration;
+                                            initialPlayTriggerTime = initialPlayFrames / frameRate;
+                                            if (loopStartTime < 0 || video.duration === 0) loopStartTime = 0;
+                                            if (initialPlayTriggerTime >= loopStartTime && loopStartTime > 0) initialPlayTriggerTime = loopStartTime;
+                                            video.pause(); video.currentTime = 0;
+                                        });
+                                        if (!isTouchDevice()) {
+                                            video.addEventListener("mouseenter", () => {
+                                                isHovering = true; stopReversePlayback(); video.currentTime = 0;
+                                                isPlayingInitialSegment = true; video.play().catch(e => {});
+                                            });
+                                            video.addEventListener("mouseleave", () => {
+                                                isHovering = false; isPlayingInitialSegment = false; video.pause();
+                                                if (video.currentTime > 0) playReverseFrames();
+                                                else { video.currentTime = 0; video.pause(); }
+                                            });
+                                        } else {
+                                            video.addEventListener("touchstart", (e) => {
+                                                isHolding = true; stopReversePlayback();
+                                                holdTimeout = setTimeout(() => {
+                                                    if (isHolding) {
+                                                        video.currentTime = 0; isPlayingInitialSegment = true;
+                                                        video.play().catch(e => {});
+                                                    }
+                                                }, holdDelay);
+                                            });
+                                            const endTouch = () => {
+                                                clearTimeout(holdTimeout);
+                                                if (isHolding) {
+                                                    isHolding = false; isPlayingInitialSegment = false; video.pause();
+                                                    if (video.currentTime > 0) playReverseFrames();
+                                                    else { video.currentTime = 0; video.pause(); }
+                                                }
+                                            };
+                                            video.addEventListener("touchend", endTouch);
+                                            video.addEventListener("touchcancel", endTouch);
+                                        }
+                                        video.addEventListener("timeupdate", () => {
+                                            if (isReversing) return;
+                                            const isActive = isTouchDevice() ? isHolding : isHovering;
+                                            if (!isActive || video.paused || loopStartTime === 0) return;
+                                            if (isPlayingInitialSegment) {
+                                                if (video.currentTime >= initialPlayTriggerTime) {
+                                                    video.currentTime = loopStartTime; isPlayingInitialSegment = false;
+                                                }
+                                            } else {
+                                                const loopEndThreshold = video.duration - (1 / frameRate) * 5;
+                                                if (video.currentTime >= loopEndThreshold) video.currentTime = loopStartTime;
+                                            }
+                                        });
+                                        video.addEventListener("ended", () => {
+                                            const isActive = isTouchDevice() ? isHolding : isHovering;
+                                            if (isActive && loopStartTime > 0) {
+                                                video.currentTime = loopStartTime; video.play().catch(e => {});
+                                            } else if (!isActive) {
+                                                video.currentTime = 0; video.pause();
+                                            }
+                                        });
+                                        video.addEventListener("error", () => console.error("Error loading video:", video.error));
+                                    });
+                                <\/script>
+                            </body>
+                            </html>
+                        '></iframe>
+                        <div class="slide-content">
+                             <div class="slide-title-group">
+                                <h1>WIKD Cooling Fan</h1>
+                                <a href="#" class="btn"><span>Shop Now</span></a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+            </div>
+        </section>
+
+        <!-- EMBEDDED QUESTIONNAIRE SECTION -->
+        <section id="questionnaire-section" class="section">
+            <div class="container">
+                <iframe id="questionnaireFrame" class="questionnaire-iframe" title="WIKD Motorsports Build Questionnaire"></iframe>
+            </div>
+        </section>
+
+
+        <!-- PERFORMANCE PACKAGES SECTION -->
+        <section id="packages" class="section packages-section">
+            <div class="container">
+                <h2 class="section-title">Performance Packages</h2>
+                <div class="packages-grid">
+                    <a href="https://www.wikdmotorsports.com/pages/corvette-c7-lt4-tuning-packages" class="package-card">
+                        <img src="https://www.wikdmotorsports.com/cdn/shop/files/image_1600x.jpg?v=1732117588" alt="Corvette C7 LT4" class="package-card-bg">
+                        <div class="package-card-overlay">
+                            <h3 class="package-card-title">Corvette C7 LT4</h3>
+                            <span class="package-card-link">View Packages &rarr;</span>
+                        </div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/pages/c8-lt2-packages" class="package-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8_Exhaust_Tuning_Packages_10c50e27-688f-4c5e-a253-f9cb872af5d3.webp?v=1750949635" alt="Corvette C8 LT2" class="package-card-bg">
+                        <div class="package-card-overlay">
+                            <h3 class="package-card-title">Corvette C8 LT2</h3>
+                            <span class="package-card-link">View Packages &rarr;</span>
+                        </div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/pages/6th-gen-camaro-tuning-packages" class="package-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/ZL1.webp?v=1750443336" alt="6th Gen Camaro" class="package-card-bg">
+                        <div class="package-card-overlay">
+                            <h3 class="package-card-title">6th Gen Camaro</h3>
+                            <span class="package-card-link">View Packages &rarr;</span>
+                        </div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/pages/ct5-blackwing-tuning-packages" class="package-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/DSC08715.webp?v=1740518095" alt="CTS V & CT5 V Blackwing" class="package-card-bg">
+                        <div class="package-card-overlay">
+                            <h3 class="package-card-title">CTS/CT5-V Blackwing</h3>
+                            <span class="package-card-link">View Packages &rarr;</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXHAUSTS TICKER SECTION -->
+        <section id="exhausts" class="section ticker-section">
+            <div class="container">
+                <h2 class="section-title">Titanium Racing Exhausts</h2>
+            </div>
+            <div class="ticker-wrap">
+                <div class="ticker-move">
+                    <!-- Items are duplicated for seamless loop -->
+                    <a href="https://www.wikdmotorsports.com/products/corvette-c8-titanium-catback-2020-brushed-blue" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4623.jpg?v=1733425432&width=5000" class="exhaust-card-bg" alt="Corvette C8 Titanium Catback"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Corvette C8 Titanium Catback 2020+ (Brushed Blue)</h3><p class="exhaust-card-price">$3,999.99</p></div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/products/ferrari-458-italia-45l-titanium-catback-2010-2015-golden-polish" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4415.jpg?v=1733425565&width=5000" class="exhaust-card-bg" alt="Ferrari 458 Italia Titanium Catback"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Ferrari 458 Italia 4.5L Titanium Catback (Golden Polish)</h3><p class="exhaust-card-price">$3,999.99</p></div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/products/mclaren-720s-decat-titanium-downpipe-2018-brushed-purple" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4559_f71fde06-0135-4c14-9064-d85084463868.jpg?v=1734125231&width=5000" class="exhaust-card-bg" alt="Mclaren 720S Decat Titanium Downpipe"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Mclaren 720S Decat Titanium Downpipe 2018+ (Brushed Purple)</h3><p class="exhaust-card-price">$3,349.99</p></div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/products/lamborghini-huracan-evo-header-black-ceramic-coated" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/Huracan_Headers_Blk-1.png?v=1734023095&width=5000" class="exhaust-card-bg" alt="Lamborghini Huracan EVO Header"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Lamborghini Huracan EVO / Audi R8 Header (Black Ceramic Coated)</h3><p class="exhaust-card-price">$4,999.99</p></div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/products/corvette-c8-z06-titanium-sport-exhaust-system-2023-without-valve-brushed-blue" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/1_2abafc71-96c5-49fc-8b12-a4f461d1dde7.jpg?v=1733425492&width=5000" class="exhaust-card-bg" alt="Corvette C8 Z06 Titanium Sport Exhaust"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Corvette C8 Z06 Titanium Sport Exhaust System 2023+</h3><p class="exhaust-card-price">$4,999.99</p></div>
+                    </a>
+                    <!-- Duplicates for smooth scroll -->
+                    <a href="https://www.wikdmotorsports.com/products/corvette-c8-titanium-catback-2020-brushed-blue" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4623.jpg?v=1733425432&width=5000" class="exhaust-card-bg" alt="Corvette C8 Titanium Catback"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Corvette C8 Titanium Catback 2020+ (Brushed Blue)</h3><p class="exhaust-card-price">$3,999.99</p></div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/products/ferrari-458-italia-45l-titanium-catback-2010-2015-golden-polish" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4415.jpg?v=1733425565&width=5000" class="exhaust-card-bg" alt="Ferrari 458 Italia Titanium Catback"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Ferrari 458 Italia 4.5L Titanium Catback (Golden Polish)</h3><p class="exhaust-card-price">$3,999.99</p></div>
+                    </a>
+                    <a href="https://www.wikdmotorsports.com/products/mclaren-720s-decat-titanium-downpipe-2018-brushed-purple" class="exhaust-card">
+                        <div class="exhaust-card-image-wrapper"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4559_f71fde06-0135-4c14-9064-d85084463868.jpg?v=1734125231&width=5000" class="exhaust-card-bg" alt="Mclaren 720S Decat Titanium Downpipe"></div>
+                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Mclaren 720S Decat Titanium Downpipe 2018+ (Brushed Purple)</h3><p class="exhaust-card-price">$3,349.99</p></div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY SECTION -->
+        <section id="gallery" class="section">
+            <div class="container">
+                <h2 class="section-title">From The Shop</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item"><img src="https://www.wikdmotorsports.com/cdn/shop/files/image_1600x.jpg?v=1732117588" alt="WIKD Z06 Gallery Image 1"></div>
+                    <div class="gallery-item"><img src="https://www.wikdmotorsports.com/cdn/shop/files/C7_Black_Dyno_2_310640e9-af91-41ca-8554-bdc3479cb2ae_1600x.jpg?v=1732120285" alt="WIKD Z06 Gallery Image 2"></div>
+                    <div class="gallery-item"><img src="https://www.wikdmotorsports.com/cdn/shop/files/C7_Black_EngineBay_1_46d7c3ca-66f2-42ea-972a-9daabcca666c_1600x.jpg?v=1732120285" alt="WIKD Z06 Gallery Image 3"></div>
+                    <div class="gallery-item"><img src="https://www.wikdmotorsports.com/cdn/shop/files/C7_Black_Trunk_1t_758d6f66-d172-4b2f-9e7f-af893f46d7cf_1600x.jpg?v=1732120284" alt="WIKD Z06 Gallery Image 4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAP & LOCATION SECTION -->
+        <section id="location-section" class="section">
+            <div class="container">
+                <iframe id="mapFrame" class="map-iframe" title="WIKD Motorsports Location"></iframe>
             </div>
         </section>
     </main>
 
+    <!-- FOOTER -->
     <footer class="main-footer">
-        <!-- Footer content can be added here -->
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col"><a href="#"><img src="https://github.com/WIKDMotorsports/TestSite/blob/main/White%20Logo.png?raw=true" alt="WIKD Logo" class="logo" style="height: 50px; margin-bottom: 20px;"></a><p style="color: var(--color-text-muted);">Engineered for the Apex Predator.</p></div>
+                <div class="footer-col"><h4>Navigation</h4><ul><li><a href="#packages">Performance Packages</a></li><li><a href="shop.html">Shop</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="videos.html">Videos</a></li><li><a href="aboutus.html">About Us</a></li><li><a href="#location">Contact</a></li></ul></div>
+                <div class="footer-col"><h4>Company</h4><ul><li><a href="aboutus.html">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+                <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 WIKD Motorsports. All Rights Reserved.</p>
+                <div class="social-links"><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a></div>
+            </div>
+        </div>
     </footer>
+    
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close">&times;</button>
+            <button class="lightbox-prev">&lt;</button>
+            <button class="lightbox-next">&gt;</button>
+            <img src="" alt="Lightbox image" id="lightboxImg">
+        </div>
+    </div>
 
+    <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        const JSON_URL = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Shopandgallerydata.json?v=1755204797';
-        const galleryGrid = document.getElementById('galleryGrid');
+        // --- HERO SLIDESHOW LOGIC ---
+        const heroWrapper = document.querySelector('.hero-wrapper');
+        const slideshow = document.getElementById('slideshow');
+        const slides = slideshow.querySelectorAll('.slide');
+        const slideThemes = Array.from(slides).map(slide => slide.dataset.theme);
+        let currentIndex = 0;
+        let slideInterval;
 
-        /**
-         * Creates the complete HTML string for a single gallery card.
-         * @param {object} item - The gallery item data from the JSON file.
-         * @returns {string} The HTML string for the gallery card.
-         */
-        function createGalleryCardHTML(item) {
-            const isWikd = item.isWikdBuild;
-            const specialBuild = item.specialBuild || '';
-            const subtitleHTML = item.subtitle ? `<span class="gallery-card-subtitle">${item.subtitle}</span>` : '';
-            const placeholder = `https://placehold.co/800x600/141414/eaeaea?text=${encodeURIComponent(item.title)}`;
+        function showSlide(index) {
+            // Deactivate previous slide
+            const prevSlide = slides[currentIndex];
+            const prevVideo = prevSlide.querySelector('video.slide-background');
+            if (prevVideo) prevVideo.pause();
 
-            // --- WIKD Build Card Template ---
-            if (isWikd) {
-                const videoHTML = item.video && item.video.overlaySrc 
-                    ? `<video class="gallery-card-video-overlay" ${item.video.style ? `style="${item.video.style}"` : ''} src="${item.video.overlaySrc}" autoplay loop muted playsinline></video>` 
-                    : '';
-                
-                const foregroundHTML = item.images && item.images.foreground
-                    ? `<img src="${item.images.foreground}" class="media-fg" alt="${item.title} Foreground" onerror="this.onerror=null;this.src='${placeholder}';">`
-                    : '';
-                
-                const wikdBadgeText = specialBuild ? specialBuild.replace(/-/g, '.').toUpperCase() : 'WIKD';
-
-                return `
-                <div class="gallery-card-wrapper" data-brand="${item.brand}" data-wikd="true" data-special-build="${specialBuild}">
-                    <a href="${item.link}" class="gallery-card" data-brand="${item.brand}" data-wikd="true">
-                        <div class="card-shaker">
-                            <div class="card-media-container">
-                                <img src="${item.images.background}" class="media-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
-                                ${videoHTML}
-                                ${foregroundHTML}
-                            </div>
-                            <div class="gallery-card-overlay">
-                                <div class="card-badge-container">
-                                    <div class="card-brand-badge" data-brand-badge="${item.brand}">${item.brand}</div>
-                                    <div class="wikd-sub-badge">${wikdBadgeText}</div>
-                                </div>
-                                <div class="gallery-card-title-block">
-                                    <h3 class="gallery-card-title">${item.title}</h3>
-                                    ${subtitleHTML}
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>`;
-            } 
+            slides[currentIndex].classList.remove('active');
             
-            // --- Standard Card Template ---
-            else {
-                return `
-                <div class="gallery-card-wrapper" data-brand="${item.brand}">
-                    <a href="${item.link}" class="gallery-card" data-brand="${item.brand}">
-                        <img src="${item.images.background}" class="gallery-card-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
-                        <div class="gallery-card-overlay">
-                            <div class="card-badge-container">
-                                <div class="card-brand-badge" data-brand-badge="${item.brand}">${item.brand}</div>
-                            </div>
-                            <div class="gallery-card-title-block">
-                                <h3 class="gallery-card-title">${item.title}</h3>
-                                ${subtitleHTML}
-                            </div>
-                        </div>
-                    </a>
-                </div>`;
+            // Remove old theme classes from wrapper and container
+            if (slideThemes[currentIndex]) {
+                heroWrapper.classList.remove(slideThemes[currentIndex]);
+                slideshow.classList.remove(slideThemes[currentIndex]);
+            }
+            
+            // Activate new slide
+            currentIndex = index;
+            const newSlide = slides[currentIndex];
+            const newVideo = newSlide.querySelector('video.slide-background');
+            
+            newSlide.classList.add('active');
+
+            // Add new theme classes to wrapper and container
+            if (slideThemes[currentIndex]) {
+                heroWrapper.classList.add(slideThemes[currentIndex]);
+                slideshow.classList.add(slideThemes[currentIndex]);
+            }
+
+            // Play new video
+            if (newVideo) {
+                newVideo.currentTime = 0;
+                newVideo.play().catch(e => console.warn("Main video autoplay failed", e));
             }
         }
 
-        /**
-         * Initializes all GSAP animations and event listeners for the gallery.
-         * This function should be called only after the gallery items are populated in the DOM.
-         */
-        function initializeGalleryScripts() {
-            // --- CARD FILTERING LOGIC ---
-            const filterMenu = document.getElementById('galleryFilter');
-            const galleryItems = gsap.utils.toArray('.gallery-card-wrapper');
-            
-            // Initial load animation
-            gsap.from(galleryItems, {
-                duration: 0.8,
-                opacity: 0,
-                y: 50,
-                stagger: 0.05,
-                ease: 'power3.out',
-                delay: 0.2
-            });
-
-            if (filterMenu) {
-                filterMenu.addEventListener('click', (e) => {
-                    const target = e.target.closest('.filter-btn');
-                    if (!target) return;
-
-                    const activeBtn = filterMenu.querySelector('.active');
-                    if (activeBtn) activeBtn.classList.remove('active');
-                    target.classList.add('active');
-
-                    const filter = target.dataset.filter;
-                    
-                    const itemsToHide = [];
-                    const itemsToShow = [];
-
-                    galleryItems.forEach(item => {
-                        let showItem = false;
-                        if (filter === 'all') {
-                            showItem = true;
-                        } else if (filter === 'wikd') {
-                            if (item.dataset.wikd === 'true') showItem = true;
-                        } else {
-                            if (item.dataset.brand === filter) showItem = true;
-                        }
-
-                        if (showItem) {
-                            itemsToShow.push(item);
-                        } else {
-                            itemsToHide.push(item);
-                        }
-                    });
-
-                    const tl = gsap.timeline();
-
-                    if (itemsToHide.length > 0) {
-                        tl.to(itemsToHide, {
-                            opacity: 0,
-                            scale: 0.9,
-                            duration: 0.3,
-                            stagger: 0.05,
-                            ease: 'power3.in',
-                            onComplete: () => {
-                                itemsToHide.forEach(item => item.style.display = 'none');
-                            }
-                        });
-                    }
-
-                    if (itemsToShow.length > 0) {
-                        itemsToShow.forEach(item => {
-                           item.style.display = 'block'; // Or 'grid' if needed
-                           gsap.set(item, { opacity: 0, scale: 0.9 });
-                        });
-
-                        tl.to(itemsToShow, {
-                            opacity: 1,
-                            scale: 1,
-                            duration: 0.4,
-                            stagger: 0.05,
-                            ease: 'power3.out'
-                        }, itemsToHide.length > 0 ? ">-0.1" : 0);
-                    }
-                });
-            }
-            
-            // --- WIKD CARD PARALLAX EFFECT ---
-            const wikdCards = document.querySelectorAll('.gallery-card[data-wikd="true"]');
-
-            wikdCards.forEach(card => {
-                const mediaFg = card.querySelector('.media-fg');
-                const mediaBg = card.querySelector('.media-bg');
-                const videoOverlay = card.querySelector('.gallery-card-video-overlay');
-                const cardBadge = card.querySelector('.card-badge-container');
-                const cardTitle = card.querySelector('.gallery-card-title-block');
-
-
-                const ROTATE_INTENSITY = 15;
-                const BG_SCALE_AMOUNT = 1.05;
-
-                // Layer-specific intensities for parallax
-                const FG_INTENSITY = 20;
-                const VIDEO_INTENSITY = 8;
-                const BADGE_INTENSITY = 12;
-                const TITLE_INTENSITY = 18;
-
-
-                const handleMouseMove = (e) => {
-                    const { width, height, left, top } = card.getBoundingClientRect();
-                    const x = (e.clientX - left) / width - 0.5;
-                    const y = (e.clientY - top) / height - 0.5;
-
-                    const rotateY = x * ROTATE_INTENSITY * 2;
-                    const rotateX = y * -ROTATE_INTENSITY * 2;
-                    
-                    // Calculate parallax translations for each layer
-                    const fgTranslateX = x * FG_INTENSITY;
-                    const fgTranslateY = y * FG_INTENSITY;
-                    const videoTranslateX = x * VIDEO_INTENSITY;
-                    const videoTranslateY = y * VIDEO_INTENSITY;
-                    const badgeTranslateX = x * BADGE_INTENSITY;
-                    const badgeTranslateY = y * BADGE_INTENSITY;
-                    const titleTranslateX = x * TITLE_INTENSITY;
-                    const titleTranslateY = y * TITLE_INTENSITY;
-
-
-                    requestAnimationFrame(() => {
-                        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-                        if (mediaBg) {
-                            mediaBg.style.transform = `scale(${BG_SCALE_AMOUNT})`;
-                        }
-                        if (videoOverlay) {
-                            videoOverlay.style.transform = `translateX(${videoTranslateX}px) translateY(${videoTranslateY}px) translateZ(40px)`;
-                        }
-                        if (mediaFg) {
-                            mediaFg.style.transform = `translateX(${fgTranslateX}px) translateY(${fgTranslateY}px) translateZ(60px) scale(1.1)`;
-                        }
-                        if (cardBadge) {
-                            cardBadge.style.transform = `translateX(${badgeTranslateX}px) translateY(${badgeTranslateY}px) translateZ(30px)`;
-                        }
-                        if (cardTitle) {
-                            cardTitle.style.transform = `translateX(${titleTranslateX}px) translateY(${titleTranslateY}px) translateZ(50px)`;
-                        }
-                    });
-                };
-
-                const handleMouseLeave = () => {
-                    requestAnimationFrame(() => {
-                        card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-                        if (mediaBg) {
-                            mediaBg.style.transform = 'scale(1)';
-                        }
-                        if (videoOverlay) {
-                            videoOverlay.style.transform = 'translateX(0px) translateY(0px) translateZ(40px)';
-                        }
-                        if (mediaFg) {
-                            mediaFg.style.transform = 'translateX(0px) translateY(0px) translateZ(60px) scale(1)';
-                        }
-                        if (cardBadge) {
-                            cardBadge.style.transform = 'translateX(0px) translateY(0px) translateZ(0px)';
-                        }
-                        if (cardTitle) {
-                            cardTitle.style.transform = 'translateX(0px) translateY(0px) translateZ(0px)';
-                        }
-                    });
-                };
-
-                card.addEventListener('mousemove', handleMouseMove);
-                card.addEventListener('mouseleave', handleMouseLeave);
-            });
+        function nextSlide() {
+            const newIndex = (currentIndex + 1) % slides.length;
+            showSlide(newIndex);
         }
 
-        /**
-         * Main function to fetch data and render the gallery.
-         */
-        async function loadGallery() {
-            if (!galleryGrid) {
-                console.error('Gallery grid container not found!');
-                return;
-            }
-            try {
-                const response = await fetch(JSON_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
+        function startInterval() {
+            slideInterval = setInterval(nextSlide, 7000);
+        }
 
-                if (data && data.gallery) {
-                    galleryGrid.innerHTML = ''; // Clear loading message
-                    data.gallery.forEach(item => {
-                        const cardHTML = createGalleryCardHTML(item);
-                        galleryGrid.insertAdjacentHTML('beforeend', cardHTML);
+        // Initialize Everything
+        showSlide(0);
+        startInterval();
+
+
+        // --- DYNAMIC IFRAME LOADER ---
+        function loadDynamicIframe(frameId, url, isDynamicHeight) {
+            const iframe = document.getElementById(frameId);
+            if (!iframe) return;
+
+            // Add a cache-busting parameter to the URL
+            const cacheBustedUrl = `${url}?_=${new Date().getTime()}`;
+
+            if (isDynamicHeight) {
+                fetch(cacheBustedUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.text();
+                    })
+                    .then(html => {
+                        const styles = `<style>body, html { margin: 0 !important; padding: 0 !important; overflow: hidden !important; }</style>`;
+                        const scripts = `
+                            <script>
+                                try {
+                                    const observer = new ResizeObserver(entries => {
+                                        const newHeight = document.documentElement.offsetHeight;
+                                        window.parent.postMessage({ type: 'resize', height: newHeight, frameId: '${frameId}' }, '*');
+                                    });
+                                    observer.observe(document.documentElement);
+
+                                    window.addEventListener('load', () => {
+                                        const initialHeight = document.documentElement.offsetHeight;
+                                        window.parent.postMessage({ type: 'resize', height: initialHeight, frameId: '${frameId}' }, '*');
+                                        
+                                        const nextButton = document.getElementById('nextBtn');
+                                        const prevButton = document.getElementById('prevBtn');
+                                        const postSnapMessage = () => window.parent.postMessage({ type: 'snapToTop', frameId: '${frameId}' }, '*');
+                                        if(nextButton) nextButton.addEventListener('click', postSnapMessage);
+                                        if(prevButton) prevButton.addEventListener('click', postSnapMessage);
+                                    });
+                                } catch (e) { console.error("Error in iframe scripts:", e); }
+                            <\/script>
+                        `;
+                        let processedHtml = html.replace('</head>', styles + '</head>');
+                        processedHtml = processedHtml.replace('</body>', scripts + '</body>');
+                        iframe.srcdoc = processedHtml;
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching content for ${frameId}:`, error);
+                        iframe.parentElement.innerHTML = `<p style="color: var(--color-text-muted); text-align: center;">Failed to load content. Please try again later.</p>`;
                     });
-                    
-                    // After populating the grid, initialize all the interactive scripts
-                    initializeGalleryScripts();
-                } else {
-                    throw new Error("JSON data is not in the expected format.");
-                }
-
-            } catch (error) {
-                console.error('Failed to load gallery data:', error);
-                galleryGrid.innerHTML = `<p style="color: var(--color-primary); text-align: center; grid-column: 1 / -1;">Could not load gallery items. Please try again later.</p>`;
+            } else {
+                iframe.src = cacheBustedUrl;
             }
         }
 
-        // --- MOBILE NAVIGATION (Independent of gallery loading) ---
+        loadDynamicIframe('questionnaireFrame', 'https://raw.githack.com/WIKDMotorsports/MasterQuestionnaire/main/index.html', true);
+        loadDynamicIframe('mapFrame', 'https://raw.githack.com/WIKDMotorsports/Deploy/main/MapsWidget.html', false);
+
+        // --- IFRAME MESSAGE LISTENER ---
+        window.addEventListener('message', (event) => {
+            const data = event.data;
+            if (!data.type || !data.frameId) return;
+
+            const iframe = document.getElementById(data.frameId);
+            if (!iframe || event.source !== iframe.contentWindow) return;
+
+            if (data.type === 'resize' && data.height) {
+                iframe.style.height = (data.height + 2) + 'px';
+            } else if (data.type === 'snapToTop') {
+                iframe.parentElement.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+
+        // --- MOBILE NAVIGATION ---
         const navToggle = document.getElementById('mobileNavToggle');
         const mainNav = document.getElementById('mainNav');
-        if (navToggle && mainNav) {
-            navToggle.addEventListener('click', () => {
-                mainNav.classList.toggle('active');
+        navToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+
+        // --- LIGHTBOX LOGIC ---
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox) {
+            const lightboxImg = document.getElementById('lightboxImg');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
+            let currentImageIndex = 0;
+
+            const showImage = (index) => {
+                if (index >= 0 && index < images.length) {
+                    currentImageIndex = index;
+                    lightboxImg.src = images[currentImageIndex];
+                    lightbox.classList.add('active');
+                }
+            };
+
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', () => showImage(index));
+            });
+
+            document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.classList.remove('active'));
+            document.querySelector('.lightbox-prev').addEventListener('click', () => showImage((currentImageIndex - 1 + images.length) % images.length));
+            document.querySelector('.lightbox-next').addEventListener('click', () => showImage((currentImageIndex + 1) % images.length));
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) lightbox.classList.remove('active');
             });
         }
-
-        // --- INITIATE GALLERY LOADING ---
-        loadGallery();
     });
     </script>
 </body>
