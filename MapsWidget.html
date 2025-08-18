@@ -478,6 +478,21 @@
             }
         });
 
+        // --- MAP RESIZE HANDLING ---
+        // This ensures the map redraws correctly when its container size changes,
+        // for example when the browser window is resized on a desktop.
+        const mapContainer = document.getElementById('map');
+        const resizeObserver = new ResizeObserver(() => {
+            // We use a short timeout to ensure any CSS transitions have completed
+            // before the map recalculates its size.
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100); 
+        });
+
+        // Start observing the map container for size changes.
+        resizeObserver.observe(mapContainer);
+
     </script>
 
 </body>
