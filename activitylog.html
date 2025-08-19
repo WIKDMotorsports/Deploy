@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activity Logger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #a1a1aa;
+            --color-primary: #FF3B30;
+            --color-surface: #141414;
+            --color-border: #2A2A2A;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+        .form-element {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-element:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        .form-element::placeholder { color: var(--color-text-muted); }
+        .btn {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 18px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            border: 1px solid var(--color-primary);
+        }
+        .btn-primary:hover {
+            background-color: #E03024;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+        }
+        .btn-secondary {
+            background-color: var(--color-surface);
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+        .btn-secondary:hover { background-color: rgba(255, 59, 48, 0.1); }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a1a1aa' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+          -webkit-appearance: none; 
+          margin: 0; 
+        }
+        input[type=number] { -moz-appearance: textfield; }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
+        <div class="bg-surface border border-border rounded-2xl shadow-lg p-8" style="background-color: var(--color-surface);">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-white uppercase" style="font-family: var(--font-heading);">Daily Activity Logger</h1>
+                <p class="mt-2 text-sm" style="color: var(--color-text-muted);">Log your daily tasks and copy a formatted summary.</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <select id="userSelect" class="form-element w-full px-4 py-3">
+                        <option>rango</option>
+                        <option>Elyas</option>
+                    </select>
+                    <div class="flex gap-2">
+                        <input type="text" id="addNameInput" placeholder="Add New User" class="form-element w-full px-4 py-3">
+                        <button id="addNameButton" class="btn btn-secondary flex-shrink-0">Add</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1" style="color: var(--color-text-muted);">Date</label>
+                    <input type="date" id="logDate" class="mt-1 block w-full px-4 py-3 form-element">
+                </div>
+
+                <div id="metricsSection">
+                    <label class="block text-sm font-medium mb-2" style="color: var(--color-text-muted);">Metrics</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between p-3 rounded-lg" style="background-color: #0A0A0A;">
+                            <label for="newLeads" class="text-sm">New Leads Contacted</label>
+                            <div class="flex items-center border rounded-lg" style="border-color: var(--color-border);">
+                                <button type="button" id="leadsDecrement" class="px-3 py-1 text-lg font-bold text-gray-400 hover:text-white transition-colors">-</button>
+                                <input type="number" id="newLeads" value="0" class="form-element w-16 text-center bg-transparent border-x" style="border-radius: 0; border-color: var(--color-border);">
+                                <button type="button" id="leadsIncrement" class="px-3 py-1 text-lg font-bold text-gray-400 hover:text-white transition-colors">+</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg" style="background-color: #0A0A0A;">
+                            <label for="estimatesGiven" class="text-sm">Estimates Given</label>
+                             <div class="flex items-center border rounded-lg" style="border-color: var(--color-border);">
+                                <button type="button" id="estimatesDecrement" class="px-3 py-1 text-lg font-bold text-gray-400 hover:text-white transition-colors">-</button>
+                                <input type="number" id="estimatesGiven" value="0" class="form-element w-16 text-center bg-transparent border-x" style="border-radius: 0; border-color: var(--color-border);">
+                                <button type="button" id="estimatesIncrement" class="px-3 py-1 text-lg font-bold text-gray-400 hover:text-white transition-colors">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <textarea id="activity_8_9" placeholder="8am - 9am" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_9_10" placeholder="9am - 10am" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_10_11" placeholder="10am - 11am" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_11_12" placeholder="11am - 12pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_1_2" placeholder="1pm - 2pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_2_3" placeholder="2pm - 3pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_3_4" placeholder="3pm - 4pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                    <textarea id="activity_4_5" placeholder="4pm - 5pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                </div>
+
+                <div class="pt-4">
+                     <button id="copySummaryButton" class="btn btn-primary w-full justify-center">Copy Summary</button>
+                </div>
+            </div>
+
+            <div id="statusMessage" class="text-center text-sm mt-6 h-4"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        // --- DOM Elements ---
+        const USER_SELECT = document.getElementById('userSelect');
+        const ADD_NAME_INPUT = document.getElementById('addNameInput');
+        const ADD_NAME_BUTTON = document.getElementById('addNameButton');
+        const COPY_SUMMARY_BUTTON = document.getElementById('copySummaryButton');
+        const STATUS_MESSAGE = document.getElementById('statusMessage');
+        const METRICS_SECTION = document.getElementById('metricsSection');
+        const LOG_DATE_INPUT = document.getElementById('logDate');
+        const NEW_LEADS_INPUT = document.getElementById('newLeads');
+        const ESTIMATES_GIVEN_INPUT = document.getElementById('estimatesGiven');
+        const ALL_DATA_FIELDS = document.querySelectorAll('.data-field, #newLeads, #estimatesGiven');
+
+        // --- App State ---
+        let db, auth;
+        let currentLogUnsubscribe = null; // To detach old Firestore listeners
+        let saveTimeout = null; // To debounce save operations
+        
+        // --- Firebase Initialization and Auth ---
+        function initializeFirebase() {
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyD27xD4cCvzYFbdKLOdtF3sxLAPnPpQLo8",
+                authDomain: "activity-log-7d4d6.firebaseapp.com",
+                projectId: "activity-log-7d4d6",
+                storageBucket: "activity-log-7d4d6.appspot.com",
+                messagingSenderId: "751457913972",
+                appId: "1:751457913972:web:ce8972d2aa78c215039521",
+                measurementId: "G-VJEJDWM1NW"
+            };
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+            } catch (error) {
+                 console.error("Firebase initialization failed:", error);
+                 updateStatus('Could not connect to the database.', true);
+            }
+        }
+
+        // --- Initial Setup on Page Load ---
+        window.onload = () => {
+            initializeFirebase();
+            
+            // Set date to today in YYYY-MM-DD format
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+            LOG_DATE_INPUT.value = today.toISOString().slice(0,10);
+
+            USER_SELECT.value = 'rango';
+            handleUserChange();
+            setupEventListeners();
+            loadDataForCurrentDate();
+        };
+
+        // --- Event Handlers Setup ---
+        function setupEventListeners() {
+            COPY_SUMMARY_BUTTON.onclick = handleCopySummary;
+            ADD_NAME_BUTTON.onclick = handleAddName;
+            USER_SELECT.addEventListener('change', () => {
+                handleUserChange();
+                loadDataForCurrentDate();
+            });
+            LOG_DATE_INPUT.addEventListener('change', loadDataForCurrentDate);
+
+            // Auto-save on input
+            ALL_DATA_FIELDS.forEach(field => {
+                field.addEventListener('input', () => {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(saveData, 1000); // Debounce for 1 second
+                });
+            });
+
+            // Tally buttons
+            document.getElementById('leadsDecrement').onclick = () => { updateTally(NEW_LEADS_INPUT, -1); saveData(); };
+            document.getElementById('leadsIncrement').onclick = () => { updateTally(NEW_LEADS_INPUT, 1); saveData(); };
+            document.getElementById('estimatesDecrement').onclick = () => { updateTally(ESTIMATES_GIVEN_INPUT, -1); saveData(); };
+            document.getElementById('estimatesIncrement').onclick = () => { updateTally(ESTIMATES_GIVEN_INPUT, 1); saveData(); };
+        }
+
+        // --- Data Logic (Firestore) ---
+        function loadDataForCurrentDate() {
+            if (currentLogUnsubscribe) {
+                currentLogUnsubscribe(); // Detach the listener for the previous date
+            }
+            clearForm();
+
+            const dateId = LOG_DATE_INPUT.value;
+            if (!dateId || !db) return;
+            
+            const docRef = doc(db, "activity_logs", dateId);
+
+            currentLogUnsubscribe = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const currentUser = USER_SELECT.value;
+                    const userData = data[currentUser];
+                    if (userData) {
+                        populateForm(userData);
+                    }
+                } else {
+                    // If the document doesn't exist, clear the form for a new entry
+                    clearForm();
+                }
+            }, (error) => {
+                console.error("Error fetching document: ", error);
+                updateStatus("Error loading data.", true);
+            });
+        }
+
+        async function saveData() {
+            const currentUser = USER_SELECT.value;
+            const dateId = LOG_DATE_INPUT.value;
+            if (!currentUser || !dateId || !db) return;
+            
+            updateStatus('Saving...', false, true);
+
+            const dataToSave = {
+                activities: {
+                    '8-9': document.getElementById('activity_8_9').value,
+                    '9-10': document.getElementById('activity_9_10').value,
+                    '10-11': document.getElementById('activity_10_11').value,
+                    '11-12': document.getElementById('activity_11_12').value,
+                    '1-2': document.getElementById('activity_1_2').value,
+                    '2-3': document.getElementById('activity_2_3').value,
+                    '3-4': document.getElementById('activity_3_4').value,
+                    '4-5': document.getElementById('activity_4_5').value
+                }
+            };
+
+            if (currentUser !== 'Elyas') {
+                dataToSave.metrics = {
+                    newLeads: NEW_LEADS_INPUT.value,
+                    estimatesGiven: ESTIMATES_GIVEN_INPUT.value
+                };
+            }
+
+            try {
+                const docRef = doc(db, "activity_logs", dateId);
+                await setDoc(docRef, { [currentUser]: dataToSave }, { merge: true });
+                updateStatus('Saved!', false);
+            } catch (error) {
+                console.error("Error saving document: ", error);
+                updateStatus('Save failed.', true);
+            }
+        }
+
+        // --- UI & Form Logic ---
+        function handleUserChange() {
+            METRICS_SECTION.style.display = (USER_SELECT.value === 'Elyas') ? 'none' : 'block';
+        }
+
+        function handleAddName() {
+            const newName = ADD_NAME_INPUT.value.trim();
+            if (newName) {
+                if (![...USER_SELECT.options].some(opt => opt.value === newName)) {
+                    const option = document.createElement('option');
+                    option.value = newName;
+                    option.textContent = newName;
+                    USER_SELECT.appendChild(option);
+                }
+                USER_SELECT.value = newName;
+                ADD_NAME_INPUT.value = '';
+                handleUserChange();
+                loadDataForCurrentDate();
+            }
+        }
+
+        function updateTally(inputElement, change) {
+            let currentValue = parseInt(inputElement.value, 10) || 0;
+            inputElement.value = Math.max(0, currentValue + change);
+        }
+        
+        function populateForm(userData) {
+            for (const key in userData.activities) {
+                const element = document.getElementById(`activity_${key.replace('-', '_')}`);
+                if (element) element.value = userData.activities[key];
+            }
+            if (userData.metrics) {
+                NEW_LEADS_INPUT.value = userData.metrics.newLeads || 0;
+                ESTIMATES_GIVEN_INPUT.value = userData.metrics.estimatesGiven || 0;
+            }
+        }
+
+        function clearForm() {
+            ALL_DATA_FIELDS.forEach(field => field.value = (field.type === 'number') ? '0' : '');
+            // Specifically reset textareas to empty strings
+            document.querySelectorAll('.data-field').forEach(ta => ta.value = '');
+        }
+
+        function handleCopySummary() {
+            const data = {
+                date: new Date(LOG_DATE_INPUT.value + 'T00:00:00').toLocaleDateString(), // Format date nicely
+                userName: USER_SELECT.value,
+                newLeads: NEW_LEADS_INPUT.value,
+                estimatesGiven: ESTIMATES_GIVEN_INPUT.value,
+                activities: {
+                    '8-9': document.getElementById('activity_8_9').value, '9-10': document.getElementById('activity_9_10').value,
+                    '10-11': document.getElementById('activity_10_11').value, '11-12': document.getElementById('activity_11_12').value,
+                    '1-2': document.getElementById('activity_1_2').value, '2-3': document.getElementById('activity_2_3').value,
+                    '3-4': document.getElementById('activity_3_4').value, '4-5': document.getElementById('activity_4_5').value
+                }
+            };
+
+            let message = `*Daily Activity Log for ${data.userName} on ${data.date}*\n\n`;
+            message += "```\nTime      | Activity\n----------|----------------------------------\n";
+            message += `8am-9am   | ${data.activities['8-9'] || ''}\n`;
+            message += `9am-10am  | ${data.activities['9-10'] || ''}\n`;
+            message += `10am-11am | ${data.activities['10-11'] || ''}\n`;
+            message += `11am-12pm | ${data.activities['11-12'] || ''}\n`;
+            message += `1pm-2pm   | ${data.activities['1-2'] || ''}\n`;
+            message += `2pm-3pm   | ${data.activities['2-3'] || ''}\n`;
+            message += `3pm-4pm   | ${data.activities['3-4'] || ''}\n`;
+            message += `4pm-5pm   | ${data.activities['4-5'] || ''}\n`;
+            message += "```";
+            
+            if (data.userName !== 'Elyas') {
+                message += `\n\n--- Tallies ---\nNew Leads Contacted: ${data.newLeads}\nEstimates Given: ${data.estimatesGiven}`;
+            }
+
+            navigator.clipboard.writeText(message).then(() => {
+                updateStatus('Summary copied to clipboard!', false);
+            }).catch(err => {
+                updateStatus('Failed to copy.', true);
+                console.error('Clipboard error:', err);
+            });
+        }
+        
+        let statusTimeout;
+        function updateStatus(message, isError, persistent = false) {
+            clearTimeout(statusTimeout);
+            STATUS_MESSAGE.textContent = message;
+            STATUS_MESSAGE.style.color = isError ? '#FF3B30' : '#34D399';
+            if (!persistent) {
+                statusTimeout = setTimeout(() => STATUS_MESSAGE.textContent = '', 2000);
+            }
+        }
+    </script>
+</body>
+</html>
