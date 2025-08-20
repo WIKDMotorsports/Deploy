@@ -27,6 +27,13 @@
         --font-body: 'Inter', sans-serif;
     }
 
+    /* --- FIX: BROWSER RESET --- */
+    /* This removes the default browser margin that causes the white border */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
     /* --- SCOPED STYLES FOR SHOPIFY --- */
     #wikd-homepage-root {
         background-color: var(--color-background);
@@ -34,6 +41,7 @@
         font-family: var(--font-body);
         line-height: 1.6;
         overflow-x: hidden;
+        /* These margins handle Shopify's theme padding */
         margin-left: calc(-1 * var(--page-width-margin, 0px));
         margin-right: calc(-1 * var(--page-width-margin, 0px));
     }
@@ -531,8 +539,8 @@
                         <iframe class="slide-background" loading="lazy" title="Interactive Cooling Fan" srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Interactive Video</title><style>html,body{height:100%;width:100%;margin:0;padding:0;font-family:Inter,sans-serif;display:flex;justify-content:center;align-items:center;background-color:#000;box-sizing:border-box;overflow:hidden}video{width:100%;height:auto;display:block;cursor:pointer}</style></head><body><video id="interactiveVideo" preload="metadata"><source src="https://github.com/WIKDMotorsports/TestSite/raw/refs/heads/main/FanInteract.mp4" type="video/mp4"></video><script>document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("interactiveVideo"),t=16,o=22,i=4,n=4;let a=0,r=0,s=!1,l=!1,d=null;const c=200;let u=!1,v=!1,m=null;const p=()=>"ontouchstart"in window||navigator.maxTouchPoints>0;function g(){m&&cancelAnimationFrame(m),m=null,v=!1}function y(){g(),v=!0,e.pause();const t=Math.max(0,e.currentTime-n/o);const i=()=>{v&&e.currentTime>t?(e.currentTime=Math.max(0,e.currentTime-1/o),v&&(m=requestAnimationFrame(i))):g()};m=requestAnimationFrame(i)}e.addEventListener("loadedmetadata",()=>{const i=t/o;a=e.duration-i,r=4/o,e.pause(),e.currentTime=0}),p()?(e.addEventListener("touchstart",e=>{l=!0,g(),d=setTimeout(()=>{l&&(e.currentTime=0,u=!0,e.play().catch(e=>{}))},c)}),e.addEventListener("touchend",()=>{clearTimeout(d),l&&(l=!1,u=!1,e.pause(),e.currentTime>0?y():(e.currentTime=0,e.pause()))})):(e.addEventListener("mouseenter",()=>{s=!0,g(),e.currentTime=0,u=!0,e.play().catch(e=>{})}),e.addEventListener("mouseleave",()=>{s=!1,u=!1,e.pause(),e.currentTime>0?y():(e.currentTime=0,e.pause())})),e.addEventListener("timeupdate",()=>{if(v)return;const t=p()?l:s;if(!t||e.paused||0===a)return;u?e.currentTime>=r&&(e.currentTime=a,u=!1):e.currentTime>=e.duration-5/o&&(e.currentTime=a)}),e.addEventListener("ended",()=>{const t=p()?l:s;t&&a>0?(e.currentTime=a,e.play().catch(e=>{})):t||(e.currentTime=0,e.pause())})})<\/script></body></html>'></iframe>
                         <div class="slide-content">
                              <div class="slide-title-group">
-                                 <h1>WIKD Cooling Fan</h1>
-                                 <a href="/products/wikd-motorsports-fan-shroud-for-c7-corvette" class="btn"><span>Shop Now</span></a>
+                                  <h1>WIKD Cooling Fan</h1>
+                                  <a href="/products/wikd-motorsports-fan-shroud-for-c7-corvette" class="btn"><span>Shop Now</span></a>
                             </div>
                         </div>
                     </div>
