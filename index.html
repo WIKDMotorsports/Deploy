@@ -1,862 +1,1158 @@
-<!-- 
-  Instructions for Shopify:
-  1. Go to your Shopify Admin > Online Store > Theme editor.
-  2. Add a new "Custom Liquid" section to your homepage.
-  3. Delete any default code in the Custom Liquid block.
-  4. Copy and paste ALL of the code below into the block.
-  5. In the section settings on the right, set "Content width" to "Full width" and "Section padding" to "0px" for top and bottom.
-  6. Click "Save".
--->
-
-<!-- 1. FONT STYLES (Required) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<!-- 2. CSS STYLES (Required) -->
-<style>
-    /* --- BASE VARIABLES --- */
-    :root {
-        --color-background: #0A0A0A;
-        --color-text: #EAEAEA;
-        --color-text-muted: #888888;
-        --color-primary: #FF3B30;
-        --color-surface: #141414;
-        --color-border: #2A2A2A;
-        --font-heading: 'Rajdhani', sans-serif;
-        --font-body: 'Inter', sans-serif;
-    }
-
-    /* --- SCOPED STYLES FOR SHOPIFY --- */
-    #wikd-homepage-root {
-        background-color: var(--color-background);
-        color: var(--color-text);
-        font-family: var(--font-body);
-        line-height: 1.6;
-        overflow-x: hidden;
-        margin-left: calc(-1 * var(--page-width-margin, 0px));
-        margin-right: calc(-1 * var(--page-width-margin, 0px));
-    }
-
-    #wikd-homepage-root *, 
-    #wikd-homepage-root *::before, 
-    #wikd-homepage-root *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    #wikd-homepage-root h1, 
-    #wikd-homepage-root h2, 
-    #wikd-homepage-root h3 {
-        font-family: var(--font-heading);
-        font-weight: 700;
-        line-height: 1.2;
-        text-transform: uppercase;
-    }
-
-    #wikd-homepage-root img, 
-    #wikd-homepage-root video, 
-    #wikd-homepage-root iframe {
-        max-width: 100%;
-        height: auto;
-        display: block;
-    }
-
-    #wikd-homepage-root a {
-        color: var(--color-primary);
-        text-decoration: none;
-    }
-
-    #wikd-homepage-root .section {
-        padding: 60px 5%;
-        overflow: hidden;
-    }
-
-    #wikd-homepage-root .container {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-    
-    #wikd-homepage-root .section-title {
-        text-align: center;
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        margin-bottom: 60px;
-    }
-
-    /* --- HERO SLIDESHOW SECTION (REPLACED FROM REFERENCE) --- */
-    #wikd-homepage-root .hero {
-        padding-top: 80px;
-        padding-bottom: 50px;
-        padding-left: 5%;
-        padding-right: 5%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #wikd-homepage-root .hero-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 1400px;
-        aspect-ratio: 16 / 7;
-        border-radius: 16px;
-        transition: box-shadow 0.8s ease-in-out;
-    }
-
-    #wikd-homepage-root .hero-wrapper.theme-exhaust { box-shadow: 0 0 60px -10px #8A2BE2; }
-    #wikd-homepage-root .hero-wrapper.theme-packages { box-shadow: 0 0 60px -10px #ff1a00; }
-    #wikd-homepage-root .hero-wrapper.theme-wheels { box-shadow: 0 0 60px -10px #008000; }
-    #wikd-homepage-root .hero-wrapper.theme-cooling { box-shadow: 0 0 60px -10px #00c5ff; }
-
-    #wikd-homepage-root .slideshow-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 16px;
-        overflow: hidden;
-        z-index: 1;
-        background: #000;
-    }
-
-    #wikd-homepage-root .slideshow-container::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 16px;
-        padding: 2px;
-        background-size: 300%;
-        animation: colorFlow 4s ease-in-out infinite;
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        z-index: 4;
-        pointer-events: none;
-        transition: background-image 0.8s ease-in-out;
-    }
-
-    #wikd-homepage-root .slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.8s ease-in-out, visibility 0.8s;
-        z-index: 1;
-    }
-    
-    #wikd-homepage-root .slide-content {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 3;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        align-items: flex-start;
-        text-align: left;
-        padding: 40px;
-        height: 100%;
-    }
-    
-    #wikd-homepage-root .slide-content::after {
-        content: '';
-        position: absolute;
-        bottom: 0; left: 0; width: 100%; height: 70%;
-        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-        z-index: -1;
-    }
-
-    #wikd-homepage-root .slide-background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 1;
-    }
-
-    #wikd-homepage-root video.slide-background {
-        object-fit: contain;
-    }
-    
-    #wikd-homepage-root .slide.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    #wikd-homepage-root .slide-title-group {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        transform: translateY(30px);
-        opacity: 0;
-    }
-
-    #wikd-homepage-root .slide h1 {
-        font-weight: 700;
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        background-size: 300%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: colorFlow 4s ease-in-out infinite;
-        margin: 0;
-        transition: background-image 0.8s ease-in-out;
-    }
-    
-    #wikd-homepage-root .slide.active .slide-title-group {
-        transform: translateY(0);
-        opacity: 1;
-        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s, opacity 0.8s ease 0.3s;
-    }
-
-    @keyframes colorFlow {
-        0%   { background-position: 0% 50%; }
-        50%  { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    #wikd-homepage-root .slideshow-container.theme-exhaust::before,
-    #wikd-homepage-root .slideshow-container.theme-exhaust .slide.active h1 {
-        background-image: linear-gradient(90deg, #4B0082, #800000, #8A2BE2, #800000, #4B0082);
-    }
-    #wikd-homepage-root .slideshow-container.theme-packages::before,
-    #wikd-homepage-root .slideshow-container.theme-packages .slide.active h1 {
-        background-image: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
-    }
-    #wikd-homepage-root .slideshow-container.theme-wheels::before,
-    #wikd-homepage-root .slideshow-container.theme-wheels .slide.active h1 {
-        background-image: linear-gradient(90deg, #004d00, #008000, #90ee90, #008000, #004d00);
-    }
-    #wikd-homepage-root .slideshow-container.theme-cooling::before,
-    #wikd-homepage-root .slideshow-container.theme-cooling .slide.active h1 {
-        background-image: linear-gradient(90deg, #00c5ff, #ffffff, #afeeee, #ffffff, #00c5ff);
-    }
-
-    #wikd-homepage-root .btn {
-        display: inline-block;
-        padding: 14px 32px;
-        font-family: var(--font-heading);
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: var(--color-text);
-        background-color: transparent;
-        border: 2px solid var(--color-border);
-        position: relative;
-        overflow: hidden;
-        transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out;
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 85%);
-        text-decoration: none;
-        flex-shrink: 0;
-    }
-    #wikd-homepage-root .btn span { position: relative; z-index: 2; }
-    #wikd-homepage-root .btn::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        z-index: 1;
-        transform: translateX(-101%);
-        transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1), background-color 0.4s ease-in-out;
-    }
-    #wikd-homepage-root .btn:hover { color: white; }
-    #wikd-homepage-root .btn:hover::before { transform: translateX(0); }
-
-    #wikd-homepage-root .slide[data-theme="theme-exhaust"] .btn:hover { border-color: #8A2BE2; }
-    #wikd-homepage-root .slide[data-theme="theme-exhaust"] .btn::before { background-color: #8A2BE2; }
-    #wikd-homepage-root .slide[data-theme="theme-packages"] .btn:hover { border-color: #ff1a00; }
-    #wikd-homepage-root .slide[data-theme="theme-packages"] .btn::before { background-color: #ff1a00; }
-    #wikd-homepage-root .slide[data-theme="theme-wheels"] .btn:hover { border-color: #008000; }
-    #wikd-homepage-root .slide[data-theme="theme-wheels"] .btn::before { background-color: #008000; }
-    #wikd-homepage-root .slide[data-theme="theme-cooling"] .btn:hover { border-color: #00c5ff; }
-    #wikd-homepage-root .slide[data-theme="theme-cooling"] .btn::before { background-color: #00c5ff; }
-
-    #wikd-homepage-root .section-cta {
-        text-align: center;
-        margin-top: 40px;
-    }
-    #wikd-homepage-root .btn-primary:hover { border-color: var(--color-primary); }
-    #wikd-homepage-root .btn-primary::before { background-color: var(--color-primary); }
-
-
-    #wikd-homepage-root #questionnaire-section { padding-top: 0; padding-bottom: 0; }
-    #wikd-homepage-root .questionnaire-iframe {
-        border: none;
-        width: 100%;
-        display: block;
-        background-color: transparent;
-        transition: height 0.2s ease-out;
-    }
-
-    #wikd-homepage-root .packages-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 30px;
-    }
-    #wikd-homepage-root .package-card {
-        position: relative;
-        aspect-ratio: 3 / 4;
-        overflow: hidden;
-        border-radius: 8px;
-        border: 1px solid var(--color-border);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: block;
-    }
-    #wikd-homepage-root .package-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    }
-    #wikd-homepage-root .package-card-bg {
-        position: absolute; inset: 0; width: 100%; height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-    #wikd-homepage-root .package-card:hover .package-card-bg { transform: scale(1.05); }
-    #wikd-homepage-root .package-card-overlay {
-        position: absolute; inset: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%);
-        display: flex; flex-direction: column; justify-content: flex-end;
-        padding: 25px;
-    }
-    #wikd-homepage-root .package-card-title {
-        font-size: 2rem; color: white;
-        transform: translateY(20px); opacity: 0;
-        transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
-    }
-    #wikd-homepage-root .package-card-link {
-        font-size: 1rem; color: var(--color-primary);
-        text-transform: uppercase; font-weight: 600;
-        transform: translateY(20px); opacity: 0;
-        transition: transform 0.4s ease 0.2s, opacity 0.4s ease 0.2s;
-    }
-    #wikd-homepage-root .package-card:hover .package-card-title,
-    #wikd-homepage-root .package-card:hover .package-card-link {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    #wikd-homepage-root .ticker-section { padding: 60px 0; }
-    #wikd-homepage-root .ticker-wrap {
-        max-width: 1400px; margin: 0 auto; width: 100%;
-        overflow: hidden; position: relative;
-    }
-    #wikd-homepage-root .ticker-wrap::before, 
-    #wikd-homepage-root .ticker-wrap::after {
-        content: ''; position: absolute; top: 0;
-        width: 100px; height: 100%; z-index: 2;
-    }
-    #wikd-homepage-root .ticker-wrap::before { left: 0; background: linear-gradient(to right, var(--color-background) 0%, transparent 100%); }
-    #wikd-homepage-root .ticker-wrap::after { right: 0; background: linear-gradient(to left, var(--color-background) 0%, transparent 100%); }
-    #wikd-homepage-root .ticker-move { display: inline-flex; animation: ticker 60s linear infinite; }
-    #wikd-homepage-root .exhaust-card {
-        display: flex; flex-direction: column;
-        background-color: var(--color-surface);
-        border-radius: 8px; border: 1px solid var(--color-border);
-        overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
-        text-decoration: none; color: var(--color-text);
-        width: 380px; margin: 0 20px; flex-shrink: 0;
-    }
-    #wikd-homepage-root .exhaust-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-    #wikd-homepage-root .exhaust-card-image-wrapper { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
-    #wikd-homepage-root .exhaust-card-bg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.3, 1, 0.4, 1); }
-    #wikd-homepage-root .exhaust-card:hover .exhaust-card-bg { transform: scale(1.05); }
-    #wikd-homepage-root .exhaust-card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-    #wikd-homepage-root .exhaust-card-title { font-size: 1.2rem; line-height: 1.4; margin: 0 0 10px 0; flex-grow: 1; text-transform: none; color: var(--color-text); }
-    #wikd-homepage-root .exhaust-card-price { font-size: 1.6rem; font-weight: 700; color: var(--color-primary); margin-top: auto; font-family: var(--font-heading); }
-    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    #wikd-homepage-root .gallery-grid { 
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
-        gap: 20px; 
-    }
-    #wikd-homepage-root .gallery-item { overflow: hidden; border-radius: 8px; cursor: pointer; border: 1px solid var(--color-border); }
-    #wikd-homepage-root .gallery-item img { transition: transform 0.4s ease; }
-    #wikd-homepage-root .gallery-item:hover img { transform: scale(1.05); }
-
-    /* --- MAP & LOCATION SECTION (REPLACED FROM REFERENCE) --- */
-    #wikd-homepage-root .map-iframe {
-        border: none;
-        width: 100%;
-        display: block;
-        background-color: transparent;
-        height: 600px;
-        border-radius: 16px;
-    }
-    
-    #wikd-homepage-root .lightbox {
-        position: fixed; inset: 0;
-        background: rgba(0,0,0,0.9); z-index: 99999;
-        display: flex; justify-content: center; align-items: center;
-        opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-    }
-    #wikd-homepage-root .lightbox.active { opacity: 1; pointer-events: all; }
-    #wikd-homepage-root .lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
-    #wikd-homepage-root .lightbox-content img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
-    #wikd-homepage-root .lightbox-close, 
-    #wikd-homepage-root .lightbox-prev, 
-    #wikd-homepage-root .lightbox-next {
-        position: absolute; background: none; border: none;
-        color: white; font-size: 3rem; cursor: pointer; z-index: 1;
-        transition: color 0.3s ease;
-    }
-    #wikd-homepage-root .lightbox-close:hover, 
-    #wikd-homepage-root .lightbox-prev:hover, 
-    #wikd-homepage-root .lightbox-next:hover { color: var(--color-primary); }
-    #wikd-homepage-root .lightbox-close { top: 20px; right: 30px; }
-    #wikd-homepage-root .lightbox-prev { top: 50%; left: 20px; transform: translateY(-50%); }
-    #wikd-homepage-root .lightbox-next { top: 50%; right: 20px; transform: translateY(-50%); }
-
-    /* --- RESPONSIVE STYLES --- */
-
-    @media (max-width: 1200px) {
-        #wikd-homepage-root .packages-grid,
-        #wikd-homepage-root .gallery-grid { 
-            grid-template-columns: repeat(2, 1fr); 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Activity Logger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #a1a1aa;
+            --color-primary: #FF3B30;
+            --color-surface: #141414;
+            --color-border: #2A2A2A;
+            --color-danger: #ef4444;
+            --color-success: #34d399;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
         }
-    }
-
-    @media (max-width: 900px) {
-        #wikd-homepage-root .hero { padding-top: 100px; }
-        #wikd-homepage-root .hero-wrapper, 
-        #wikd-homepage-root .slideshow-container { aspect-ratio: 16 / 9; }
-        
-        #wikd-homepage-root .map-iframe { 
-            height: 1000px;
+        html { box-sizing: border-box; }
+        *, *:before, *:after { box-sizing: inherit; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-    }
-
-    @media (max-width: 768px) {
-        #wikd-homepage-root .section { padding: 40px 5%; }
-        #wikd-homepage-root .section-title { margin-bottom: 40px; }
+        .container { width: 100%; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+        @media (min-width: 640px) { .container { max-width: 640px; padding-left: 1.5rem; padding-right: 1.5rem; } }
+        @media (min-width: 768px) { .container { max-width: 768px; } }
+        @media (min-width: 1024px) { .container { max-width: 1024px; padding-left: 2rem; padding-right: 2rem; } }
+        @media (min-width: 1280px) { .container { max-width: 1280px; } }
+        .max-w-4xl { max-width: 56rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .p-4 { padding: 1rem; }
+        .p-8 { padding: 2rem; }
+        .pt-4 { padding-top: 1rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .bg-surface { background-color: var(--color-surface); }
+        .border { border-width: 1px; }
+        .border-border { border-color: var(--color-border); }
+        .border-x { border-left-width: 1px; border-right-width: 1px; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-l-lg { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; }
+        .rounded-r-lg { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .text-center { text-align: center; }
+        .text-white { color: #fff; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .font-bold { font-weight: 700; }
+        .uppercase { text-transform: uppercase; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .h-4 { height: 1rem; }
+        .w-full { width: 100%; }
+        .w-16 { width: 4rem; }
+        .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-shrink-0 { flex-shrink: 0; }
+        .flex-grow { flex-grow: 1; }
+        @media (min-width: 640px) { .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        .form-element {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-element:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        .form-element::placeholder { color: var(--color-text-muted); }
+        .btn {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 18px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            border: 1px solid var(--color-primary);
+        }
+        .btn-primary:hover {
+            background-color: #E03024;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+        }
+        .btn-secondary {
+            background-color: var(--color-surface);
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+        .btn-secondary:hover { background-color: rgba(255, 59, 48, 0.1); }
+        .btn-clear-section {
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .btn-clear-section:hover {
+            color: var(--color-danger);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a1a1aa' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: brightness(0) saturate(100%) invert(31%) sepia(93%) saturate(3493%) hue-rotate(352deg) brightness(99%) contrast(106%);
+        }
+        /* Hide arrows from number input */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .entry-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: #0A0A0A;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid var(--color-border);
+        }
+        .entry-item .desc, .entry-item .value {
+            transition: all 0.2s ease;
+        }
+        .entry-item .desc { flex-grow: 1; }
+        .entry-item .value { color: var(--color-text-muted); font-size: 0.875rem; }
+        .entry-item-actions { display: flex; align-items: center; gap: 0.5rem; }
+        .entry-item-btn {
+            background: none; border: none; color: var(--color-text-muted); cursor: pointer;
+            padding: 0.25rem; line-height: 1;
+            transition: color 0.2s ease;
+        }
+        .entry-item-btn svg { width: 16px; height: 16px; }
+        .entry-item-btn:hover { color: var(--color-primary); }
+        .entry-item-btn.delete-btn:hover { color: var(--color-danger); }
+        .entry-item-btn.save-btn:hover { color: var(--color-success); }
         
-        #wikd-homepage-root .hero { 
-            padding-top: 80px; 
-            padding-bottom: 40px;
+        .add-btn {
+            padding: 0.75rem;
+            font-size: 1.5rem;
+            line-height: 1;
+            font-family: var(--font-body);
+        }
+        .collapsible-content.collapsed {
+            display: none;
+        }
+        #socialMediaToggle.collapsed-state {
+            background-color: #0A0A0A;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            transition: all 0.2s ease-in-out;
+        }
+        #socialMediaToggle.collapsed-state:hover {
+            border-color: var(--color-primary);
+        }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: var(--color-surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--color-border);
+            width: 90%;
+            max-width: 500px;
+        }
+        .hidden { display: none; }
+        .tally-btn {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+            line-height: 1;
+            color: var(--color-text-muted);
+            background-color: var(--color-surface);
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+        }
+        .tally-btn:hover {
+            color: var(--color-primary);
+            background-color: rgba(255, 59, 48, 0.1);
         }
         
-        #wikd-homepage-root .hero-wrapper { aspect-ratio: 4 / 3; }
-        #wikd-homepage-root .slide-content { padding: 25px; }
-        #wikd-homepage-root .slide-title-group { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-        #wikd-homepage-root .btn { padding: 12px 28px; font-size: 16px; }
-
-        #wikd-homepage-root .packages-grid { 
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px; 
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        #wikd-homepage-root .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        #wikd-homepage-root .package-card { aspect-ratio: 1 / 1; }
-        #wikd-homepage-root .package-card-title { font-size: 1.75rem; }
-        
-        #wikd-homepage-root .ticker-wrap::before, 
-        #wikd-homepage-root .ticker-wrap::after { width: 50px; }
-        #wikd-homepage-root .exhaust-card { width: 80vw; max-width: 320px; margin: 0 10px; }
-        
-        #wikd-homepage-root .map-iframe {
-            height: 1000px;
-        }
-    }
 
-    @media (max-width: 480px) {
-        #wikd-homepage-root .section { padding: 30px 4%; }
-        
-        #wikd-homepage-root .hero { 
-            padding-left: 4%;
-            padding-right: 4%;
+        #liveDieRepeatButton {
+            background: linear-gradient(90deg, #00ffff, #0000ff, #00ffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border: none;
+            position: relative;
+            transition: box-shadow 0.3s ease-in-out;
+            background-size: 200% auto;
+            animation: gradient-flow 4s linear infinite;
         }
-        
-        #wikd-homepage-root .hero-wrapper { aspect-ratio: 1 / 1; }
+        #liveDieRepeatButton::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            padding: 2px; 
+            background: linear-gradient(90deg, #00ffff, #0000ff, #00ffff);
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            background-size: 200% auto;
+            animation: gradient-flow 4s linear infinite;
+        }
+        #liveDieRepeatButton:hover {
+            box-shadow: 0 0 15px 3px rgba(0, 255, 255, 0.6), 0 0 25px 10px rgba(0, 0, 255, 0.4);
+        }
 
-        #wikd-homepage-root .slide-content { padding: 20px; }
-        #wikd-homepage-root .slide h1 { font-size: clamp(1.8rem, 10vw, 2.5rem); }
-        #wikd-homepage-root .btn { padding: 10px 24px; font-size: 15px; }
-        
-        #wikd-homepage-root .exhaust-card { width: 85vw; margin: 0 8px; }
-        #wikd-homepage-root .exhaust-card-title { font-size: 1.1rem; }
-        #wikd-homepage-root .exhaust-card-price { font-size: 1.4rem; }
-        #wikd-homepage-root .lightbox-close { top: 10px; right: 15px; font-size: 2.5rem; }
-        #wikd-homepage-root .lightbox-prev { left: 10px; }
-        #wikd-homepage-root .lightbox-next { right: 10px; }
-    }
-</style>
+        #pinInput {
+            letter-spacing: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: var(--font-heading);
+        }
+    </style>
+</head>
+<body class="antialiased">
 
-<!-- 3. HTML CONTENT (Required) -->
-<div id="wikd-homepage-root">
-    <main>
-        <!-- HERO SLIDESHOW SECTION -->
-        <section class="hero" id="hero">
-            <div class="hero-wrapper">
-                <div class="slideshow-container" id="slideshow">
-                    <div class="slide" data-theme="theme-exhaust">
-                        <video id="exhaust-video" class="slide-background" muted playsinline>
-                            <source src="https://github.com/WIKDMotorsports/TestSite/raw/refs/heads/main/5-8mbps.mp4" type="video/mp4">
-                        </video>
-                        <div class="slide-content">
-                            <div class="slide-title-group">
-                                <h1>Titanium Exhausts</h1>
-                                <a href="#exhausts" class="btn"><span>Explore</span></a>
-                            </div>
+    <div id="mainContent" class="hidden">
+        <div class="container mx-auto max-w-4xl p-4">
+            <div class="bg-surface border border-border rounded-2xl shadow-lg p-8">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-white uppercase" style="font-family: var(--font-heading);">Daily Activity Logger</h1>
+                    <p class="mt-2 text-sm" style="color: var(--color-text-muted);">Log your daily tasks and copy a formatted summary.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- User and Date Selection -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <select id="userSelect" class="form-element w-full px-4 py-3">
+                            <option>rango</option>
+                            <option>Elyas</option>
+                        </select>
+                        <div class="flex gap-2">
+                            <input type="text" id="addNameInput" placeholder="Add New User" class="form-element w-full px-4 py-3">
+                            <button id="addNameButton" class="btn btn-secondary flex-shrink-0">Add</button>
                         </div>
                     </div>
-                    <div class="slide" data-theme="theme-packages">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/WIKDonDyno.jpg?v=1752603899" alt="Performance Packages" class="slide-background">
-                        <div class="slide-content">
-                            <div class="slide-title-group">
-                                <h1>Performance Packages</h1>
-                                <a href="#packages" class="btn"><span>Explore</span></a>
+                    <div>
+                        <label class="block text-sm font-medium mb-1" style="color: var(--color-text-muted);">Date</label>
+                        <input type="date" id="logDate" class="mt-1 block w-full px-4 py-3 form-element">
+                    </div>
+                    
+                    <!-- Rango-specific sections -->
+                    <div id="rangoModeSections" class="space-y-6">
+                        <!-- Metrics Section -->
+                        <div id="metricsSection">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="flex items-center justify-between p-3 rounded-lg" style="background-color: #0A0A0A;">
+                                    <label for="newLeads" class="text-sm">New Leads Contacted</label>
+                                    <div class="flex items-center border border-border rounded-lg">
+                                        <button type="button" id="leadsDecrement" class="tally-btn rounded-l-lg">-</button>
+                                        <input type="number" id="newLeads" value="0" class="form-element w-16 text-center bg-transparent border-x border-border" style="border-radius: 0;">
+                                        <button type="button" id="leadsIncrement" class="tally-btn rounded-r-lg">+</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-lg" style="background-color: #0A0A0A;">
+                                    <label for="estimatesGiven" class="text-sm">Estimates Given</label>
+                                     <div class="flex items-center border border-border rounded-lg">
+                                        <button type="button" id="estimatesDecrement" class="tally-btn rounded-l-lg">-</button>
+                                        <input type="number" id="estimatesGiven" value="0" class="form-element w-16 text-center bg-transparent border-x border-border" style="border-radius: 0;">
+                                        <button type="button" id="estimatesIncrement" class="tally-btn rounded-r-lg">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="slide" data-theme="theme-wheels">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/f450.jpg?v=1750445422" alt="F-450 Wheel & Tire Package" class="slide-background">
-                        <div class="slide-content">
-                            <div class="slide-title-group">
-                                <h1>F-450 Wheel & Tire</h1>
-                                <a href="/pages/f450-wheel-tire-package" class="btn"><span>View Package</span></a>
+                        <!-- Potential Clients -->
+                        <div class="entry-section" data-section="potentialClients">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-medium" style="color: var(--color-text-muted);">Potential Clients</label>
+                                <button type="button" class="btn-clear-section">Clear All</button>
+                            </div>
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" placeholder="Description (e.g., 2022 C7Z Package)" class="form-element w-full px-4 py-3 entry-desc">
+                                <input type="number" placeholder="Value" class="form-element w-1/3 px-4 py-3 entry-value">
+                                <button class="btn btn-secondary add-btn">+</button>
+                            </div>
+                            <div class="space-y-2 entry-list"></div>
+                        </div>
+                        <!-- Sold Cars -->
+                        <div class="entry-section" data-section="soldCars">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-medium" style="color: var(--color-text-muted);">Sold - Car Coming</label>
+                                <button type="button" class="btn-clear-section">Clear All</button>
+                            </div>
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" placeholder="Description (e.g., 2024 Blackwing Package)" class="form-element w-full px-4 py-3 entry-desc">
+                                <input type="number" placeholder="Value" class="form-element w-1/3 px-4 py-3 entry-value">
+                                <button class="btn btn-secondary add-btn">+</button>
+                            </div>
+                            <div class="space-y-2 entry-list"></div>
+                        </div>
+                        <!-- Cars in Shop -->
+                        <div class="entry-section" data-section="carsInShop">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-medium" style="color: var(--color-text-muted);">Cars in Shop</label>
+                                <button type="button" class="btn-clear-section">Clear All</button>
+                            </div>
+                            <div class="flex gap-2 mb-2">
+                                <input type="text" placeholder="Description (e.g., MacGruber)" class="form-element w-full px-4 py-3 entry-desc">
+                                <input type="number" placeholder="Value" class="form-element w-1/3 px-4 py-3 entry-value">
+                                <button class="btn btn-secondary add-btn">+</button>
+                            </div>
+                            <div class="space-y-2 entry-list"></div>
+                        </div>
+                        <!-- Social Media -->
+                        <div id="socialMediaSection">
+                            <div id="socialMediaToggle" class="flex items-center justify-between cursor-pointer">
+                                <div class="flex items-center">
+                                    <label class="block text-sm font-medium" style="color: var(--color-text-muted); pointer-events: none;">Social Media</label>
+                                    <span id="expandCue" class="text-xs" style="color: var(--color-text-muted); margin-left: 8px;">(Click to expand)</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <button type="button" class="btn-clear-section hidden">Clear All</button>
+                                    <span id="socialMediaIcon" class="text-lg">&#9654;</span> <!-- Right arrow -->
+                                </div>
+                            </div>
+                            <div id="socialMediaContent" class="collapsible-content collapsed mt-2 p-4 rounded-lg" style="background-color: #0A0A0A; border: 1px solid var(--color-border);">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <input type="text" id="social_story_one" placeholder="Story One" class="form-element w-full px-4 py-3 data-field">
+                                    <input type="text" id="social_story_two" placeholder="Story Two" class="form-element w-full px-4 py-3 data-field">
+                                    <input type="text" id="social_story_three" placeholder="Story Three" class="form-element w-full px-4 py-3 data-field">
+                                    <input type="text" id="social_story_four" placeholder="Story Four" class="form-element w-full px-4 py-3 data-field">
+                                    <input type="text" id="social_reel_1" placeholder="Reel 1" class="form-element w-full px-4 py-3 data-field">
+                                    <input type="text" id="social_saturday_story" placeholder="Saturday Story" class="form-element w-full px-4 py-3 data-field">
+                                    <input type="text" id="social_sunday_story" placeholder="Sunday Story" class="form-element w-full px-4 py-3 data-field">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="slide" data-theme="theme-cooling">
-                        <iframe class="slide-background" loading="lazy" title="Interactive Cooling Fan" srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Interactive Video</title><style>html,body{height:100%;width:100%;margin:0;padding:0;font-family:Inter,sans-serif;display:flex;justify-content:center;align-items:center;background-color:#000;box-sizing:border-box;overflow:hidden}video{width:100%;height:auto;display:block;cursor:pointer}</style></head><body><video id="interactiveVideo" preload="metadata"><source src="https://github.com/WIKDMotorsports/TestSite/raw/refs/heads/main/FanInteract.mp4" type="video/mp4"></video><script>document.addEventListener("DOMContentLoaded",()=>{const e=document.getElementById("interactiveVideo"),t=16,o=22,i=4,n=4;let a=0,r=0,s=!1,l=!1,d=null;const c=200;let u=!1,v=!1,m=null;const p=()=>"ontouchstart"in window||navigator.maxTouchPoints>0;function g(){m&&cancelAnimationFrame(m),m=null,v=!1}function y(){g(),v=!0,e.pause();const t=Math.max(0,e.currentTime-n/o);const i=()=>{v&&e.currentTime>t?(e.currentTime=Math.max(0,e.currentTime-1/o),v&&(m=requestAnimationFrame(i))):g()};m=requestAnimationFrame(i)}e.addEventListener("loadedmetadata",()=>{const i=t/o;a=e.duration-i,r=4/o,e.pause(),e.currentTime=0}),p()?(e.addEventListener("touchstart",e=>{l=!0,g(),d=setTimeout(()=>{l&&(e.currentTime=0,u=!0,e.play().catch(e=>{}))},c)}),e.addEventListener("touchend",()=>{clearTimeout(d),l&&(l=!1,u=!1,e.pause(),e.currentTime>0?y():(e.currentTime=0,e.pause()))})):(e.addEventListener("mouseenter",()=>{s=!0,g(),e.currentTime=0,u=!0,e.play().catch(e=>{})}),e.addEventListener("mouseleave",()=>{s=!1,u=!1,e.pause(),e.currentTime>0?y():(e.currentTime=0,e.pause())})),e.addEventListener("timeupdate",()=>{if(v)return;const t=p()?l:s;if(!t||e.paused||0===a)return;u?e.currentTime>=r&&(e.currentTime=a,u=!1):e.currentTime>=e.duration-5/o&&(e.currentTime=a)}),e.addEventListener("ended",()=>{const t=p()?l:s;t&&a>0?(e.currentTime=a,e.play().catch(e=>{})):t||(e.currentTime=0,e.pause())})})<\/script></body></html>'></iframe>
-                        <div class="slide-content">
-                             <div class="slide-title-group">
-                                 <h1>WIKD Cooling Fan</h1>
-                                 <a href="/products/wikd-motorsports-fan-shroud-for-c7-corvette" class="btn"><span>Shop Now</span></a>
-                            </div>
+                        <!-- Live Die Repeat Button -->
+                        <div>
+                            <button id="liveDieRepeatButton" class="btn w-full justify-center">Live, Die, Repeat</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <section id="questionnaire-section" class="section">
-            <div class="container">
-                <iframe id="questionnaireFrame" class="questionnaire-iframe" title="WIKD Motorsports Build Questionnaire" loading="lazy"></iframe>
-            </div>
-        </section>
-
-        <section id="packages" class="section packages-section">
-            <div class="container">
-                <h2 class="section-title">Performance Packages</h2>
-                <div class="packages-grid">
-                    <a href="/pages/corvette-c7-lt4-tuning-packages" class="package-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/image_1600x.jpg?v=1732117588" alt="Corvette C7 LT4" class="package-card-bg" loading="lazy">
-                        <div class="package-card-overlay">
-                            <h3 class="package-card-title">Corvette C7 LT4</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
+                    <!-- Hourly activities section -->
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--color-text-muted);">Hourly Activities</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <textarea id="activity_8_9" placeholder="8am - 9am" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_9_10" placeholder="9am - 10am" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_10_11" placeholder="10am - 11am" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_11_12" placeholder="11am - 12pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_1_2" placeholder="1pm - 2pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_2_3" placeholder="2pm - 3pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_3_4" placeholder="3pm - 4pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
+                            <textarea id="activity_4_5" placeholder="4pm - 5pm" rows="2" class="form-element w-full px-4 py-3 data-field"></textarea>
                         </div>
-                    </a>
-                    <a href="/pages/c8-lt2-packages" class="package-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8_Exhaust_Tuning_Packages_10c50e27-688f-4c5e-a253-f9cb872af5d3.webp?v=1750949635" alt="Corvette C8 LT2" class="package-card-bg" loading="lazy">
-                        <div class="package-card-overlay">
-                            <h3 class="package-card-title">Corvette C8 LT2</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
-                        </div>
-                    </a>
-                    <a href="/pages/6th-gen-camaro-tuning-packages" class="package-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/ZL1.webp?v=1750443336" alt="6th Gen Camaro" class="package-card-bg" loading="lazy">
-                        <div class="package-card-overlay">
-                            <h3 class="package-card-title">6th Gen Camaro</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
-                        </div>
-                    </a>
-                    <a href="/pages/ct5-blackwing-tuning-packages" class="package-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/DSC08715.webp?v=1740518095" alt="CTS V & CT5 V Blackwing" class="package-card-bg" loading="lazy">
-                        <div class="package-card-overlay">
-                            <h3 class="package-card-title">CTS/CT5-V Blackwing</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
+                    </div>
 
-        <section id="exhausts" class="section ticker-section">
-            <div class="container">
-                <h2 class="section-title">Titanium Racing Exhausts</h2>
-            </div>
-            <div class="ticker-wrap">
-                <div class="ticker-move">
-                    <!-- Items are duplicated for seamless loop -->
-                    <a href="/products/corvette-c8-titanium-catback-2020-brushed-blue" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4623.jpg?v=1733425432&width=1200" class="exhaust-card-bg" alt="Corvette C8 Titanium Catback" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Corvette C8 Titanium Catback 2020+ (Brushed Blue)</h3><p class="exhaust-card-price">$3,999.99</p></div>
-                    </a>
-                    <a href="/products/ferrari-458-italia-45l-titanium-catback-2010-2015-golden-polish" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4415.jpg?v=1733425565&width=1200" class="exhaust-card-bg" alt="Ferrari 458 Italia Titanium Catback" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Ferrari 458 Italia 4.5L Titanium Catback (Golden Polish)</h3><p class="exhaust-card-price">$3,999.99</p></div>
-                    </a>
-                    <a href="/products/mclaren-720s-decat-titanium-downpipe-2018-brushed-purple" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4559_f71fde06-0135-4c14-9064-d85084463868.jpg?v=1734125231&width=1200" class="exhaust-card-bg" alt="Mclaren 720S Decat Titanium Downpipe" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Mclaren 720S Decat Titanium Downpipe 2018+ (Brushed Purple)</h3><p class="exhaust-card-price">$3,349.99</p></div>
-                    </a>
-                    <a href="/products/lamborghini-huracan-evo-header-black-ceramic-coated" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Huracan_Headers_Blk-1.png?v=1734023095&width=1200" class="exhaust-card-bg" alt="Lamborghini Huracan EVO Header" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Lamborghini Huracan EVO / Audi R8 Header (Black Ceramic Coated)</h3><p class="exhaust-card-price">$4,999.99</p></div>
-                    </a>
-                    <a href="/products/corvette-c8-z06-titanium-sport-exhaust-system-2023-without-valve-brushed-blue" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/1_2abafc71-96c5-49fc-8b12-a4f461d1dde7.jpg?v=1733425492&width=1200" class="exhaust-card-bg" alt="Corvette C8 Z06 Titanium Sport Exhaust" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Corvette C8 Z06 Titanium Sport Exhaust System 2023+</h3><p class="exhaust-card-price">$4,999.99</p></div>
-                    </a>
-                    <a href="/products/corvette-c8-titanium-catback-2020-brushed-blue" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4623.jpg?v=1733425432&width=1200" class="exhaust-card-bg" alt="Corvette C8 Titanium Catback" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Corvette C8 Titanium Catback 2020+ (Brushed Blue)</h3><p class="exhaust-card-price">$3,999.99</p></div>
-                    </a>
-                    <a href="/products/ferrari-458-italia-45l-titanium-catback-2010-2015-golden-polish" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4415.jpg?v=1733425565&width=1200" class="exhaust-card-bg" alt="Ferrari 458 Italia Titanium Catback" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Ferrari 458 Italia 4.5L Titanium Catback (Golden Polish)</h3><p class="exhaust-card-price">$3,999.99</p></div>
-                    </a>
-                    <a href="/products/mclaren-720s-decat-titanium-downpipe-2018-brushed-purple" class="exhaust-card">
-                        <div class="exhaust-card-image-wrapper"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4559_f71fde06-0135-4c14-9064-d85084463868.jpg?v=1734125231&width=1200" class="exhaust-card-bg" alt="Mclaren 720S Decat Titanium Downpipe" loading="lazy"></div>
-                        <div class="exhaust-card-content"><h3 class="exhaust-card-title">Mclaren 720S Decat Titanium Downpipe 2018+ (Brushed Purple)</h3><p class="exhaust-card-price">$3,349.99</p></div>
-                    </a>
+                    <div class="pt-4 flex gap-4">
+                         <button id="copySummaryButton" class="btn btn-primary w-full justify-center">Copy Summary</button>
+                         <button id="showExportModalButton" class="btn btn-secondary w-full justify-center">Export History</button>
+                    </div>
                 </div>
-            </div>
-            <div class="section-cta">
-                <a href="https://www.wikdmotorsports.com/collections/exhausts" class="btn btn-primary" target="_blank"><span>See All</span></a>
-            </div>
-        </section>
 
-        <section id="gallery" class="section">
-            <div class="container">
-                <h2 class="section-title">From The Shop</h2>
-                <div class="gallery-grid">
-                    <div class="gallery-item"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/image_1600x.jpg?v=1732117588" alt="WIKD Z06 Gallery Image 1" loading="lazy"></div>
-                    <div class="gallery-item"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_Dyno_2_310640e9-af91-41ca-8554-bdc3479cb2ae_1600x.jpg?v=1732120285" alt="WIKD Z06 Gallery Image 2" loading="lazy"></div>
-                    <div class="gallery-item"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_EngineBay_1_46d7c3ca-66f2-42ea-972a-9daabcca666c_1600x.jpg?v=1732120285" alt="WIKD Z06 Gallery Image 3" loading="lazy"></div>
-                    <div class="gallery-item"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_Trunk_1t_758d6f66-d172-4b2f-9e7f-af893f46d7cf_1600x.jpg?v=1732120284" alt="WIKD Z06 Gallery Image 4" loading="lazy"></div>
-                </div>
-                <!-- FIX: Added "Visit Gallery" button -->
-                <div class="section-cta">
-                    <a href="https://www.wikdmotorsports.com/pages/gallery" class="btn btn-primary" target="_blank"><span>Visit Gallery</span></a>
-                </div>
+                <div id="statusMessage" class="text-center text-sm mt-6 h-4"></div>
             </div>
-        </section>
-
-        <!-- MAP & LOCATION SECTION -->
-        <section id="location" class="section">
-            <div class="container">
-                <iframe id="mapFrame" class="map-iframe" title="WIKD Motorsports Location" loading="lazy"></iframe>
-            </div>
-        </section>
-    </main>
-    
-    <div class="lightbox" id="lightbox">
-        <div class="lightbox-content">
-            <button class="lightbox-close" title="Close">&times;</button>
-            <button class="lightbox-prev" title="Previous image">&lt;</button>
-            <button class="lightbox-next" title="Next image">&gt;</button>
-            <img src="" alt="Lightbox image" id="lightboxImg">
         </div>
     </div>
-</div>
 
-<!-- 4. JAVASCRIPT LOGIC (Required) -->
-<script>
-(function() {
-    // This is the master initialization function. It's designed to be idempotent,
-    // meaning it can be called multiple times without breaking anything. This is crucial
-    // for the Shopify theme editor, which can reload sections unpredictably.
-    const runWikdHomepage = function() {
-        const rootElement = document.getElementById('wikd-homepage-root');
+    <!-- Password Modal -->
+    <div id="pinModal" class="modal-overlay">
+        <div class="modal-content space-y-6">
+             <h2 class="text-2xl font-bold text-white text-center" style="font-family: var(--font-heading);">Enter 4-Digit PIN</h2>
+             <div>
+                 <input type="number" id="pinInput" class="form-element w-full px-4 py-3" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength)">
+             </div>
+             <div class="flex items-center justify-center gap-2">
+                 <input type="checkbox" id="rememberDevice" class="form-element" style="width: 1rem; height: 1rem;">
+                 <label for="rememberDevice" class="text-sm" style="color: var(--color-text-muted);">Remember this device</label>
+             </div>
+             <p id="pinError" class="text-center h-4" style="color: var(--color-danger);"></p>
+        </div>
+    </div>
 
-        // Guard clause: If the main container isn't in the DOM yet, stop.
-        if (!rootElement) {
-            return;
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal-overlay hidden">
+        <div class="modal-content space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white" style="font-family: var(--font-heading);">Export History</h2>
+                <button id="closeExportModalButton" class="text-2xl font-bold" style="color: var(--color-text-muted);">&times;</button>
+            </div>
+            <div>
+                <label for="startDate" class="block text-sm font-medium mb-1" style="color: var(--color-text-muted);">Start Date</label>
+                <input type="date" id="startDate" class="mt-1 block w-full px-4 py-3 form-element">
+            </div>
+            <div>
+                <label for="endDate" class="block text-sm font-medium mb-1" style="color: var(--color-text-muted);">End Date</label>
+                <input type="date" id="endDate" class="mt-1 block w-full px-4 py-3 form-element">
+            </div>
+            <button id="exportCsvButton" class="btn btn-primary w-full justify-center">Download CSV</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, query, where, getDocs, documentId, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        const USER_SELECT = document.getElementById('userSelect');
+        const ADD_NAME_BUTTON = document.getElementById('addNameButton');
+        const COPY_SUMMARY_BUTTON = document.getElementById('copySummaryButton');
+        const STATUS_MESSAGE = document.getElementById('statusMessage');
+        const LOG_DATE_INPUT = document.getElementById('logDate');
+        const RANGO_SECTIONS = document.getElementById('rangoModeSections');
+        const NEW_LEADS_INPUT = document.getElementById('newLeads');
+        const ESTIMATES_GIVEN_INPUT = document.getElementById('estimatesGiven');
+        const LIVE_DIE_REPEAT_BUTTON = document.getElementById('liveDieRepeatButton');
+        
+        // Modal Elements
+        const EXPORT_MODAL = document.getElementById('exportModal');
+        const SHOW_EXPORT_MODAL_BUTTON = document.getElementById('showExportModalButton');
+        const CLOSE_EXPORT_MODAL_BUTTON = document.getElementById('closeExportModalButton');
+        const EXPORT_CSV_BUTTON = document.getElementById('exportCsvButton');
+        const PIN_MODAL = document.getElementById('pinModal');
+        const PIN_INPUT = document.getElementById('pinInput');
+        const PIN_ERROR = document.getElementById('pinError');
+        const REMEMBER_DEVICE_CHECKBOX = document.getElementById('rememberDevice');
+        const MAIN_CONTENT = document.getElementById('mainContent');
+
+        let db, auth;
+        let currentLogUnsubscribe = null;
+        let saveTimeout = null;
+        
+        function initializeFirebase() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyD27xD4cCvzYFbdKLOdtF3sxLAPnPpQLo8",
+                authDomain: "activity-log-7d4d6.firebaseapp.com",
+                projectId: "activity-log-7d4d6",
+                storageBucket: "activity-log-7d4d6.appspot.com",
+                messagingSenderId: "751457913972",
+                appId: "1:751457913972:web:ce8972d2aa78c215039521",
+                measurementId: "G-VJEJDWM1NW"
+            };
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+            } catch (error) {
+                 console.error("Firebase initialization failed:", error);
+                 updateStatus('Could not connect to the database.', true);
+            }
         }
 
-        // Guard clause: If this script has already run successfully, stop.
-        if (rootElement.classList.contains('wikd-homepage-initialized')) {
-            return;
+        window.onload = () => {
+            if (getCookie('trusted_device') === 'true') {
+                unlockPage();
+            } else {
+                setupPinPrompt();
+            }
+        };
+        
+        function startApp() {
+            initializeFirebase();
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+            const todayStr = today.toISOString().slice(0,10);
+            LOG_DATE_INPUT.value = todayStr;
+            document.getElementById('endDate').value = todayStr; // Default end date for export
+            
+            USER_SELECT.value = 'rango';
+            handleUserChange();
+            setupEventListeners();
+            loadDataForCurrentDate();
         }
 
-        // Mark as initialized so it doesn't run again.
-        rootElement.classList.add('wikd-homepage-initialized');
+        function setupPinPrompt() {
+            PIN_MODAL.classList.remove('hidden');
+            PIN_INPUT.focus();
+            PIN_INPUT.addEventListener('input', checkPin);
+        }
 
-        // --- HERO SLIDESHOW LOGIC ---
-        try {
-            const slideshow = rootElement.querySelector('#slideshow');
-            if (slideshow) {
-                const heroWrapper = rootElement.querySelector('.hero-wrapper');
-                const slides = slideshow.querySelectorAll('.slide');
-                const slideThemes = Array.from(slides).map(slide => slide.dataset.theme);
-                let currentIndex = 0;
-                let slideInterval;
-
-                const exhaustVideo = slideshow.querySelector('#exhaust-video');
-                if (exhaustVideo) {
-                    exhaustVideo.addEventListener('ended', () => {
-                        exhaustVideo.dataset.played = 'true';
-                    });
-                }
-
-                const showSlide = (index) => {
-                    if (!slides[currentIndex] || !slides[index]) return;
-
-                    const prevSlide = slides[currentIndex];
-                    const prevVideo = prevSlide.querySelector('video.slide-background');
-                    if (prevVideo) prevVideo.pause();
-                    prevSlide.classList.remove('active');
-                    if (slideThemes[currentIndex]) {
-                        heroWrapper.classList.remove(slideThemes[currentIndex]);
-                        slideshow.classList.remove(slideThemes[currentIndex]);
+        function checkPin() {
+            PIN_ERROR.textContent = '';
+            // The PIN is the numeric equivalent of "WIKD"
+            const correctPin = '9453'; 
+            
+            if (PIN_INPUT.value.length >= 4) {
+                if (PIN_INPUT.value === correctPin) {
+                    if (REMEMBER_DEVICE_CHECKBOX.checked) {
+                        setCookie('trusted_device', 'true', 30); // Cookie expires in 30 days
                     }
-                    
-                    currentIndex = index;
-                    const newSlide = slides[index];
-                    const newVideo = newSlide.querySelector('video.slide-background');
-                    newSlide.classList.add('active');
-                    if (slideThemes[currentIndex]) {
-                        heroWrapper.classList.add(slideThemes[currentIndex]);
-                        slideshow.classList.add(slideThemes[currentIndex]);
-                    }
-                    if (newVideo) {
-                        if (newVideo.id === 'exhaust-video' && newVideo.dataset.played === 'true') {
-                            // Video has played, do nothing.
-                        } else {
-                            newVideo.currentTime = 0;
-                            newVideo.play().catch(e => console.warn("Video autoplay failed:", e));
-                        }
-                    }
-                };
-
-                const nextSlide = () => {
-                    if (slides.length > 0) {
-                        const newIndex = (currentIndex + 1) % slides.length;
-                        showSlide(newIndex);
-                    }
-                };
-
-                const startInterval = () => {
-                    clearInterval(slideInterval);
-                    slideInterval = setInterval(nextSlide, 7000);
-                };
-                
-                if (slides.length > 0) {
-                    showSlide(0);
-                    startInterval();
+                    unlockPage();
+                } else {
+                    PIN_ERROR.textContent = 'Incorrect PIN';
+                    setTimeout(() => {
+                        PIN_INPUT.value = '';
+                    }, 500);
                 }
             }
-        } catch (error) {
-            console.error("WIKD Homepage Error in Slideshow:", error);
+        }
+        
+        function unlockPage() {
+            PIN_MODAL.classList.add('hidden');
+            MAIN_CONTENT.classList.remove('hidden');
+            startApp();
         }
 
-        // --- DYNAMIC IFRAME LOADER ---
-        try {
-            const loadDynamicIframe = (frameId, url, isDynamicHeight) => {
-                const iframe = rootElement.querySelector(`#${frameId}`);
-                if (!iframe) return;
+        function setupEventListeners() {
+            COPY_SUMMARY_BUTTON.onclick = handleCopySummary;
+            ADD_NAME_BUTTON.onclick = handleAddName;
+            LIVE_DIE_REPEAT_BUTTON.onclick = handleLiveDieRepeat;
+            USER_SELECT.addEventListener('change', () => {
+                handleUserChange();
+                loadDataForCurrentDate();
+            });
+            LOG_DATE_INPUT.addEventListener('change', loadDataForCurrentDate);
 
-                const cacheBustedUrl = `${url}?v=${new Date().getTime()}`;
+            document.querySelectorAll('.data-field, #newLeads, #estimatesGiven').forEach(field => {
+                field.addEventListener('input', () => {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(saveData, 1000);
+                });
+            });
 
-                if (isDynamicHeight) {
-                    fetch(cacheBustedUrl)
-                        .then(response => response.ok ? response.text() : Promise.reject(`HTTP error ${response.status}`))
-                        .then(html => {
-                            const styles = `<style>body,html{margin:0!important;padding:0!important;overflow:hidden!important}</style>`;
-                            const scripts = `<script>try{const o=new ResizeObserver(o=>{const t=document.documentElement.offsetHeight;window.parent.postMessage({type:"resize",height:t,frameId:"${frameId}"},"*")});o.observe(document.documentElement),window.addEventListener("load",()=>{const o=document.documentElement.offsetHeight;window.parent.postMessage({type:"resize",height:o,frameId:"${frameId}"},"*");const t=()=>window.parent.postMessage({type:"snapToTop",frameId:"${frameId}"},"*");document.getElementById("nextBtn")?.addEventListener("click",t),document.getElementById("prevBtn")?.addEventListener("click",t)})}catch(o){console.error("Error in iframe scripts:",o)}<\/script>`;
-                            let processedHtml = html.replace('</head>', styles + '</head>');
-                            processedHtml = processedHtml.replace('</body>', scripts + '</body>');
-                            iframe.srcdoc = processedHtml;
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching content for ${frameId}:`, error);
-                            if(iframe.parentElement) {
-                                iframe.parentElement.innerHTML = `<p style="color: var(--color-text-muted); text-align: center;">Content failed to load.</p>`;
-                            }
-                        });
-                } else {
-                    iframe.src = cacheBustedUrl;
+            document.querySelectorAll('.entry-section .add-btn').forEach(button => {
+                button.addEventListener('click', handleAddEntry);
+            });
+
+            // Add listeners for the new "Clear All" buttons
+            document.querySelectorAll('.btn-clear-section').forEach(button => {
+                button.addEventListener('click', handleClearSection);
+            });
+
+            // Tally buttons
+            document.getElementById('leadsDecrement').onclick = () => { updateTally(NEW_LEADS_INPUT, -1); saveData(); };
+            document.getElementById('leadsIncrement').onclick = () => { updateTally(NEW_LEADS_INPUT, 1); saveData(); };
+            document.getElementById('estimatesDecrement').onclick = () => { updateTally(ESTIMATES_GIVEN_INPUT, -1); saveData(); };
+            document.getElementById('estimatesIncrement').onclick = () => { updateTally(ESTIMATES_GIVEN_INPUT, 1); saveData(); };
+
+            // Social Media Collapse Toggle
+            const socialMediaToggle = document.getElementById('socialMediaToggle');
+            const socialMediaContent = document.getElementById('socialMediaContent');
+            const socialMediaIcon = document.getElementById('socialMediaIcon');
+            const expandCue = document.getElementById('expandCue');
+            socialMediaToggle.classList.add('collapsed-state');
+            expandCue.style.display = 'inline';
+            socialMediaToggle.addEventListener('click', () => {
+                const isNowCollapsed = socialMediaContent.classList.toggle('collapsed');
+                socialMediaIcon.innerHTML = isNowCollapsed ? '&#9654;' : '&#9660;';
+                socialMediaToggle.classList.toggle('collapsed-state', isNowCollapsed);
+                expandCue.style.display = isNowCollapsed ? 'inline' : 'none';
+                
+                // Show/hide the "Clear All" button for social media
+                const clearBtn = document.querySelector('#socialMediaSection .btn-clear-section');
+                if (clearBtn) {
+                    clearBtn.classList.toggle('hidden', isNowCollapsed);
+                }
+            });
+            
+            // Export Modal Listeners
+            SHOW_EXPORT_MODAL_BUTTON.onclick = () => EXPORT_MODAL.classList.remove('hidden');
+            CLOSE_EXPORT_MODAL_BUTTON.onclick = () => EXPORT_MODAL.classList.add('hidden');
+            EXPORT_CSV_BUTTON.onclick = handleExport;
+        }
+        
+        function updateTally(inputElement, change) {
+            let currentValue = parseInt(inputElement.value, 10) || 0;
+            inputElement.value = Math.max(0, currentValue + change);
+        }
+
+        function handleAddEntry(event) {
+            const sectionEl = event.target.closest('.entry-section');
+            const descInput = sectionEl.querySelector('.entry-desc');
+            const valueInput = sectionEl.querySelector('.entry-value');
+            const desc = descInput.value.trim();
+            
+            if (!desc) return;
+
+            const entryData = { desc };
+            if (valueInput) {
+                entryData.value = parseFloat(valueInput.value) || 0;
+            }
+            
+            renderEntry(sectionEl, entryData);
+            descInput.value = '';
+            if (valueInput) valueInput.value = '';
+            descInput.focus();
+            saveData();
+        }
+        
+        function handleClearSection(event) {
+            const button = event.target;
+            const entrySection = button.closest('.entry-section');
+            const socialSection = button.closest('#socialMediaSection');
+
+            if (entrySection) {
+                const list = entrySection.querySelector('.entry-list');
+                if (list) {
+                    list.innerHTML = ''; // Clear the list of entries
+                }
+            } else if (socialSection) {
+                const content = socialSection.querySelector('#socialMediaContent');
+                content.querySelectorAll('input').forEach(input => input.value = ''); // Clear all social media inputs
+            }
+            
+            saveData(); // Save the changes immediately
+        }
+
+        function renderEntry(sectionEl, entryData) {
+            const listEl = sectionEl.querySelector('.entry-list');
+            const item = document.createElement('div');
+            item.className = 'entry-item';
+            
+            let valueHtml = '';
+            if (typeof entryData.value !== 'undefined') {
+                valueHtml = `<span class="value">${entryData.value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span>`;
+            }
+
+            // Define icons as SVGs
+            const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>`;
+            const saveIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>`;
+            const moveIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/></svg>`;
+            const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>`;
+
+            const sectionName = sectionEl.dataset.section;
+            const canMove = sectionName === 'potentialClients' || sectionName === 'soldCars';
+
+            item.innerHTML = `
+                <div class="desc">${entryData.desc}</div>
+                ${valueHtml}
+                <div class="entry-item-actions">
+                    <button class="entry-item-btn edit-btn">${editIcon}</button>
+                    ${canMove ? `<button class="entry-item-btn move-btn">${moveIcon}</button>` : ''}
+                    <button class="entry-item-btn delete-btn">${deleteIcon}</button>
+                </div>
+            `;
+            
+            item.querySelector('.delete-btn').addEventListener('click', () => {
+                item.remove();
+                saveData();
+            });
+
+            item.querySelector('.edit-btn').addEventListener('click', (e) => {
+                toggleEditState(e.currentTarget.closest('.entry-item'), saveIcon, editIcon);
+            });
+
+            if (canMove) {
+                item.querySelector('.move-btn').addEventListener('click', (e) => {
+                    handleMoveEntry(e.currentTarget.closest('.entry-item'));
+                });
+            }
+
+            listEl.appendChild(item);
+        }
+
+        function toggleEditState(item, saveIcon, editIcon) {
+            const isEditing = item.classList.toggle('is-editing');
+            const descEl = item.querySelector('.desc');
+            const valueEl = item.querySelector('.value');
+            const editBtn = item.querySelector('.edit-btn');
+
+            if (isEditing) {
+                // Switch to edit mode
+                const currentDesc = descEl.textContent;
+                const currentValue = valueEl ? parseFloat(valueEl.textContent.replace(/[^0-9.-]+/g,"")) : '';
+                
+                descEl.innerHTML = `<input type="text" class="form-element w-full px-2 py-1 text-sm" value="${currentDesc}">`;
+                if (valueEl) {
+                    valueEl.innerHTML = `<input type="number" class="form-element w-24 px-2 py-1 text-sm" value="${currentValue}">`;
+                }
+                editBtn.innerHTML = saveIcon;
+                editBtn.classList.add('save-btn');
+
+            } else {
+                // Switch back to view mode
+                const newDesc = descEl.querySelector('input').value;
+                const newValueInput = valueEl ? valueEl.querySelector('input') : null;
+                
+                descEl.textContent = newDesc;
+                if (valueEl && newValueInput) {
+                    const newValue = parseFloat(newValueInput.value) || 0;
+                    valueEl.textContent = newValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                }
+                editBtn.innerHTML = editIcon;
+                editBtn.classList.remove('save-btn');
+                saveData();
+            }
+        }
+
+        function handleMoveEntry(item) {
+            const currentSectionEl = item.closest('.entry-section');
+            const currentSectionName = currentSectionEl.dataset.section;
+            
+            const funnel = {
+                potentialClients: 'soldCars',
+                soldCars: 'carsInShop'
+            };
+
+            const targetSectionName = funnel[currentSectionName];
+            if (!targetSectionName) return; // Should not happen if button isn't there
+
+            const targetSectionEl = document.querySelector(`.entry-section[data-section="${targetSectionName}"]`);
+
+            if (targetSectionEl) {
+                const desc = item.querySelector('.desc').textContent;
+                const valueEl = item.querySelector('.value');
+                const value = valueEl ? parseFloat(valueEl.textContent.replace(/[^0-9.-]+/g,"")) : 0;
+                
+                renderEntry(targetSectionEl, { desc, value });
+                item.remove();
+                saveData();
+            }
+        }
+
+        function loadDataForCurrentDate() {
+            if (currentLogUnsubscribe) currentLogUnsubscribe();
+            const dateId = LOG_DATE_INPUT.value;
+            if (!dateId || !db) return;
+            
+            const docRef = doc(db, "activity_logs", dateId);
+            currentLogUnsubscribe = onSnapshot(docRef, (docSnap) => {
+                clearForm(); // Clear the form before populating
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const currentUser = USER_SELECT.value;
+                    const userData = data[currentUser];
+                    if (userData) populateForm(userData);
+                }
+            }, (error) => {
+                console.error("Error fetching document: ", error);
+                updateStatus("Error loading data.", true);
+            });
+        }
+
+        async function saveData() {
+            const currentUser = USER_SELECT.value;
+            const dateId = LOG_DATE_INPUT.value;
+            if (!currentUser || !dateId || !db) return;
+            
+            updateStatus('Saving...', false, true);
+
+            const dataToSave = {
+                activities: {
+                    '8-9': document.getElementById('activity_8_9').value,
+                    '9-10': document.getElementById('activity_9_10').value,
+                    '10-11': document.getElementById('activity_10_11').value,
+                    '11-12': document.getElementById('activity_11_12').value,
+                    '1-2': document.getElementById('activity_1_2').value,
+                    '2-3': document.getElementById('activity_2_3').value,
+                    '3-4': document.getElementById('activity_3_4').value,
+                    '4-5': document.getElementById('activity_4_5').value
                 }
             };
 
-            loadDynamicIframe('questionnaireFrame', 'https://raw.githack.com/WIKDMotorsports/MasterQuestionnaire/main/index.html', true);
-            loadDynamicIframe('mapFrame', 'https://raw.githack.com/WIKDMotorsports/Deploy/main/MapsWidget.html', false);
-
-            window.addEventListener('message', (event) => {
-                const data = event.data;
-                if (!data.type || !data.frameId) return;
-                const iframe = rootElement.querySelector(`#${data.frameId}`);
-                if (!iframe || !iframe.contentWindow || event.source !== iframe.contentWindow) return;
-
-                if (data.type === 'resize' && data.height) {
-                    iframe.style.height = (data.height + 5) + 'px';
-                } else if (data.type === 'snapToTop') {
-                    const section = iframe.closest('.section');
-                    if(section) {
-                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-            });
-        } catch (error) {
-            console.error("WIKD Homepage Error in Iframe Loader:", error);
-        }
-
-        // --- LIGHTBOX LOGIC ---
-        try {
-            const lightbox = rootElement.querySelector('#lightbox');
-            if (lightbox) {
-                const lightboxImg = rootElement.querySelector('#lightboxImg');
-                const galleryItems = rootElement.querySelectorAll('.gallery-item');
-                const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
-                let currentImageIndex = 0;
-
-                const showImage = (index) => {
-                    if (index >= 0 && index < images.length) {
-                        currentImageIndex = index;
-                        lightboxImg.src = images[currentImageIndex];
-                        lightbox.classList.add('active');
+            if (currentUser !== 'Elyas') {
+                dataToSave.rangoData = {
+                    metrics: {
+                        newLeads: NEW_LEADS_INPUT.value,
+                        estimatesGiven: ESTIMATES_GIVEN_INPUT.value,
+                    },
+                    socialMedia: {
+                        storyOne: document.getElementById('social_story_one').value,
+                        storyTwo: document.getElementById('social_story_two').value,
+                        storyThree: document.getElementById('social_story_three').value,
+                        storyFour: document.getElementById('social_story_four').value,
+                        reel1: document.getElementById('social_reel_1').value,
+                        saturdayStory: document.getElementById('social_saturday_story').value,
+                        sundayStory: document.getElementById('social_sunday_story').value,
                     }
                 };
-
-                galleryItems.forEach((item, index) => {
-                    item.addEventListener('click', () => showImage(index));
-                });
-
-                rootElement.querySelector('.lightbox-close').addEventListener('click', () => lightbox.classList.remove('active'));
-                rootElement.querySelector('.lightbox-prev').addEventListener('click', () => { if(images.length > 0) showImage((currentImageIndex - 1 + images.length) % images.length) });
-                rootElement.querySelector('.lightbox-next').addEventListener('click', () => { if(images.length > 0) showImage((currentImageIndex + 1) % images.length) });
-                lightbox.addEventListener('click', (e) => {
-                    if (e.target === lightbox) lightbox.classList.remove('active');
+                document.querySelectorAll('.entry-section').forEach(sectionEl => {
+                    const sectionName = sectionEl.dataset.section;
+                    dataToSave.rangoData[sectionName] = [];
+                    sectionEl.querySelectorAll('.entry-item').forEach(itemEl => {
+                        const desc = itemEl.querySelector('.desc').textContent;
+                        const valueEl = itemEl.querySelector('.value');
+                        const entry = { desc };
+                        if (valueEl) {
+                           entry.value = parseFloat(valueEl.textContent.replace(/[^0-9.-]+/g,""));
+                        }
+                        dataToSave.rangoData[sectionName].push(entry);
+                    });
                 });
             }
-        } catch (error) {
-            console.error("WIKD Homepage Error in Lightbox:", error);
-        }
-    };
 
-    // --- ROBUST INITIALIZATION ---
-    // This is the new, foolproof way to run the script. It waits for the browser to be ready
-    // to paint, then checks if our root element exists. If not, it waits for the next frame
-    // and checks again. This is the most reliable way to handle unpredictable script loading
-    // in environments like the Shopify theme editor.
-    const ensureReady = () => {
-        if (document.getElementById('wikd-homepage-root')) {
-            runWikdHomepage();
-        } else {
-            requestAnimationFrame(ensureReady);
+            try {
+                const docRef = doc(db, "activity_logs", dateId);
+                await setDoc(docRef, { [currentUser]: dataToSave }, { merge: true });
+                updateStatus('Saved!', false);
+            } catch (error) {
+                console.error("Error saving document: ", error);
+                updateStatus('Save failed.', true);
+            }
         }
-    };
 
-    // Kick off the check.
-    requestAnimationFrame(ensureReady);
-    
-    // Also listen for Shopify's specific event for when a section is reloaded in the editor.
-    document.addEventListener('shopify:section:load', () => {
-        // When Shopify reloads the section, the old 'initialized' class is gone,
-        // so our script will re-run correctly for the new content.
-        requestAnimationFrame(ensureReady); 
-    });
-})();
-</script>
+        function handleUserChange() {
+            const isElyas = USER_SELECT.value === 'Elyas';
+            RANGO_SECTIONS.style.display = isElyas ? 'none' : 'block';
+        }
+
+        function handleAddName() {
+            const newName = document.getElementById('addNameInput').value.trim();
+            if (newName) {
+                if (![...USER_SELECT.options].some(opt => opt.value === newName)) {
+                    const option = document.createElement('option');
+                    option.value = newName;
+                    option.textContent = newName;
+                    USER_SELECT.appendChild(option);
+                }
+                USER_SELECT.value = newName;
+                document.getElementById('addNameInput').value = '';
+                handleUserChange();
+                loadDataForCurrentDate();
+            }
+        }
+        
+        function populateForm(userData) {
+            if (userData.activities) {
+                for (const key in userData.activities) {
+                    const element = document.getElementById(`activity_${key.replace('-', '_')}`);
+                    if (element) element.value = userData.activities[key] || '';
+                }
+            }
+            if (userData.rangoData) {
+                populateRangoData(userData.rangoData);
+            }
+        }
+
+        function populateRangoData(rangoData) {
+            if (rangoData.metrics) {
+                NEW_LEADS_INPUT.value = rangoData.metrics.newLeads || '0';
+                ESTIMATES_GIVEN_INPUT.value = rangoData.metrics.estimatesGiven || '0';
+            }
+            ['potentialClients', 'soldCars', 'carsInShop'].forEach(sectionName => {
+                const sectionEl = document.querySelector(`.entry-section[data-section="${sectionName}"]`);
+                if (sectionEl && Array.isArray(rangoData[sectionName])) {
+                    sectionEl.querySelector('.entry-list').innerHTML = ''; // Clear existing entries
+                    rangoData[sectionName].forEach(entry => renderEntry(sectionEl, entry));
+                }
+            });
+            if (rangoData.socialMedia) {
+                const sm = rangoData.socialMedia;
+                document.getElementById('social_story_one').value = sm.storyOne || '';
+                document.getElementById('social_story_two').value = sm.storyTwo || '';
+                document.getElementById('social_story_three').value = sm.storyThree || '';
+                document.getElementById('social_story_four').value = sm.storyFour || '';
+                document.getElementById('social_reel_1').value = sm.reel1 || '';
+                document.getElementById('social_saturday_story').value = sm.saturdayStory || '';
+                document.getElementById('social_sunday_story').value = sm.sundayStory || '';
+            }
+        }
+
+        function clearForm() {
+            document.querySelectorAll('.data-field').forEach(field => field.value = '');
+            document.querySelectorAll('.entry-list').forEach(list => list.innerHTML = '');
+            document.querySelectorAll('.entry-desc, .entry-value').forEach(input => input.value = '');
+            NEW_LEADS_INPUT.value = '0';
+            ESTIMATES_GIVEN_INPUT.value = '0';
+        }
+
+        async function handleLiveDieRepeat() {
+            const currentDateStr = LOG_DATE_INPUT.value;
+            const currentDate = new Date(currentDateStr + 'T12:00:00'); // Use noon to avoid timezone issues
+            currentDate.setDate(currentDate.getDate() - 1);
+            const prevDateStr = currentDate.toISOString().slice(0, 10);
+            
+            const currentUser = USER_SELECT.value;
+            if (!currentUser || !db) return;
+
+            updateStatus('Loading yesterday\'s data...', false, true);
+
+            try {
+                const docRef = doc(db, "activity_logs", prevDateStr);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const userData = data[currentUser];
+                    if (userData && userData.rangoData) {
+                        populateRangoData(userData.rangoData);
+                        await saveData(); // Save the copied data to the current day
+                        updateStatus('Yesterday\'s data copied and saved!', false);
+                    } else {
+                        updateStatus(`No data found for ${currentUser} on ${prevDateStr}.`, false);
+                    }
+                } else {
+                    updateStatus(`No log found for yesterday (${prevDateStr}).`, false);
+                }
+            } catch (error) {
+                console.error("Error in Live, Die, Repeat:", error);
+                updateStatus('Failed to load yesterday\'s data.', true);
+            }
+        }
+
+        function handleCopySummary() {
+            const userName = USER_SELECT.value;
+            const date = new Date(LOG_DATE_INPUT.value + 'T00:00:00').toLocaleDateString();
+            let message = `*${userName.toUpperCase()} - DAILY REPORT for ${date}*\n\n`;
+
+            if (userName !== 'Elyas') {
+                message += `*METRICS*\n`;
+                message += `- New Leads Contacted: ${NEW_LEADS_INPUT.value}\n`;
+                message += `- Estimates Given: ${ESTIMATES_GIVEN_INPUT.value}\n\n`;
+            }
+
+            message += `*HOURLY ACTIVITIES*\n`;
+            const activities = [
+                { label: '8-9am', value: document.getElementById('activity_8_9').value.trim() },
+                { label: '9-10am', value: document.getElementById('activity_9_10').value.trim() },
+                { label: '10-11am', value: document.getElementById('activity_10_11').value.trim() },
+                { label: '11am-12pm', value: document.getElementById('activity_11_12').value.trim() },
+                { label: '1-2pm', value: document.getElementById('activity_1_2').value.trim() },
+                { label: '2-3pm', value: document.getElementById('activity_2_3').value.trim() },
+                { label: '3-4pm', value: document.getElementById('activity_3_4').value.trim() },
+                { label: '4-5pm', value: document.getElementById('activity_4_5').value.trim() }
+            ];
+            activities.forEach(act => {
+                if (act.value) message += `- ${act.label}: ${act.value}\n`;
+            });
+            message += '\n';
+            
+            if (userName !== 'Elyas') {
+                const processEntrySection = (sectionEl, title) => {
+                    const items = sectionEl.querySelectorAll('.entry-item');
+                    if (items.length === 0) return '';
+                    let content = `*${title}*\n`;
+                    let total = 0;
+                    items.forEach(item => {
+                        const desc = item.querySelector('.desc').textContent;
+                        const valueEl = item.querySelector('.value');
+                        const value = parseFloat(valueEl.textContent.replace(/[^0-9.-]+/g,""));
+                        total += value;
+                        content += `- ${desc} (${value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })})\n`;
+                    });
+                    content += `*Total: ${total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}*\n\n`;
+                    return content;
+                };
+                message += processEntrySection(document.querySelector('[data-section="potentialClients"]'), 'POTENTIAL CLIENTS');
+                message += processEntrySection(document.querySelector('[data-section="soldCars"]'), 'SOLD - CAR COMING');
+                message += processEntrySection(document.querySelector('[data-section="carsInShop"]'), 'CARS IN SHOP');
+                
+                const socialMediaFields = [
+                    { label: 'STORY ONE', value: document.getElementById('social_story_one').value.trim() },
+                    { label: 'STORY TWO', value: document.getElementById('social_story_two').value.trim() },
+                    { label: 'STORY THREE', value: document.getElementById('social_story_three').value.trim() },
+                    { label: 'STORY FOUR', value: document.getElementById('social_story_four').value.trim() },
+                    { label: 'REEL 1', value: document.getElementById('social_reel_1').value.trim() },
+                    { label: 'SATURDAY STORY', value: document.getElementById('social_saturday_story').value.trim() },
+                    { label: 'SUNDAY STORY', value: document.getElementById('social_sunday_story').value.trim() },
+                ];
+                const filledSocialMedia = socialMediaFields.filter(field => field.value);
+                if (filledSocialMedia.length > 0) {
+                    message += `*SOCIAL MEDIA*\n`;
+                    filledSocialMedia.forEach(field => {
+                        message += `- ${field.label}: ${field.value}\n`;
+                    });
+                    message += "\n";
+                }
+            }
+
+            const textArea = document.createElement("textarea");
+            textArea.value = message;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    updateStatus('Summary copied to clipboard!', false);
+                } else {
+                    updateStatus('Failed to copy.', true);
+                }
+            } catch (err) {
+                updateStatus('Failed to copy.', true);
+                console.error('Clipboard error:', err);
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        async function handleExport() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                updateStatus('Please select a start and end date.', true);
+                return;
+            }
+            if (startDate > endDate) {
+                updateStatus('Start date cannot be after end date.', true);
+                return;
+            }
+
+            updateStatus('Exporting...', false, true);
+            
+            try {
+                const logsRef = collection(db, 'activity_logs');
+                const q = query(logsRef, where(documentId(), '>=', startDate), where(documentId(), '<=', endDate));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    updateStatus('No data found for the selected range.', false);
+                    return;
+                }
+                
+                let csvContent = "Date,User,Category,Item,Description,Value\n";
+                
+                const escapeCsvCell = (cell) => {
+                    if (cell === undefined || cell === null) return '';
+                    const str = String(cell);
+                    if (str.includes(',')) return `"${str.replace(/"/g, '""')}"`;
+                    return str;
+                };
+
+                querySnapshot.forEach(doc => {
+                    const date = doc.id;
+                    const data = doc.data();
+                    
+                    for (const user in data) {
+                        const log = data[user];
+                        
+                        if (log.activities) {
+                            for(const time in log.activities) {
+                                if(log.activities[time]) {
+                                    csvContent += `${date},${user},Hourly Activity,${time},${escapeCsvCell(log.activities[time])},\n`;
+                                }
+                            }
+                        }
+                        
+                        if (log.rangoData) {
+                            const rd = log.rangoData;
+                            if (rd.metrics) {
+                                csvContent += `${date},${user},Metric,New Leads Contacted,,${rd.metrics.newLeads || 0}\n`;
+                                csvContent += `${date},${user},Metric,Estimates Given,,${rd.metrics.estimatesGiven || 0}\n`;
+                            }
+                            if (rd.potentialClients) rd.potentialClients.forEach(item => csvContent += `${date},${user},Potential Client,${escapeCsvCell(item.desc)},,${item.value || 0}\n`);
+                            if (rd.soldCars) rd.soldCars.forEach(item => csvContent += `${date},${user},Sold - Car Coming,${escapeCsvCell(item.desc)},,${item.value || 0}\n`);
+                            if (rd.carsInShop) rd.carsInShop.forEach(item => csvContent += `${date},${user},Cars in Shop,${escapeCsvCell(item.desc)},,${item.value || 0}\n`);
+                            if (rd.socialMedia) {
+                                for(const item in rd.socialMedia) {
+                                    if(rd.socialMedia[item]) {
+                                        csvContent += `${date},${user},Social Media,${escapeCsvCell(item)},${escapeCsvCell(rd.socialMedia[item])},\n`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", `activity_log_${startDate}_to_${endDate}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                updateStatus('Export successful!', false);
+                EXPORT_MODAL.classList.add('hidden');
+
+            } catch (error) {
+                console.error("Error exporting data: ", error);
+                updateStatus('Export failed.', true);
+            }
+        }
+        
+        // Cookie helper functions
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=None; Secure";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        let statusTimeout;
+        function updateStatus(message, isError, persistent = false) {
+            clearTimeout(statusTimeout);
+            STATUS_MESSAGE.textContent = message;
+            STATUS_MESSAGE.style.color = isError ? '#FF3B30' : '#34D399';
+            if (!persistent) {
+                statusTimeout = setTimeout(() => STATUS_MESSAGE.textContent = '', 3000);
+            }
+        }
+    </script>
+</body>
+</html>
