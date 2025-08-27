@@ -423,6 +423,69 @@
     #wikd-homepage-root .lightbox-prev { top: 50%; left: 20px; transform: translateY(-50%); }
     #wikd-homepage-root .lightbox-next { top: 50%; right: 20px; transform: translateY(-50%); }
 
+    /* --- FOOTER STYLES --- */
+    #wikd-homepage-root .wikd-footer {
+        background-color: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        padding: 60px 5% 30px;
+        color: var(--color-text-muted);
+    }
+    #wikd-homepage-root .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 40px;
+    }
+    #wikd-homepage-root .footer-about {
+        flex: 1 1 300px;
+    }
+    #wikd-homepage-root .footer-logo {
+        width: 120px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    #wikd-homepage-root .footer-about p {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+    #wikd-homepage-root .footer-links {
+        flex: 1 1 200px;
+    }
+    #wikd-homepage-root .footer-title {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        color: var(--color-text);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+    #wikd-homepage-root .footer-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    #wikd-homepage-root .footer-nav li {
+        margin-bottom: 12px;
+    }
+    #wikd-homepage-root .footer-nav a {
+        color: var(--color-text-muted);
+        text-decoration: none;
+        font-size: 15px;
+        transition: color 0.3s ease;
+    }
+    #wikd-homepage-root .footer-nav a:hover {
+        color: var(--color-primary);
+    }
+    #wikd-homepage-root .footer-bottom {
+        border-top: 1px solid var(--color-border);
+        margin-top: 40px;
+        padding-top: 30px;
+        text-align: center;
+        font-size: 14px;
+        width: 100%;
+    }
+
     /* --- RESPONSIVE STYLES --- */
 
     @media (max-width: 1200px) {
@@ -660,6 +723,29 @@
         </section>
     </main>
     
+    <!-- FOOTER SECTION -->
+    <footer class="wikd-footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <img src="https://www.wikdmotorsports.com/cdn/shop/files/WIKD_Logo_1x1_042e0d65-4215-4fa6-a125-e20b8aa0c958.png?v=1732213676&width=120" alt="WIKD Motorsports Logo" class="footer-logo">
+                <p>Your one-stop shop for high-performance automotive parts, tuning, and expert installations. Pushing the limits of speed and style.</p>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-title">Company</h3>
+                <ul class="footer-nav">
+                    <li><a href="https://www.wikdmotorsports.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
+                    <li><a href="https://www.wikdmotorsports.com/policies/refund-policy" target="_blank" rel="noopener noreferrer">Refund Policy</a></li>
+                    <li><a href="https://www.wikdmotorsports.com/policies/shipping-policy" target="_blank" rel="noopener noreferrer">Shipping Policy</a></li>
+                    <li><a href="https://www.wikdmotorsports.com/policies/terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a></li>
+                    <li><a href="https://www.wikdmotorsports.com/pages/careers" target="_blank" rel="noopener noreferrer">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                &copy; <script>document.write(new Date().getFullYear())</script> WIKD Motorsports. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
     <div class="lightbox" id="lightbox">
         <div class="lightbox-content">
             <button class="lightbox-close" title="Close">&times;</button>
