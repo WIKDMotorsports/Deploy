@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKD Motorsports - Style Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- CORE STYLES FROM WEBSITE --- */
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #888888;
+            --color-primary: #FF3B30;
+            --color-surface: #141414;
+            --color-border: #2A2A2A;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* Base styles for preview components */
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+        .font-heading { font-family: var(--font-heading); }
+        .font-body { font-family: var(--font-body); }
+        h1, h2, h3, .h1, .h2, .h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+        .h1 { font-size: clamp(2.5rem, 6vw, 4rem); }
+        .h2 { font-size: clamp(2rem, 5vw, 3rem); }
+        .h3 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+        .p { font-family: var(--font-body); color: var(--color-text); line-height: 1.6;}
+        .p-muted { font-family: var(--font-body); color: var(--color-text-muted); line-height: 1.6;}
+
+        /* --- BUTTON STYLES --- */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--color-text);
+            background-color: transparent;
+            border: 2px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 85%);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .btn span { position: relative; z-index: 2; }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            transform: translateX(-101%);
+            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1), background-color 0.4s ease-in-out;
+        }
+        .btn:hover { color: white; }
+        .btn:hover::before { transform: translateX(0); }
+        
+        /* Primary Button */
+        .btn-primary:hover { border-color: var(--color-primary); }
+        .btn-primary::before { background-color: var(--color-primary); }
+        
+        /* Filter Button */
+        .btn.filter-btn {
+            padding: 10px 24px;
+            font-size: 16px;
+            color: var(--color-text-muted);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 88%);
+        }
+        .btn.filter-btn:hover {
+            color: white;
+            border-color: var(--color-primary);
+        }
+        .btn.filter-btn.active {
+            color: white;
+            border-color: var(--color-primary);
+        }
+        .btn.filter-btn.active::before {
+            transform: translateX(0);
+            background-color: var(--color-primary);
+        }
+
+        /* --- CARD STYLES --- */
+        .package-card {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+        }
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .package-card-bg {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .package-card:hover .package-card-bg { transform: scale(1.05); }
+        .package-card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 25px;
+        }
+        .package-card-title {
+            font-family: var(--font-heading);
+            font-size: 2rem; color: white;
+            text-transform: uppercase;
+            transform: translateY(20px); opacity: 0;
+            transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
+        }
+        .package-card-link {
+            font-size: 1rem; color: var(--color-primary);
+            text-transform: uppercase; font-weight: 600;
+            transform: translateY(20px); opacity: 0;
+            transition: transform 0.4s ease 0.2s, opacity 0.4s ease 0.2s;
+        }
+        .package-card:hover .package-card-title,
+        .package-card:hover .package-card-link {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* --- WIKD GALLERY CARD --- */
+        @keyframes lavaFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gallery-card-wrapper { max-width: 380px; width: 100%; perspective: 1000px; }
+        .gallery-card {
+            display: block; position: relative; aspect-ratio: 1 / 1;
+            border-radius: 8px; border: 1px solid var(--color-border);
+            text-decoration: none; isolation: isolate;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .gallery-card-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; filter: grayscale(100%);
+            transition: transform 0.6s cubic-bezier(0.3, 1, 0.4, 1), filter 0.6s ease;
+        }
+        .gallery-card:hover .gallery-card-bg {
+            filter: grayscale(100%) brightness(0.3);
+        }
+        .gallery-card-overlay {
+            height: 100%; display: flex; flex-direction: column; justify-content: space-between;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+            position: relative; z-index: 5; transform: translateZ(100px);
+            transform-style: preserve-3d; padding: 15px;
+        }
+        .gallery-card-title {
+            font-family: var(--font-heading);
+            font-size: 1.75rem; color: white; margin: 0; line-height: 1.2;
+            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8); transition: color 0.3s ease;
+            text-transform: uppercase;
+        }
+        .gallery-card:hover .gallery-card-title {
+            background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+            background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: lavaFlow 4s ease-in-out infinite; text-shadow: none;
+            filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.7));
+        }
+        .card-badge-container { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+        .wikd-sub-badge {
+            display: inline-block; background-color: rgba(255, 59, 48, 0.7);
+            color: white; padding: 6px 18px 8px; font-size: 12px;
+            font-weight: 600; font-style: italic;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
+        }
+        .gallery-card::before {
+            content: ""; position: absolute; inset: 0; border-radius: 8px;
+            padding: 2px;
+            background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+            background-size: 300%; animation: lavaFlow 4s ease-in-out infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            z-index: 6; pointer-events: none; opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .gallery-card:hover::before { opacity: 1; }
+        .gallery-card:hover { box-shadow: 0 0 25px rgba(255, 59, 48, 0.5); }
+    </style>
+</head>
+<body class="font-body text-gray-200">
+
+    <div class="bg-[var(--color-surface)] border-b border-[var(--color-border)] py-6">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl font-heading text-white">WIKD Motorsports Style Guide</h1>
+            <p class="text-lg text-[var(--color-text-muted)] mt-2">A central reference for all design elements and components.</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-12">
+
+        <!-- STARTER TEMPLATE -->
+        <section id="starter-template" class="mb-16">
+            <h2 class="h2 text-white border-b border-[var(--color-border)] pb-4 mb-6">Starter Template</h2>
+            <p class="p-muted mb-4">To create a new page, start with this basic HTML structure. It includes the required Google Fonts and the CSS variables that define the site's look and feel.</p>
+            <div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg overflow-hidden">
+                <div class="bg-gray-900 px-4 py-2 text-sm text-gray-400">
+                    <span class="font-bold text-white">template.html</span>
+                </div>
+                <pre class="p-4 text-sm overflow-x-auto"><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;New Page&lt;/title&gt;
+
+    &lt;!-- Google Fonts --&gt;
+    &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+    &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"&gt;
+
+    &lt;!-- Core Styles --&gt;
+    &lt;style&gt;
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #888888;
+            --color-primary: #FF3B30;
+            --color-surface: #141414;
+            --color-border: #2A2A2A;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-body);
+        }
+        /* Add other base styles or component styles here */
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Your Content Here&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+            </div>
+        </section>
+
+
+        <!-- COLORS -->
+        <section id="colors" class="mb-16">
+            <h2 class="h2 text-white border-b border-[var(--color-border)] pb-4 mb-6">Color Palette</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div class="text-center">
+                    <div class="h-24 rounded-lg" style="background-color: var(--color-primary);"></div>
+                    <h4 class="font-bold mt-3 text-white">Primary</h4>
+                    <p class="text-sm text-[var(--color-text-muted)]">#FF3B30</p>
+                    <p class="text-xs font-mono text-gray-500">--color-primary</p>
+                </div>
+                <div class="text-center">
+                    <div class="h-24 rounded-lg" style="background-color: var(--color-text);"></div>
+                    <h4 class="font-bold mt-3 text-white">Text</h4>
+                    <p class="text-sm text-[var(--color-text-muted)]">#EAEAEA</p>
+                    <p class="text-xs font-mono text-gray-500">--color-text</p>
+                </div>
+                <div class="text-center">
+                    <div class="h-24 rounded-lg" style="background-color: var(--color-text-muted);"></div>
+                    <h4 class="font-bold mt-3 text-white">Text Muted</h4>
+                    <p class="text-sm text-[var(--color-text-muted)]">#888888</p>
+                    <p class="text-xs font-mono text-gray-500">--color-text-muted</p>
+                </div>
+                 <div class="text-center">
+                    <div class="h-24 rounded-lg" style="background-color: var(--color-background);"></div>
+                    <h4 class="font-bold mt-3 text-white">Background</h4>
+                    <p class="text-sm text-[var(--color-text-muted)]">#0A0A0A</p>
+                    <p class="text-xs font-mono text-gray-500">--color-background</p>
+                </div>
+                <div class="text-center">
+                    <div class="h-24 rounded-lg" style="background-color: var(--color-surface);"></div>
+                    <h4 class="font-bold mt-3 text-white">Surface</h4>
+                    <p class="text-sm text-[var(--color-text-muted)]">#141414</p>
+                    <p class="text-xs font-mono text-gray-500">--color-surface</p>
+                </div>
+                 <div class="text-center">
+                    <div class="h-24 rounded-lg" style="background-color: var(--color-border);"></div>
+                    <h4 class="font-bold mt-3 text-white">Border</h4>
+                    <p class="text-sm text-[var(--color-text-muted)]">#2A2A2A</p>
+                    <p class="text-xs font-mono text-gray-500">--color-border</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TYPOGRAPHY -->
+        <section id="typography" class="mb-16">
+            <h2 class="h2 text-white border-b border-[var(--color-border)] pb-4 mb-6">Typography</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Heading Font: Rajdhani</h3>
+                    <div class="space-y-4">
+                        <h1 class="h1">Heading 1</h1>
+                        <h2 class="h2">Heading 2</h2>
+                        <h3 class="h3">Heading 3</h3>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Body Font: Inter</h3>
+                    <div class="space-y-4">
+                        <p class="p">This is standard body text. It's used for paragraphs and general content. It should be legible and clean, providing a comfortable reading experience for longer-form text.</p>
+                        <p class="p-muted">This is muted body text. It's used for secondary information, captions, or less important details that shouldn't draw as much attention as the primary content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPONENTS -->
+        <section id="components">
+            <h2 class="h2 text-white border-b border-[var(--color-border)] pb-4 mb-6">Components</h2>
+            
+            <!-- Buttons -->
+            <div class="mb-12">
+                <h3 class="h3 text-white mb-4">Buttons</h3>
+                <div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-8 flex flex-wrap items-center justify-center gap-6">
+                    <a href="#" class="btn btn-primary"><span>Primary Button</span></a>
+                    <button class="btn filter-btn"><span>Filter Button</span></button>
+                    <button class="btn filter-btn active"><span>Filter Active</span></button>
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="mb-12">
+                <h3 class="h3 text-white mb-4">Cards</h3>
+                 <div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-8 grid md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                    <!-- Standard Card -->
+                    <div class="w-full max-w-sm">
+                         <h4 class="text-center mb-4 text-lg text-white font-semibold">Standard Package Card</h4>
+                        <a href="#" class="package-card">
+                            <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/ZL1.webp?v=1750443336" alt="6th Gen Camaro" class="package-card-bg" loading="lazy">
+                            <div class="package-card-overlay">
+                                <h3 class="package-card-title">6th Gen Camaro</h3>
+                                <span class="package-card-link">View Packages &rarr;</span>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- WIKD Card -->
+                    <div class="w-full max-w-sm">
+                         <h4 class="text-center mb-4 text-lg text-white font-semibold">"WIKD" Gallery Card</h4>
+                         <div class="gallery-card-wrapper">
+                             <a href="#" class="gallery-card">
+                                 <img src="https://www.wikdmotorsports.com/cdn/shop/files/image.jpg?v=1732117588&width=800" class="gallery-card-bg" alt="WIKD Z06">
+                                 <div class="gallery-card-overlay">
+                                     <div class="card-badge-container">
+                                         <div class="wikd-sub-badge">WIKD</div>
+                                     </div>
+                                     <div class="gallery-card-title-block">
+                                         <h3 class="gallery-card-title">WIKD Z06</h3>
+                                     </div>
+                                 </div>
+                             </a>
+                         </div>
+                    </div>
+                 </div>
+            </div>
+
+        </section>
+    </div>
+
+</body>
+</html>
