@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIKD Build - GRAY MATTER - 2020 BMW M340I</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- Custom styles for "GRAY MATTER" Theme --- */
+    :root {
+      --color-primary: #007BFF; /* A strong blue */
+      --color-secondary: #87CEEB; /* A lighter sky blue for accents */
+      --color-text-main: #EAEAEA;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0A0A0A;
+      color: var(--color-text-main);
+    }
+    .font-heading {
+      font-family: 'Rajdhani', sans-serif;
+    }
+    .lava-gradient-text {
+      background: linear-gradient(90deg, #004c9e, #007BFF, #87CEEB, #007BFF, #004c9e);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    .lava-gradient-bg {
+      background: linear-gradient(90deg, #004c9e, #007BFF, #87CEEB, #007BFF, #004c9e);
+      background-size: 300%;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    @keyframes lavaFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* --- CLIP PATHS --- */
+    .clip-path-custom {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 30px 100%, 0 97%);
+    }
+    .clip-path-data-section {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 95%);
+    }
+    
+    /* -- THEME COLOR CORRECTION -- */
+    *:focus-visible {
+      outline: 2px solid var(--color-primary) !important;
+      outline-offset: 2px;
+    }
+    .mods-list li::before {
+      content: '■';
+      color: var(--color-primary);
+      margin-right: 0.75rem;
+      font-size: 0.8em;
+    }
+    #chart-container {
+      position: relative;
+    }
+    
+    /* --- DESKTOP VERTICAL TICKER --- */
+    .ticker-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 40rem;
+      height: 100vh;
+      overflow-y: scroll;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .ticker-wrapper::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, and Opera */
+    }
+    .image-ticker-card {
+      width: 100%;
+      height: auto;
+      margin-bottom: 2rem;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    .image-ticker-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: grayscale(80%);
+      transition: filter 0.3s ease-in-out;
+      object-fit: cover;
+    }
+    .image-ticker-card:hover img {
+      filter: grayscale(0%);
+    }
+    .ticker-inner {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .gradient-overlay-top, .gradient-overlay-bottom {
+      position: sticky;
+      left: 0;
+      width: 100%;
+      height: 10rem;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .gradient-overlay-top {
+      top: 0;
+      background: linear-gradient(to bottom, #0A0A0A, rgba(10, 10, 10, 0));
+    }
+    .gradient-overlay-bottom {
+      bottom: 0;
+      background: linear-gradient(to top, #0A0A0A, rgba(10, 10, 10, 0));
+    }
+
+    /* --- HERO & PARALLAX (Desktop Only) --- */
+    .build-hero {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+    .parallax-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      mix-blend-mode: screen;
+      opacity: 0.6;
+      z-index: 2;
+    }
+    .build-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 70%);
+      z-index: 4;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  
+  <!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
+  <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden">
+    <div id="mobileTickerInner" class="flex h-full will-change-transform">
+      <!-- Mobile gallery items will be populated by JS -->
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+  </div>
+
+  <div class="build-hero">
+    <!-- Parallax video will be hidden on mobile via JS -->
+    <video autoplay loop muted playsinline class="parallax-video hidden lg:block">
+        <source src="https://videos.pexels.com/video-files/7995213/7995213-hd.mp4" type="video/mp4">
+    </video>
+
+    <!-- Main Content Container -->
+    <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
+    
+      <!-- DESKTOP-ONLY: Vertical Image Ticker -->
+      <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
+        <div class="gradient-overlay-top"></div>
+        <div id="tickerInner" class="ticker-inner">
+          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0444_copy_1600x.jpg?v=1705071847" alt="BMW M340i Gallery Image 1"></div>
+          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0438_copy_1600x.jpg?v=1705071846" alt="BMW M340i Gallery Image 2"></div>
+          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0442_copy_1600x.jpg?v=1705071847" alt="BMW M340i Gallery Image 3"></div>
+        </div>
+        <div class="gradient-overlay-bottom"></div>
+      </div>
+      
+      <!-- Content Card -->
+      <main id="contentCard" class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0">
+      
+        <!-- Card Header -->
+        <header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
+          <div class="overflow-hidden"> 
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">GRAY MATTER</h1>
+            <h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">2020 BMW M340I</h2>
+          </div>
+          <div class="text-right">
+            <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" data-target="425" style="color: var(--color-primary);">0 HP</div>
+            <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading whitespace-nowrap" data-target="425" style="color: var(--color-secondary);">0 TQ</div>
+          </div>
+        </header>
+
+        <!-- Divider -->
+        <div class="h-1 w-full lava-gradient-bg"></div>
+
+        <!-- Main Body Content -->
+        <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
+        
+          <!-- Dyno Section -->
+          <section class="anim-stagger">
+            <div id="chart-container">
+              <canvas id="dynoChart"></canvas>
+            </div>
+            <div class="mt-5 bg-gray-900/50 border border-gray-800 clip-path-data-section">
+              <div class="data-header flex justify-between items-center cursor-pointer p-4 transition-colors hover:bg-gray-800/20">
+                <h4 class="text-sm font-semibold uppercase font-heading">WIKD Tuned Session Report</h4>
+                <i class="fas fa-chevron-down transition-transform duration-300"></i>
+              </div>
+              <div class="data-list-collapsible max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                <div class="p-4 border-t border-gray-800">
+                  <p class="text-sm text-gray-300">(+43 WHP / +56 WTQ vs. Stock)</p>
+                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Power:</strong> ~425 WHP @ 5,500 RPM</p>
+                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Torque:</strong> 424.82 WTQ @ 4,500 RPM</p>
+                  <p class="text-xs text-gray-500 mt-2">Data extracted from SAE J1349 corrected dyno graph. Stock figures estimated.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Specifications & Modifications -->
+          <section class="mt-10 anim-stagger">
+            <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Specifications</h3>
+            <ul class="text-lg">
+              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">YEAR</strong><span>2020</span></li>
+              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">MAKE</strong><span>BMW</span></li>
+              <li class="flex justify-between py-3"><strong class="text-gray-400 font-medium">MODEL</strong><span>M340i</span></li>
+            </ul>
+
+            <div class="mods-section mt-10">
+              <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Modifications</h3>
+              <ul class="mt-4 space-y-2 text-gray-300 mods-list">
+                <li>INTAKE</li>
+                <li>Mad Downpipe</li>
+                <li>93 OCTANE</li>
+                <li>WIKDTUNED</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative max-w-4xl max-h-full">
+      <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
+      <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
+      <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
+      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg hidden">
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // --- GLOBAL ELEMENTS & STATE ---
+    const contentCard = document.getElementById('contentCard');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
+    const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
+        return { 
+            type: 'image', 
+            src: card.querySelector('img').src, 
+        };
+    });
+
+    let currentIndex = 0;
+    let desktopTickerAnimation;
+    let mobileTickerAnimation;
+    let isMobile = window.innerWidth < 1024;
+
+    // --- LIGHTBOX LOGIC ---
+    const showLightboxItem = (index) => {
+      const adjustedIndex = (index + originalItems.length) % originalItems.length;
+      currentIndex = adjustedIndex;
+      lightboxImg.src = originalItems[currentIndex].src;
+      lightbox.classList.remove('opacity-0', 'pointer-events-none');
+    };
+    
+    const closeLightbox = () => {
+        lightbox.classList.add('opacity-0', 'pointer-events-none');
+    };
+
+    const setupLightboxListeners = (selector) => {
+        document.querySelectorAll(selector).forEach((item, index) => {
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+            newItem.addEventListener('click', () => showLightboxItem(index % originalItems.length));
+        });
+    };
+
+    if (lightbox) {
+      document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+      document.querySelector('.lightbox-prev').addEventListener('click', () => showLightboxItem(currentIndex - 1));
+      document.querySelector('.lightbox-next').addEventListener('click', () => showLightboxItem(currentIndex + 1));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('opacity-0')) {
+          closeLightbox();
+        }
+      });
+    }
+
+    // --- MOBILE VIEW SETUP ---
+    function setupMobileView() {
+        if (desktopTickerAnimation) desktopTickerAnimation.kill();
+        
+        const mobileTickerInner = document.getElementById('mobileTickerInner');
+        if (mobileTickerInner.children.length > 0) return;
+
+        originalItems.forEach(item => {
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
+            let mediaElement = document.createElement('img');
+            mediaElement.src = item.src;
+            mediaElement.className = 'h-full w-auto object-cover rounded-md';
+            itemContainer.appendChild(mediaElement);
+            mobileTickerInner.appendChild(itemContainer);
+        });
+
+        const items = mobileTickerInner.querySelectorAll('.mobile-gallery-item');
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            mobileTickerInner.appendChild(clone);
+        });
+        
+        setupLightboxListeners('.mobile-gallery-item');
+        
+        gsap.set(mobileTickerInner, {x: 0});
+        mobileTickerAnimation = gsap.to(mobileTickerInner, {
+            x: '-50%',
+            duration: 40,
+            ease: 'none',
+            repeat: -1,
+        });
+
+        const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
+        const initialScroll = galleryHeight * 0.85;
+        setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
+    }
+
+    // --- DESKTOP VIEW SETUP ---
+    function setupDesktopView() {
+        if (mobileTickerAnimation) mobileTickerAnimation.kill();
+        
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        const tickerInner = document.getElementById('tickerInner');
+        if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return;
+
+        const originalDesktopItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+        originalDesktopItems.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.classList.add('cloned');
+            tickerInner.appendChild(clone);
+        });
+
+        const syncHeights = () => {
+            if (contentCard && tickerWrapper) {
+                tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
+            }
+        };
+        
+        syncHeights();
+        window.addEventListener('resize', syncHeights);
+        const observer = new MutationObserver(syncHeights);
+        observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
+
+        let isHovering = false;
+        
+        function animateScroll() {
+            if (!isHovering && tickerWrapper) {
+                tickerWrapper.scrollTop += 0.5;
+                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) {
+                    tickerWrapper.scrollTop = 0;
+                }
+            }
+            desktopTickerAnimation = requestAnimationFrame(animateScroll);
+        }
+        animateScroll();
+        setupLightboxListeners('.image-ticker-card');
+        
+        tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
+        tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
+    }
+
+    // --- COMMON ANIMATIONS & UI ---
+    gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.utils.toArray('.anim-stagger').forEach(elem => {
+      gsap.from(elem, {
+        scrollTrigger: {
+          trigger: elem,
+          start: 'top 95%',
+          toggleActions: 'play none none none',
+        },
+        opacity: 0, y: 50, duration: 0.8, ease: 'power3.out'
+      });
+    });
+
+    gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => {
+      const target = parseInt(stat.dataset.target, 10);
+      const statObject = { val: 0 };
+      gsap.to(statObject, {
+        val: target,
+        duration: 2.5,
+        ease: 'power3.out',
+        delay: 0.5,
+        onUpdate: () => {
+          stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`;
+        }
+      });
+    });
+
+    const dataHeader = document.querySelector('.data-header');
+    if(dataHeader) {
+      const dataList = document.querySelector('.data-list-collapsible');
+      const icon = dataHeader.querySelector('i');
+      dataHeader.addEventListener('click', () => {
+        const isActive = dataHeader.classList.toggle('active');
+        dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0';
+        icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    }
+
+    // --- INITIALIZATION & RESIZE HANDLING ---
+    function initializePage() {
+        isMobile = window.innerWidth < 1024;
+        if (isMobile) {
+            setupMobileView();
+        } else {
+            setupDesktopView();
+        }
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            const newIsMobile = window.innerWidth < 1024;
+            if (newIsMobile !== isMobile) {
+                window.location.reload();
+            }
+        }, 250);
+    });
+
+    initializePage();
+    
+    // --- CHART SCRIPT ---
+    const chartData = [
+        { rpm: 3000, horsepower: 220, torque: 385 },
+        { rpm: 3250, horsepower: 260, torque: 420 },
+        { rpm: 3500, horsepower: 295, torque: 415 },
+        { rpm: 3750, horsepower: 330, torque: 410 },
+        { rpm: 4000, horsepower: 360, torque: 415 },
+        { rpm: 4250, horsepower: 385, torque: 420 },
+        { rpm: 4500, horsepower: 405, torque: 424.82 },
+        { rpm: 4750, horsepower: 415, torque: 418 },
+        { rpm: 5000, horsepower: 420, torque: 410 },
+        { rpm: 5250, horsepower: 422, torque: 400 },
+        { rpm: 5500, horsepower: 425, torque: 390 },
+        { rpm: 5750, horsepower: 420, torque: 385 },
+        { rpm: 6000, horsepower: 415, torque: 380 },
+        { rpm: 6250, horsepower: 410, torque: 375 },
+        { rpm: 6500, horsepower: 405, torque: 370 },
+        { rpm: 6750, horsepower: 385, torque: 365 }
+    ];
+    const peakHpIndex = chartData.findIndex(d => d.horsepower === 425);
+    const peakTqIndex = chartData.findIndex(d => d.torque === 424.82);
+    const peakHpData = new Array(chartData.length).fill(null); if (peakHpIndex !== -1) peakHpData[peakHpIndex] = chartData[peakHpIndex].horsepower;
+    const peakTqData = new Array(chartData.length).fill(null); if (peakTqIndex !== -1) peakTqData[peakTqIndex] = chartData[peakTqIndex].torque;
+    const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
+    const chartCanvas = document.getElementById('dynoChart');
+    if (chartCanvas) {
+      const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
+      let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
+      function syncOverlay(chart) { overlayCanvas.width = chart.width; overlayCanvas.height = chart.height; overlayCanvas.style.width = chart.width + 'px'; overlayCanvas.style.height = chart.height + 'px'; const hpMeta = chart.getDatasetMeta(2); const tqMeta = chart.getDatasetMeta(3); if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1); } if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); } }
+      function getPointOnPath(path, progress) { if (!path || path.length < 2) return null; const lengths = []; let totalLength = 0; for (let i = 1; i < path.length; i++) { const p1 = path[i - 1], p2 = path[i]; const dx = p2.x - p1.x, dy = p2.y - p1.y; const length = Math.sqrt(dx * dx + dy * dy); lengths.push(length); totalLength += length; } if (totalLength === 0) return path.length > 0 ? { x: path[0].x, y: path[0].y } : null; const targetLength = totalLength * progress; let lengthTraversed = 0; for (let i = 0; i < lengths.length; i++) { const segmentLength = lengths[i]; if (lengthTraversed + segmentLength >= targetLength) { const p1 = path[i], p2 = path[i + 1]; if (segmentLength === 0) return { x: p1.x, y: p1.y }; const segmentProgress = (targetLength - lengthTraversed) / segmentLength; const x = p1.x + (p2.x - p1.x) * segmentProgress; const y = p1.y + (p2.y - p1.y) * segmentProgress; return { x, y }; } lengthTraversed += segmentLength; } return { x: path[path.length - 1].x, y: path[path.length - 1].y }; }
+      new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+          labels: chartData.map(d => d.rpm),
+          datasets: [
+            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#007BFF', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : '#007BFF', borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#87CEEB', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : '#87CEEB', borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
+            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#007BFF', yAxisID: 'yHP', showLine: false, order: 0, },
+            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#87CEEB', yAxisID: 'yHP', showLine: false, order: 0, }
+          ]
+        },
+        options: {
+          animation: {
+            onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(0, 123, 255, 0.7)'); hpGradient.addColorStop(1, 'rgba(0, 123, 255, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(135, 206, 235, 0.7)'); tqGradient.addColorStop(1, 'rgba(135, 206, 235, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(0, 123, 255, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(135, 206, 235, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
+            x: { type: 'number', easing: 'linear', duration: 50, from: NaN, delay(ctx) { if (ctx.type !== 'data' || ctx.xStarted) return 0; ctx.xStarted = true; return ctx.index * 50; } },
+            y: { type: 'number', easing: 'linear', duration: 50, from: (ctx) => (ctx.index === 0) ? ctx.chart.scales.yHP.getBasePixel() : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y, delay(ctx) { if (ctx.type !== 'data' || ctx.yStarted) return 0; ctx.yStarted = true; return ctx.index * 50; } }
+          },
+          onResize: (chart) => { syncOverlay(chart); },
+          responsive: true, maintainAspectRatio: true, aspectRatio: 1.5,
+          plugins: {
+            legend: { display: false, },
+            tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
+          },
+          scales: {
+            x: { 
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } },
+              title: { display: false }
+            },
+            yHP: { 
+              type: 'linear', 
+              position: 'left', 
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              ticks: { color: '#a1a1aa', stepSize: 100 }, 
+              min: 0, 
+              max: 500, 
+              title: { display: false } 
+            },
+          }
+        },
+        plugins: [fullBorderPlugin]
+      });
+    }
+  });
+  </script>
+</body>
+</html>
