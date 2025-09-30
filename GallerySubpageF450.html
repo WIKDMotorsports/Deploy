@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIKD Build - WIKD F-450</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- Custom styles for WIKD Theme --- */
+    :root {
+      --color-primary: #FF3B30;
+      --color-secondary: #ffa500;
+      --color-text-main: #EAEAEA;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0A0A0A;
+      color: var(--color-text-main);
+    }
+    .font-heading {
+      font-family: 'Rajdhani', sans-serif;
+    }
+     .lava-gradient-text {
+      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    .lava-gradient-bg {
+      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background-size: 300%;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    @keyframes lavaFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* --- CLIP PATHS --- */
+    .clip-path-custom {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 30px 100%, 0 97%);
+    }
+    .clip-path-data-section {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 95%);
+    }
+    
+    /* -- THEME COLOR CORRECTION -- */
+    *:focus-visible {
+      outline: 2px solid var(--color-primary) !important;
+      outline-offset: 2px;
+    }
+    .mods-list li::before {
+      content: '■';
+      color: var(--color-primary);
+      margin-right: 0.75rem;
+      font-size: 0.8em;
+    }
+    
+    /* --- DESKTOP VERTICAL TICKER --- */
+    .ticker-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 40rem;
+      height: 100vh;
+      overflow-y: scroll;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .ticker-wrapper::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, and Opera */
+    }
+    .image-ticker-card {
+      width: 100%;
+      height: auto;
+      margin-bottom: 2rem;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    .image-ticker-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: grayscale(80%);
+      transition: filter 0.3s ease-in-out;
+      object-fit: cover;
+    }
+    .image-ticker-card:hover img {
+      filter: grayscale(0%);
+    }
+    .ticker-inner {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+
+    /* --- HERO & PARALLAX (Desktop Only) --- */
+    .build-hero {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  
+  <!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
+  <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden">
+     <div id="mobileTickerInner" class="flex h-full will-change-transform">
+      <!-- Mobile gallery items will be populated by JS -->
+    </div>
+     <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+  </div>
+
+  <div class="build-hero">
+
+    <!-- Main Content Container -->
+    <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
+    
+      <!-- DESKTOP-ONLY: Vertical Image Ticker -->
+      <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
+        <div id="tickerInner" class="ticker-inner">
+          <div class="image-ticker-card"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4585_1.jpg?v=1752529624" alt="WIKD F-450 Gallery Image 1"></div>
+           <div class="image-ticker-card"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4585_1.jpg?v=1752529624" alt="WIKD F-450 Gallery Image 2"></div>
+            <div class="image-ticker-card"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4585_1.jpg?v=1752529624" alt="WIKD F-450 Gallery Image 3"></div>
+        </div>
+      </div>
+      
+      <!-- Content Card -->
+      <main id="contentCard" class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0">
+      
+        <!-- Card Header -->
+        <header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
+          <div class="overflow-hidden"> 
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">WIKD F-450</h1>
+            <h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">2015 Ford F-450</h2>
+          </div>
+          <div class="text-right">
+            <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" style="color: var(--color-primary);">??? HP</div>
+            <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading whitespace-nowrap" style="color: var(--color-secondary);">???? TQ</div>
+          </div>
+        </header>
+
+        <!-- Divider -->
+        <div class="h-1 w-full lava-gradient-bg"></div>
+
+        <!-- Main Body Content -->
+        <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
+        
+          <!-- Dyno Section -->
+          <section class="anim-stagger">
+             <img src="https://placehold.co/1200x800/0A0A0A/EAEAEA?text=Dyno+Graph+Coming+Soon" alt="Dyno Graph Placeholder" class="w-full rounded-md border border-gray-800">
+          </section>
+
+          <!-- Specifications & Modifications -->
+          <section class="mt-10 anim-stagger">
+            <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Specifications</h3>
+            <ul class="text-lg">
+              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">YEAR</strong><span>2015</span></li>
+              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">MAKE</strong><span>Ford</span></li>
+              <li class="flex justify-between py-3"><strong class="text-gray-400 font-medium">MODEL</strong><span>F-450</span></li>
+            </ul>
+
+            <div class="mods-section mt-10">
+              <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Modifications</h3>
+               <a href="https://www.wikdmotorsports.com/pages/f450-wheel-tire-package" target="_blank" rel="noopener noreferrer" class="block mt-4 transition-transform hover:scale-[1.02]">
+                <ul class="space-y-2 text-gray-300 mods-list">
+                    <li>WIKD F-450 Wheel & Tire Package</li>
+                </ul>
+              </a>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative max-w-4xl max-h-full">
+      <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
+      <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
+      <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
+      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg">
+    </div>
+  </div>
+
+  <!-- Themed Pop-up Modal -->
+  <div id="tunePopup" class="fixed bottom-8 right-8 z-50 max-w-xs w-full transition-all duration-500 ease-out transform translate-y-24 opacity-0 pointer-events-none">
+    <div class="relative bg-[#1f1f1f] border border-[#2A2A2A] rounded-lg shadow-xl px-4 py-3 text-center">
+        <button id="closePopup" class="absolute top-1 right-2 text-gray-400 hover:text-white text-2xl">&times;</button>
+        <h3 class="text-xl font-heading lava-gradient-text">Build Your Beast</h3>
+        <a href="https://www.wikdmotorsports.com/pages/f450-wheel-tire-package" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 bg-[var(--color-primary)] hover:bg-opacity-80 text-white font-bold py-2 px-4 rounded-lg uppercase font-heading text-sm transition-colors duration-300">
+            View Package
+        </a>
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // --- GLOBAL ELEMENTS & STATE ---
+    const contentCard = document.getElementById('contentCard');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const tunePopup = document.getElementById('tunePopup');
+    const closePopup = document.getElementById('closePopup');
+
+    const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
+        return { 
+            type: 'image', 
+            src: card.querySelector('img').src, 
+        };
+    });
+
+    let currentIndex = 0;
+    let desktopTickerAnimation;
+    let mobileTickerAnimation;
+    let isMobile = window.innerWidth < 1024;
+
+    // --- POPUP LOGIC ---
+    setTimeout(() => {
+        if(tunePopup) {
+            tunePopup.classList.remove('opacity-0', 'translate-y-24', 'pointer-events-none');
+        }
+    }, 3000);
+
+    if(closePopup) {
+        closePopup.addEventListener('click', () => {
+            if(tunePopup) {
+                tunePopup.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+    }
+
+    // --- LIGHTBOX LOGIC ---
+    const showLightboxItem = (index) => {
+      const adjustedIndex = (index + originalItems.length) % originalItems.length;
+      currentIndex = adjustedIndex;
+      lightboxImg.src = originalItems[currentIndex].src;
+      lightbox.classList.remove('opacity-0', 'pointer-events-none');
+    };
+    
+    const closeLightbox = () => {
+        lightbox.classList.add('opacity-0', 'pointer-events-none');
+    };
+
+    const setupLightboxListeners = (selector) => {
+        document.querySelectorAll(selector).forEach((item, index) => {
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+            newItem.addEventListener('click', () => showLightboxItem(index % originalItems.length));
+        });
+    };
+
+    if (lightbox) {
+      document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+      document.querySelector('.lightbox-prev').addEventListener('click', () => showLightboxItem(currentIndex - 1));
+      document.querySelector('.lightbox-next').addEventListener('click', () => showLightboxItem(currentIndex + 1));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('opacity-0')) {
+          closeLightbox();
+        }
+      });
+    }
+
+    // --- MOBILE VIEW SETUP ---
+    function setupMobileView() {
+        if (desktopTickerAnimation) desktopTickerAnimation.kill();
+        
+        const mobileTickerInner = document.getElementById('mobileTickerInner');
+        if (mobileTickerInner.children.length > 0) return;
+
+        originalItems.forEach(item => {
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
+            let mediaElement = document.createElement('img');
+            mediaElement.src = item.src;
+            mediaElement.className = 'h-full w-auto object-cover rounded-md';
+            itemContainer.appendChild(mediaElement);
+            mobileTickerInner.appendChild(itemContainer);
+        });
+
+        const items = mobileTickerInner.querySelectorAll('.mobile-gallery-item');
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            mobileTickerInner.appendChild(clone);
+        });
+        
+        setupLightboxListeners('.mobile-gallery-item');
+        
+        gsap.set(mobileTickerInner, {x: 0});
+        mobileTickerAnimation = gsap.to(mobileTickerInner, {
+            x: '-50%',
+            duration: 40,
+            ease: 'none',
+            repeat: -1,
+        });
+
+        const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
+        const initialScroll = galleryHeight * 0.85;
+        setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
+    }
+
+    // --- DESKTOP VIEW SETUP ---
+    function setupDesktopView() {
+        if (mobileTickerAnimation) mobileTickerAnimation.kill();
+        
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        const tickerInner = document.getElementById('tickerInner');
+        if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return;
+
+        const originalDesktopItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+        originalDesktopItems.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.classList.add('cloned');
+            tickerInner.appendChild(clone);
+        });
+
+        const syncHeights = () => {
+            if (contentCard && tickerWrapper) {
+                tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
+            }
+        };
+        
+        syncHeights();
+        window.addEventListener('resize', syncHeights);
+        const observer = new MutationObserver(syncHeights);
+        observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
+
+        let isHovering = false;
+        
+        function animateScroll() {
+            if (!isHovering && tickerWrapper) {
+                tickerWrapper.scrollTop += 0.5;
+                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) {
+                    tickerWrapper.scrollTop = 0;
+                }
+            }
+            desktopTickerAnimation = requestAnimationFrame(animateScroll);
+        }
+        animateScroll();
+        setupLightboxListeners('.image-ticker-card');
+        
+        tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
+        tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
+    }
+
+    // --- COMMON ANIMATIONS & UI ---
+    gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.utils.toArray('.anim-stagger').forEach(elem => {
+      gsap.from(elem, {
+        scrollTrigger: {
+          trigger: elem,
+          start: 'top 95%',
+          toggleActions: 'play none none none',
+        },
+        opacity: 0, y: 50, duration: 0.8, ease: 'power3.out'
+      });
+    });
+
+    // --- INITIALIZATION & RESIZE HANDLING ---
+    function initializePage() {
+        isMobile = window.innerWidth < 1024;
+        if (isMobile) {
+            setupMobileView();
+        } else {
+            setupDesktopView();
+        }
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            const newIsMobile = window.innerWidth < 1024;
+            if (newIsMobile !== isMobile) {
+                window.location.reload();
+            }
+        }, 250);
+    });
+
+    initializePage();
+    
+  });
+  </script>
+</body>
+</html>
+
+
