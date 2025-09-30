@@ -92,14 +92,15 @@
       cursor: pointer;
       box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
-    .image-ticker-card img {
+    .image-ticker-card img, .image-ticker-card video {
       width: 100%;
-      height: auto;
+      height: 100%;
       display: block;
       filter: grayscale(80%);
       transition: filter 0.3s ease-in-out;
+      object-fit: cover; /* Ensures content fills the area */
     }
-    .image-ticker-card:hover img {
+    .image-ticker-card:hover img, .image-ticker-card:hover video, .ticker-video.saturation-locked {
       filter: grayscale(0%);
     }
     .ticker-inner {
@@ -158,7 +159,7 @@
   <!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
   <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden">
     <div id="mobileTickerInner" class="flex h-full will-change-transform">
-      <!-- Mobile gallery images will be populated by JS -->
+      <!-- Mobile gallery images/videos will be populated by JS -->
     </div>
     <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
   </div>
@@ -176,12 +177,49 @@
       <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
         <div class="gradient-overlay-top"></div>
         <div id="tickerInner" class="ticker-inner">
-          <!-- Image cards are populated here for the lightbox source -->
+
+          <!-- ORIGINAL VIDEO ENTRY -->
+          <a href="https://www.wikdmotorsports.com/pages/euro-tune" target="_blank" rel="noopener noreferrer" class="image-ticker-card block" data-video-card>
+            <div class="relative group w-full h-full flex justify-center items-center overflow-hidden">
+              <video autoplay loop muted playsinline class="pointer-events-none w-full h-full ticker-video" style="object-fit: cover;">
+                  <source src="https://cdn.shopify.com/videos/c/o/v/bd4ecb3dd8034ac281dce1dfe016866d.mp4" type="video/mp4">
+              </video>
+              <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
+                  <button class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Mute or unmute video">
+                      <i class="fas fa-volume-mute"></i>
+                  </button>
+                  <button class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Lock or unlock ticker scroll">
+                      <i class="fas fa-unlock"></i>
+                  </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- Image Card 1 -->
           <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC00075_1600x.jpg?v=1717604984" alt="WIKD Bull Gallery Image 1"></div>
+
+          <!-- EXHAUST VIDEO ENTRY -->
+          <a href="https://www.wikdmotorsports.com/collections/exhausts/products/lamborghini-huracan-evosto-remove-opf-52-v10-titanium-catback-with-muffler-2019-brushed-purple?_pos=2&_fid=8e3600c1d&_ss=c" target="_blank" rel="noopener noreferrer" class="image-ticker-card block" data-video-card>
+            <div class="relative group w-full h-full flex justify-center items-center overflow-hidden">
+              <video autoplay loop muted playsinline class="pointer-events-none w-full h-full ticker-video" style="object-fit: cover;">
+                  <source src="https://cdn.shopify.com/videos/c/o/v/f42c19fa942c4683b451f930f969a9c2.mp4" type="video/mp4">
+              </video>
+              <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
+                  <button class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Mute or unmute video">
+                      <i class="fas fa-volume-mute"></i>
+                  </button>
+                  <button class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Lock or unlock ticker scroll">
+                      <i class="fas fa-unlock"></i>
+                  </button>
+              </div>
+            </div>
+          </a>
+          
+          <!-- Image Card 2 -->
           <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/gallery_e843822e-5349-4b7b-be56-52eeb18b360c_1600x.jpg?v=1717604984" alt="WIKD Bull Gallery Image 2"></div>
+
+          <!-- Image Card 3 -->
           <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/1_1600x.jpg?v=1717604983" alt="WIKD Bull Gallery Image 3"></div>
-          <div class="image-ticker-card"><img src="https://placehold.co/1600x1067/0a0a0a/eaeaea?text=WIKD+Bull" alt="WIKD Bull Placeholder 1"></div>
-          <div class="image-ticker-card"><img src="https://placehold.co/1600x1067/0a0a0a/eaeaea?text=WIKD+Bull" alt="WIKD Bull Placeholder 2"></div>
         </div>
         <div class="gradient-overlay-bottom"></div>
       </div>
@@ -262,7 +300,7 @@
       <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
       <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
       <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
-      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg">
+      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg hidden">
     </div>
   </div>
 
@@ -277,35 +315,79 @@
     const contentCard = document.getElementById('contentCard');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
-    const originalImageSources = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card img')).map(img => img.src);
+
+    const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
+        const videoEl = card.querySelector('video');
+        if (videoEl) {
+            return { 
+                type: 'video', 
+                src: videoEl.querySelector('source').src, 
+                link: card.href,
+            };
+        } else {
+            return { 
+                type: 'image', 
+                src: card.querySelector('img').src, 
+                link: card.href 
+            };
+        }
+    });
+
     let currentIndex = 0;
     let desktopTickerAnimation;
     let mobileTickerAnimation;
     let isMobile = window.innerWidth < 1024;
 
     // --- LIGHTBOX LOGIC ---
-    const showImage = (index) => {
-      currentIndex = (index + originalImageSources.length) % originalImageSources.length;
-      lightboxImg.src = originalImageSources[currentIndex];
+    const showLightboxItem = (index) => {
+      const adjustedIndex = (index + originalItems.length) % originalItems.length;
+      const item = originalItems[adjustedIndex];
+
+      if (item.type === 'video') return;
+
+      currentIndex = adjustedIndex;
+      lightboxImg.style.display = 'none';
+      lightboxImg.removeAttribute('src'); 
+
+      if (item.type === 'image') {
+        lightboxImg.src = item.src;
+        lightboxImg.style.display = 'block';
+      }
       lightbox.classList.remove('opacity-0', 'pointer-events-none');
+    };
+    
+    const closeLightbox = () => {
+        lightbox.classList.add('opacity-0', 'pointer-events-none');
     };
 
     const setupLightboxListeners = (selector) => {
         document.querySelectorAll(selector).forEach((item, index) => {
-            // Remove any old listeners to prevent duplicates
             const newItem = item.cloneNode(true);
             item.parentNode.replaceChild(newItem, item);
-            newItem.addEventListener('click', () => showImage(index % originalImageSources.length));
+            
+            newItem.addEventListener('click', (e) => {
+              const adjustedIndex = index % originalItems.length;
+              const itemData = originalItems[adjustedIndex];
+              
+              if (itemData.type === 'image') {
+                showLightboxItem(adjustedIndex);
+              } else if (itemData.type === 'video' && isMobile) {
+                e.preventDefault();
+                if (itemData.link) {
+                  window.open(itemData.link, '_blank');
+                }
+              }
+            });
         });
-    }
+    };
 
     if (lightbox) {
-      document.querySelector('.lightbox-close').addEventListener('click', () => lightbox.classList.add('opacity-0', 'pointer-events-none'));
-      document.querySelector('.lightbox-prev').addEventListener('click', () => showImage(currentIndex - 1));
-      document.querySelector('.lightbox-next').addEventListener('click', () => showImage(currentIndex + 1));
+      document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+      document.querySelector('.lightbox-prev').addEventListener('click', () => showLightboxItem(currentIndex - 1));
+      document.querySelector('.lightbox-next').addEventListener('click', () => showLightboxItem(currentIndex + 1));
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !lightbox.classList.contains('opacity-0')) {
-          lightbox.classList.add('opacity-0', 'pointer-events-none');
+          closeLightbox();
         }
       });
     }
@@ -315,20 +397,29 @@
         if (desktopTickerAnimation) desktopTickerAnimation.kill();
         
         const mobileTickerInner = document.getElementById('mobileTickerInner');
-        if (mobileTickerInner.children.length > 0) return; // Already setup
+        if (mobileTickerInner.children.length > 0) return;
 
-        // Populate mobile gallery
-        originalImageSources.forEach(src => {
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
-            const img = document.createElement('img');
-            img.src = src;
-            img.className = 'h-full w-auto object-cover rounded-md';
-            imgContainer.appendChild(img);
-            mobileTickerInner.appendChild(imgContainer);
+        originalItems.forEach(item => {
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
+            let mediaElement;
+            if (item.type === 'video') {
+                mediaElement = document.createElement('video');
+                mediaElement.src = item.src;
+                mediaElement.autoplay = true;
+                mediaElement.loop = true;
+                mediaElement.muted = true;
+                mediaElement.playsinline = true;
+                mediaElement.className = 'h-full w-auto object-cover rounded-md';
+            } else { // image
+                mediaElement = document.createElement('img');
+                mediaElement.src = item.src;
+                mediaElement.className = 'h-full w-auto object-cover rounded-md';
+            }
+            itemContainer.appendChild(mediaElement);
+            mobileTickerInner.appendChild(itemContainer);
         });
 
-        // Duplicate for seamless loop
         const items = mobileTickerInner.querySelectorAll('.mobile-gallery-item');
         items.forEach(item => {
             const clone = item.cloneNode(true);
@@ -337,7 +428,6 @@
         
         setupLightboxListeners('.mobile-gallery-item');
         
-        // Horizontal animation with GSAP
         gsap.set(mobileTickerInner, {x: 0});
         mobileTickerAnimation = gsap.to(mobileTickerInner, {
             x: '-50%',
@@ -346,9 +436,8 @@
             repeat: -1,
         });
 
-        // Set initial scroll position to show top of info card
         const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
-        const initialScroll = galleryHeight * 0.85; // Scroll 85% of the gallery height
+        const initialScroll = galleryHeight * 0.85;
         setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
     }
 
@@ -358,17 +447,15 @@
         
         const tickerWrapper = document.getElementById('tickerWrapper');
         const tickerInner = document.getElementById('tickerInner');
-        if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return; // Not present or already setup
+        if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return;
 
-        // Clone for seamless loop
-        const originalItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
-        originalItems.forEach(item => {
+        const originalDesktopItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+        originalDesktopItems.forEach(item => {
             const clone = item.cloneNode(true);
             clone.classList.add('cloned');
             tickerInner.appendChild(clone);
         });
 
-        // Sync height and start animation
         const syncHeights = () => {
             if (contentCard && tickerWrapper) {
                 tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
@@ -380,13 +467,13 @@
         const observer = new MutationObserver(syncHeights);
         observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
 
-        // Vertical scroll animation
         let isHovering = false;
+        let isTickerLocked = false; 
         tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
         tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
         
         function animateScroll() {
-            if (!isHovering && tickerWrapper) {
+            if (!isHovering && !isTickerLocked && tickerWrapper) {
                 tickerWrapper.scrollTop += 0.5;
                 if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) {
                     tickerWrapper.scrollTop = 0;
@@ -396,13 +483,80 @@
         }
         animateScroll();
         setupLightboxListeners('.image-ticker-card');
-    }
+        
+        // --- DESKTOP VIDEO CONTROLS LOGIC ---
+        const videoCards = document.querySelectorAll('.ticker-inner a[data-video-card]');
 
+        videoCards.forEach(card => {
+            const tickerVideo = card.querySelector('.ticker-video');
+            const mediaControls = card.querySelector('.video-controls');
+            const muteButton = card.querySelector('.video-mute-button');
+            const lockButton = card.querySelector('.video-lock-button');
+            let controlsTimeout;
+
+            if (!tickerVideo || !mediaControls || !muteButton || !lockButton) return;
+
+            const showControls = () => {
+                mediaControls.classList.remove('opacity-0');
+                clearTimeout(controlsTimeout);
+                controlsTimeout = setTimeout(() => {
+                    mediaControls.classList.add('opacity-0');
+                }, 2000);
+            };
+
+            const hideControls = () => {
+                mediaControls.classList.add('opacity-0');
+                clearTimeout(controlsTimeout);
+            };
+
+            card.addEventListener('mouseenter', showControls);
+            card.addEventListener('mousemove', showControls);
+            card.addEventListener('mouseleave', hideControls);
+
+            muteButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const isCurrentlyMuted = tickerVideo.muted;
+
+                // Mute all videos first and reset their icons.
+                videoCards.forEach(cardEl => {
+                    cardEl.querySelector('.ticker-video').muted = true;
+                    cardEl.querySelector('.video-mute-button i').className = 'fas fa-volume-mute';
+                });
+
+                // If the clicked video was muted, unmute it and update its icon.
+                if (isCurrentlyMuted) {
+                    tickerVideo.muted = false;
+                    muteButton.querySelector('i').className = 'fas fa-volume-high';
+                }
+            });
+
+            lockButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                isTickerLocked = !isTickerLocked;
+                
+                // Reset saturation on all videos first
+                document.querySelectorAll('.ticker-video.saturation-locked').forEach(vid => {
+                    vid.classList.remove('saturation-locked');
+                });
+
+                if (isTickerLocked) {
+                    tickerVideo.classList.add('saturation-locked');
+                }
+
+                // Apply lock icon state to all lock buttons for visual consistency
+                document.querySelectorAll('.video-lock-button i').forEach(icon => {
+                    icon.className = isTickerLocked ? 'fas fa-lock' : 'fas fa-unlock';
+                });
+            });
+        });
+    }
 
     // --- COMMON ANIMATIONS & UI ---
     gsap.registerPlugin(ScrollTrigger);
     
-    // Staggered content fade-in
     gsap.utils.toArray('.anim-stagger').forEach(elem => {
       gsap.from(elem, {
         scrollTrigger: {
@@ -414,7 +568,6 @@
       });
     });
 
-    // Stat counters
     gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => {
       const target = parseInt(stat.dataset.target, 10);
       const statObject = { val: 0 };
@@ -429,7 +582,6 @@
       });
     });
 
-    // Collapsible data section
     const dataHeader = document.querySelector('.data-header');
     if(dataHeader) {
       const dataList = document.querySelector('.data-list-collapsible');
@@ -455,10 +607,9 @@
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-            // Check if breakpoint is crossed
             const newIsMobile = window.innerWidth < 1024;
             if (newIsMobile !== isMobile) {
-                window.location.reload(); // Simple reload to re-initialize correctly
+                window.location.reload();
             }
         }, 250);
     });
@@ -487,9 +638,10 @@
           labels: chartData.map(d => d.rpm),
           datasets: [
             { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#ff4747', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
-            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yTQ', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
+            // NOTE: Torque data is now plotted on the primary Y-axis (yHP) to unify the scales.
+            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
             { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#ff4747', yAxisID: 'yHP', showLine: false, order: 0, },
-            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'yTQ', showLine: false, order: 0, }
+            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'yHP', showLine: false, order: 0, }
           ]
         },
         options: {
@@ -506,9 +658,23 @@
             tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
           },
           scales: {
-            x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } } },
-            yHP: { type: 'linear', position: 'left', grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#ff4747', stepSize: 100 }, min: 100, max: 600, title: { display: true, text: 'Horsepower (WHP)', color: '#ff4747' } },
-            yTQ: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#ffa500', stepSize: 100 }, min: 100, max: 600, title: { display: true, text: 'Torque (lb-ft)', color: '#ffa500' } }
+            x: { 
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } },
+              // NOTE: Axis title removed per request.
+              title: { display: false }
+            },
+            yHP: { 
+              type: 'linear', 
+              position: 'left', 
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              // NOTE: Y-axis ticks unified to left side and color matched to X-axis per request.
+              ticks: { color: '#a1a1aa', stepSize: 100 }, 
+              min: 100, 
+              max: 600, 
+              // NOTE: Axis title removed per request.
+              title: { display: false } 
+            },
           }
         },
         plugins: [fullBorderPlugin]
@@ -518,3 +684,4 @@
   </script>
 </body>
 </html>
+
