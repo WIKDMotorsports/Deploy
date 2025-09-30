@@ -1,0 +1,1139 @@
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WIKD - C8 Corvette Stingray Titanium Cat-Back System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom styles to complement Tailwind */
+        :root {
+            --color-primary: #007BFF; /* A vibrant blue for the Corvette theme */
+        }
+        
+        /* FIX: Ensure HTML/Body fill the space and cover any external injection artifacts */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #0A0A0A; /* Ensures the background color covers the corner artifact */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A;
+            color: #EAEAEA;
+        }
+        .font-heading {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .lava-gradient-text {
+            background: linear-gradient(90deg, #0052d4, #4364f7, #6fb1fc, #4364f7, #0052d4);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: lavaFlow 5s ease-in-out infinite;
+        }
+        .lava-gradient-bg {
+            background: linear-gradient(90deg, #0052d4, #4364f7, #6fb1fc, #4364f7, #0052d4);
+            background-size: 300%;
+            animation: lavaFlow 5s ease-in-out infinite;
+        }
+        @keyframes lavaFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* --- CLIP PATHS --- */
+        .clip-path-custom {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 30px 100%, 0 97%);
+        }
+        .clip-path-data-section {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 95%);
+        }
+        
+        /* -- THEME COLOR CORRECTION -- */
+        *:focus-visible {
+            outline: 2px solid var(--color-primary) !important;
+            outline-offset: 2px;
+        }
+        .mods-list li::before, .mods-section ul li::before {
+            content: '■';
+            color: var(--color-primary);
+            margin-right: 0.75rem;
+            font-size: 0.8em;
+        }
+        
+        /* --- DESKTOP VERTICAL TICKER --- */
+        .ticker-wrapper {
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 40rem;
+            /* height will be set dynamically by JS to match contentCard.offsetHeight */
+            overflow-y: scroll;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        .ticker-wrapper::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+        .image-ticker-card {
+            width: 100%;
+            height: auto;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .image-ticker-card img, .image-ticker-card video {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease-in-out;
+        }
+        .image-ticker-card:hover img, .image-ticker-card:hover video {
+            transform: scale(1.03);
+        }
+        .ticker-inner {
+            display: flex;
+            flex-direction: column;
+            will-change: transform;
+        }
+        .gradient-overlay-top, .gradient-overlay-bottom {
+            position: sticky;
+            left: 0;
+            width: 100%;
+            height: 10rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .gradient-overlay-top {
+            top: 0;
+            background: linear-gradient(to bottom, #0A0A0A, rgba(10, 10, 10, 0));
+        }
+        .gradient-overlay-bottom {
+            bottom: 0;
+            background: linear-gradient(to top, #0A0A0A, rgba(10, 10, 10, 0));
+        }
+
+        /* --- HERO & PARALLAX (Desktop Only) --- */
+        .build-hero {
+            position: relative;
+            padding: 0;
+            overflow: hidden;
+        }
+        .parallax-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mix-blend-mode: screen;
+            opacity: 0.5;
+            z-index: 2;
+        }
+        .build-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 70%);
+            z-index: 4;
+        }
+        
+        /* **CRITICAL FIX: Z-INDEX and SIZE REFACTOR** */
+        #ultra-stealth-patch {
+            width: 10px; /* SHRUNK to avoid visibility over main content */
+            height: 10px; /* SHRUNK to avoid visibility over main content */
+            background-color: #0A0A0A;
+            z-index: 100; /* HIGH Z-INDEX to guarantee covering the external artifact */
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Hide scrollbar for the related products section (mobile-friendly horizontal scrolling) */
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari, and Opera */
+        }
+        
+        /* --- RELATED PRODUCTS SCROLL OVERRIDE --- */
+        #relatedProductsContainer .related-product-card:last-child,
+        @media (min-width: 640px) { #relatedProductsContainer .related-product-card:last-child }
+        @media (min-width: 1024px) { #relatedProductsContainer .related-product-card:last-child }
+        
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    
+    <!-- FIX: Stealth patch to cover the canvas environment's injected icon (now tiny and high z-index) -->
+    <div id="ultra-stealth-patch"></div>
+
+    <!-- MOBILE-ONLY: Horizontal Gallery Wrapper (Z-index updated to sit above the patch) -->
+    <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-[110] overflow-hidden">
+        <div id="mobileTickerInner" class="flex h-full will-change-transform">
+            <!-- Mobile gallery items will be populated by JS -->
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+    </div>
+
+    <div class="build-hero">
+        <!-- PARALLAX BACKGROUND: Using your original external URL -->
+        <img src="https://images.unsplash.com/photo-1617469747514-0a3733a49258?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            data-src="https://images.unsplash.com/photo-1617469747514-0a3733a49258?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';" 
+            alt="C8 Corvette Parallax Background" 
+            class="parallax-img hidden lg:block"
+        />
+
+        <!-- Main Content Container -->
+        <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-start lg:min-h-screen lg:p-24 lg:gap-12">
+        
+            <!-- DESKTOP-ONLY: Vertical Image Ticker -->
+            <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
+                <div class="gradient-overlay-top"></div>
+                <div id="tickerInner" class="ticker-inner">
+                    <!-- Gallery items populated here with your original Shopify CDN links -->
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4623.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4623.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 1" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4637.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4637.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4643.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4643.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 3" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4626.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4626.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 4" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4630.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4630.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 5" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4628.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4628.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 6" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4625.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4625.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 7" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4633.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4633.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 8" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4627.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4627.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 9" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4638.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4638.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 10" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4631.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4631.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 11" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                </div>
+                <div class="gradient-overlay-bottom"></div>
+            </div>
+            
+            <!-- Content Card -->
+            <main id="contentCard" class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0">
+            
+                <!-- Card Header -->
+                <header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
+                    <div class="overflow-hidden"> 
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">C8 TITANIUM</h1>
+                        <h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">STINGRAY CAT-BACK </h2>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" style="color: #00A1FF;">$3,999</div>
+                        <div class="text-lg sm:text-xl md:text-2xl font-heading whitespace-nowrap text-gray-400">USD</div>
+                    </div>
+                </header>
+
+                <!-- Divider -->
+                <div class="h-1 w-full lava-gradient-bg"></div>
+
+                <!-- Main Body Content -->
+                <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-6 sm:pt-8 lg:pb-10">
+                
+                    <!-- Waitlist Form Section -->
+                    <section class="anim-stagger mb-10">
+                        <button id="waitlist-toggle-button" class="w-full flex justify-between items-center text-left p-4 rounded-md text-xl font-bold uppercase font-heading transition-all duration-300 lava-gradient-bg text-white shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500">
+                            <span>Join The Waitlist</span>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </button>
+                        <div id="form-collapsible-container" class="max-h-0 overflow-hidden transition-all duration-700 ease-in-out">
+                            <div class="pt-6"> <!-- Added padding-top for spacing when open -->
+                                <div id="wikd-interest-form">
+                                    <!-- FORM WILL BE INJECTED HERE -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Product Description - Collapsible Sections -->
+                    <section id="product-details-sections" class="anim-stagger mb-10">
+                        <!-- Section 1: Overview -->
+                        <div class="border-b border-gray-800">
+                            <button type="button" class="collapse-toggle w-full flex justify-between items-center py-4 text-left text-lg font-semibold uppercase font-heading text-white hover:text-blue-400 transition" data-target="collapse-overview" data-open="true">
+                                Overview: Unmatched Titanium Craftsmanship
+                                <i class="fas fa-chevron-down transition-transform duration-300 transform rotate-180"></i>
+                            </button>
+                            <div id="collapse-overview" class="collapse-content overflow-hidden transition-all duration-500 ease-in-out" style="max-height: fit-content;">
+                                <div class="pb-4 text-gray-300 space-y-3">
+                                    <p>Setting a new standard for domestic performance, our Titanium Cat-Back System is one of the few in the industry to offer full titanium construction for the C8 Corvette Stingray. Crafted from tried-and-true 1.2mm DOM titanium, this system is laser-welded for unmatched strength and flawless symmetrical aesthetics.</p>
+                                    <p>AI-scanned and CAD-designed, it ensures perfect OE fitment while utilizing the factory mounting points with reinforced plating for a seamless installation.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Section 2: Sound & Control -->
+                        <div class="border-b border-gray-800">
+                            <button type="button" class="collapse-toggle w-full flex justify-between items-center py-4 text-left text-lg font-semibold uppercase font-heading text-white hover:text-blue-400 transition" data-target="collapse-sound" data-open="false">
+                                Sound & Control: Remote Valve System
+                                <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                            </button>
+                            <div id="collapse-sound" class="collapse-content overflow-hidden transition-all duration-500 ease-in-out" style="max-height: 0px;">
+                                <div class="pb-4 text-gray-300 space-y-3">
+                                    <p>Our latest design incorporates a remote valve exhaust system, allowing you to control your sound profile on demand, whether at idle or full throttle. This gives you the power to choose between a subdued street presence and an aggressive track roar instantly.</p>
+                                    <p>Pair this system with our cat-less downpipes to unleash the full potential of your LT2 engine, letting it roar in all its glory.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Section 3: Weight & Design -->
+                        <div class="border-b border-gray-800">
+                            <button type="button" class="collapse-toggle w-full flex justify-between items-center py-4 text-left text-lg font-semibold uppercase font-heading text-white hover:text-blue-400 transition" data-target="collapse-weight" data-open="false">
+                                Weight & Design: Race-Inspired Aesthetics
+                                <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                            </button>
+                            <div id="collapse-weight" class="collapse-content overflow-hidden transition-all duration-500 ease-in-out" style="max-height: 0px;">
+                                <div class="pb-4 text-gray-300 space-y-3">
+                                    <p>Previously reserved for high-end European supercars and track machines, this ultra-lightweight titanium system is now available for your C8 Stingray. Featuring a performance-enhancing 3” tubing design, it not only reduces weight but also amplifies power and sound.</p>
+                                    <p>Finished in our signature brushed blue-to-purple heat-treated gradient, it is as stunning as it is functional.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Key Features -->
+                    <section class="mt-10 anim-stagger">
+                        <div class="mods-section">
+                            <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Key Features</h3>
+                            <div class="mt-4 space-y-6">
+                                <div>
+                                    <ul class="mt-4 space-y-2 text-gray-300 text-lg">
+                                        <li>1.2mm DOM Titanium Construction</li>
+                                        <li>3” Performance Tubing</li>
+                                        <li>Laser-Welded Precision Craftsmanship</li>
+                                        <li>Remote Valve Exhaust System</li>
+                                        <li>AI-Scanned &amp; CAD-Engineered for OEM Fitment</li>
+                                        <li>Brushed &amp; Heat-Treated Blue-to-Purple Finish</li>
+                                        <li>Extreme Weight Savings vs. Stainless Steel</li>
+                                        <li>Reinforced Mounting Points with Extra Plating</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- NEW: Related Products Section -->
+    <section class="py-8 bg-[#080808]"> <!-- Darker Background for Contrast -->
+        <!-- Wrapper for static content to maintain fixed side padding -->
+        <div class="px-4 sm:px-6 lg:px-24">
+            <h2 class="text-4xl font-bold uppercase font-heading text-white mb-8 border-b border-gray-800 pb-4">Related Products</h2>
+        </div>
+        
+        <!-- Outer Wrapper for Clipping, Arrows, and Hover (Now full viewport width) -->
+        <div id="relatedProductsScrollWrapper" class="relative overflow-hidden cursor-default">
+            
+            <!-- Scrollable Container (Now includes padding for content alignment) -->
+            <div id="relatedProductsContainer" class="flex flex-nowrap space-x-6 pb-10 w-max will-change-transform px-4 sm:px-6 lg:px-24">
+                <!-- Related product cards will be injected here by JS -->
+                <div class="text-gray-500 min-w-full text-center py-10 w-full">Loading related products...</div>
+            </div>
+            
+            <!-- Horizontal Gradient Overlays - Updated for NARROWER, more abrupt shadow -->
+            <!-- These are positioned absolutely across the full width, covering the scroll edges -->
+            <div class="absolute inset-y-0 left-0 w-16 pointer-events-none bg-gradient-to-r from-black to-transparent"></div>
+            <div class="absolute inset-y-0 right-0 w-16 pointer-events-none bg-gradient-to-l from-black to-transparent"></div>
+
+            <!-- Navigation Arrows - Positioned relative to the padded content/viewport edge -->
+            <button id="related-prev" class="absolute left-4 sm:left-6 lg:left-24 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/50 hover:bg-black/80 transition text-white text-2xl flex items-center justify-center shadow-lg opacity-80 hover:opacity-100 disabled:opacity-30 disabled:pointer-events-none">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="related-next" class="absolute right-4 sm:right-6 lg:right-24 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/50 hover:bg-black/80 transition text-white text-2xl flex items-center justify-center shadow-lg opacity-80 hover:opacity-100 disabled:opacity-30 disabled:pointer-events-none">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+        </div>
+    </section>
+
+    <!-- Lightbox (Z-index updated to sit above everything) -->
+    <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black/90 z-[120] flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="relative max-w-4xl max-h-full">
+            <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-blue-500">&times;</button>
+            <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-blue-500">&lt;</button>
+            <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-blue-500">&gt;</button>
+            <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- UTILITY FUNCTION FOR CORRECT MODULO WRAPPING (The Fix) ---
+        // JavaScript's % operator returns a negative remainder if the dividend is negative.
+        // This function ensures the result is always positive (for correct time wrapping).
+        function mod(n, m) {
+            return ((n % m) + m) % m;
+        }
+        
+        // --- GLOBAL ELEMENTS & STATE ---
+        const contentCard = document.getElementById('contentCard');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        
+        // CRITICAL UPDATE: Extract image sources from data-src attribute. It now reads the transparent Base64 placeholder.
+        const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
+            const img = card.querySelector('img');
+            return { type: 'image', src: img ? img.getAttribute('data-src') : '' };
+        }).filter(item => item.src); // Filter out any empty sources
+
+        let currentIndex = 0;
+        let desktopTickerAnimation;
+        let mobileTickerAnimation;
+        let isMobile = window.innerWidth < 1024;
+        let observer; // For the desktop mutation observer
+        let isAnimatingForm = false; // Flag to prevent scroll jumps
+
+        // This function CRITICALLY ensures the image ticker height matches the content card.
+        const syncHeights = () => { 
+            if (isAnimatingForm) return; // Don't sync while form is animating
+            const tickerWrapper = document.getElementById('tickerWrapper');
+            if (contentCard && tickerWrapper) {
+                // Only set height on desktop
+                if (!isMobile) {
+                    tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
+                }
+            } 
+        };
+
+        // --- RELATED PRODUCTS LOGIC ---
+        const productsUrl = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Shopandgallerydata.json?v=1755272886';
+        const primaryProductId = 'c8-titanium-catback'; // ID of the main product
+
+        const relatedProductsContainer = document.getElementById('relatedProductsContainer');
+        const relatedProductsWrapper = document.getElementById('relatedProductsScrollWrapper');
+        const relatedPrev = document.getElementById('related-prev');
+        const relatedNext = document.getElementById('related-next');
+        let relatedProductsAnimation;
+        
+        // Function to start the continuous scroll animation
+        function startContinuousScroll() {
+            if (relatedProductsAnimation) relatedProductsAnimation.kill(); // Stop existing animation
+
+            const scrollDistance = relatedProductsContainer.scrollWidth / 2;
+            // Calculate a duration based on distance to control speed (e.g., 25 pixels per second)
+            const speedFactor = 25; 
+            const scrollDuration = scrollDistance / speedFactor; 
+            
+            gsap.set(relatedProductsContainer, { x: 0 }); // Reset start position
+
+            relatedProductsAnimation = gsap.to(relatedProductsContainer, {
+                x: -scrollDistance,
+                duration: scrollDuration,
+                ease: "none",
+                repeat: -1,
+                modifiers: {
+                    // Snap the X position back to 0 when it reaches the halfway point, creating an infinite loop effect
+                    x: x => (parseFloat(x) % scrollDistance) + 'px'
+                }
+            });
+        }
+        
+        // Function to handle cloning and starting scroll
+        function cloneAndStartScroll() {
+            const originalCards = relatedProductsContainer.querySelectorAll('.related-product-card:not(.cloned)');
+            
+            // Only clone if necessary (i.e., if original cards exist and haven't been cloned)
+            if (originalCards.length > 0 && relatedProductsContainer.querySelectorAll('.cloned').length === 0) {
+                originalCards.forEach(card => {
+                    const clone = card.cloneNode(true);
+                    clone.classList.add('cloned');
+                    relatedProductsContainer.appendChild(clone);
+                });
+                
+                // Calculate and set the width of the container to hold all cards (originals + clones)
+                const totalCardCount = originalCards.length * 2;
+                
+                // Use setTimeout to ensure reflow has happened and we get the correct size
+                setTimeout(() => {
+                    const firstCard = originalCards[0];
+                    const cardWidth = firstCard ? firstCard.offsetWidth : 0; 
+                    if (cardWidth === 0) return; // Exit if dimensions aren't available
+                    
+                    const spaceX = 24; // space-x-6 is 1.5rem * 16px/rem = 24px
+                    
+                    // Total width: (Total cards * Card width) + (Total cards - 1) * space-x
+                    const requiredWidth = (totalCardCount * cardWidth) + ((totalCardCount - 1) * spaceX);
+                    relatedProductsContainer.style.width = `${requiredWidth}px`;
+                    
+                    // Start animation only after width is set and if content overflows the container
+                    if (relatedProductsContainer.scrollWidth / 2 > relatedProductsWrapper.clientWidth) {
+                        startContinuousScroll();
+                        setupRelatedScrollButtons(); // Setup manual controls
+                    } else {
+                        // If content doesn't fill the screen, hide buttons and disable hover pause
+                        relatedPrev.style.display = 'none';
+                        relatedNext.style.display = 'none';
+                        const relatedHoverIn = () => relatedProductsAnimation && relatedProductsAnimation.pause();
+                        const relatedHoverOut = () => relatedProductsAnimation && relatedProductsAnimation.play();
+                        relatedProductsWrapper.removeEventListener('mouseenter', relatedHoverIn);
+                        relatedProductsWrapper.removeEventListener('mouseleave', relatedHoverOut);
+                    }
+                }, 100); 
+
+            }
+            
+            // Add hover events for pause/play
+            const relatedHoverIn = () => relatedProductsAnimation && relatedProductsAnimation.pause();
+            const relatedHoverOut = () => relatedProductsAnimation && relatedProductsAnimation.play();
+            
+            if (relatedProductsWrapper) {
+                relatedProductsWrapper.addEventListener('mouseenter', relatedHoverIn);
+                relatedProductsWrapper.addEventListener('mouseleave', relatedHoverOut);
+            }
+        }
+        
+        // Function to handle manual arrow scrolling (X-translation)
+        function setupRelatedScrollButtons() {
+            relatedPrev.addEventListener('click', (e) => manualScroll('prev', e));
+            relatedNext.addEventListener('click', (e) => manualScroll('next', e));
+        }
+        
+        /**
+         * @function manualScroll
+         * @description Uses the mod function to ensure the animation time correctly wraps 
+         * around the loop duration, and explicitly disables both buttons during the transition.
+         */
+        function manualScroll(direction, event) {
+            // Check if animation is ready or if either button is already disabled (mid-scroll lock)
+            if (!relatedProductsAnimation || relatedPrev.disabled || relatedNext.disabled) return; 
+
+            const firstCard = relatedProductsContainer.querySelector('.related-product-card');
+            if (!firstCard) return;
+
+            // CRITICAL FIX: Disable BOTH buttons at the start to prevent collision
+            relatedPrev.disabled = true;
+            relatedNext.disabled = true;
+
+            // 1. Pause the infinite loop animation
+            relatedProductsAnimation.pause();
+            
+            // Get constants from the existing animation setup
+            const totalLoopDistance = relatedProductsContainer.scrollWidth / 2;
+            const scrollDuration = relatedProductsAnimation.duration();
+            // Card width + space-x-6 (24px)
+            const scrollAmount = firstCard.offsetWidth + 24; 
+            
+            // Calculate how much time corresponds to one card step in the loop duration
+            const stepDuration = (scrollAmount / totalLoopDistance) * scrollDuration;
+            
+            let targetTime;
+
+            if (direction === 'next') {
+                targetTime = relatedProductsAnimation.time() + stepDuration;
+            } else { // 'prev'
+                targetTime = relatedProductsAnimation.time() - stepDuration;
+            }
+            
+            // CRITICAL FIX: Use the mod function to ensure newTime is always in the [0, scrollDuration) range
+            const newTime = mod(targetTime, scrollDuration); 
+            
+            // 2. Animate the infinite loop instance's playhead to the new position
+            gsap.to(relatedProductsAnimation, { 
+                time: newTime, // Target the normalized time
+                duration: 0.5, 
+                ease: "power2.out", 
+                onComplete: () => {
+                    // 3. Resume the infinite loop animation from the new position
+                    relatedProductsAnimation.play(); 
+                    // CRITICAL FIX: Re-enable BOTH buttons on completion
+                    relatedPrev.disabled = false;
+                    relatedNext.disabled = false;
+                }
+            });
+        }
+
+        async function renderRelatedProducts() {
+            const container = document.getElementById('relatedProductsContainer');
+            let allProducts = [];
+            
+            try {
+                const response = await fetch(productsUrl);
+                if (!response.ok) throw new Error('Failed to fetch products');
+                const data = await response.json();
+                
+                if (data && Array.isArray(data.shop)) {
+                    // 1. Filter out the main product
+                    const nonPrimaryProducts = data.shop.filter(p => p.id !== primaryProductId);
+                    
+                    // 2. Prioritize Corvette parts (not the main item)
+                    const corvetteProducts = nonPrimaryProducts.filter(p => p.categories.includes('corvette'));
+                    
+                    // 3. Collect up to 4 related products (prioritizing Corvette, then others)
+                    allProducts = corvetteProducts.slice(0, 4);
+                    
+                    if (allProducts.length < 4) {
+                        const remainingNeeded = 4 - allProducts.length;
+                        const otherProducts = nonPrimaryProducts.filter(p => !allProducts.includes(p));
+                        allProducts.push(...otherProducts.slice(0, remainingNeeded));
+                    }
+                    
+                    if (allProducts.length === 0) {
+                        container.innerHTML = '<p class="text-gray-500 min-w-full text-center py-10">No other products available.</p>';
+                        return;
+                    }
+
+                    // 4. Generate HTML (clear initial "Loading" div)
+                    container.innerHTML = allProducts.map(product => {
+                        const price = product.price ? `$${product.price.toFixed(2)}` : 'Inquire';
+                        const link = product.link || '#';
+                        const imgSrc = product.image?.src || 'https://placehold.co/800x600/1e293b/f8fafc?text=WIKD+Product';
+                        const imgAlt = product.image?.alt || product.title;
+
+                        return `
+                            <!-- ADDED z-30 and cursor-pointer for correct layering/clickability -->
+                            <a href="${link}" class="related-product-card flex-shrink-0 w-64 sm:w-80 p-4 rounded-xl bg-black/50 border border-gray-800 shadow-xl transition-all duration-300 hover:bg-black/75 hover:border-blue-700 block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 z-30 cursor-pointer">
+                                <div class="h-40 overflow-hidden rounded-lg mb-4">
+                                    <img src="${imgSrc}" 
+                                        onerror="this.src='https://placehold.co/800x600/1e293b/f8fafc?text=WIKD+Product'"
+                                        alt="${imgAlt}" 
+                                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+                                    >
+                                </div>
+                                <h3 class="text-xl font-bold font-heading text-white uppercase truncate">${product.title}</h3>
+                                <p class="text-sm text-gray-400 mt-1">${product.categories.map(c => c.toUpperCase()).join(' / ')}</p>
+                                <div class="mt-3 text-2xl font-bold font-heading" style="color: #00A1FF;">${price}</div>
+                            </a>
+                        `;
+                    }).join('');
+                    
+                    // 5. Setup infinite scroll
+                    // Needs a small delay to ensure cards have been rendered and resized by the browser
+                    setTimeout(cloneAndStartScroll, 100);
+
+                } else {
+                    container.innerHTML = '<p class="text-gray-500 min-w-full text-center py-10">No other products available.</p>';
+                }
+            } catch (error) {
+                console.error('Error rendering related products:', error);
+                container.innerHTML = `<p class="text-red-500 min-w-full text-center py-10">Error loading data: ${error.message}</p>`;
+            }
+        }
+
+        // --- LIGHTBOX LOGIC ---
+        const showLightboxItem = (index) => {
+            const adjustedIndex = (index + originalItems.length) % originalItems.length;
+            const item = originalItems[adjustedIndex];
+            currentIndex = adjustedIndex;
+
+            lightboxImg.src = item.src;
+            lightbox.classList.remove('opacity-0', 'pointer-events-none');
+        };
+        
+        const setupLightboxListeners = (selector) => {
+            // Use event delegation on the parent container (tickerWrapper or mobileTickerInner)
+            const parent = document.getElementById('tickerWrapper') || document.getElementById('mobileGalleryWrapper');
+            if (!parent) return;
+
+            // Re-attach listeners to existing/new elements
+            document.querySelectorAll(selector).forEach((item, index) => {
+                const originalIndex = index % (originalItems.length);
+
+                item.addEventListener('click', () => {
+                    showLightboxItem(originalIndex);
+                });
+            });
+        };
+
+        
+        const closeLightbox = () => {
+            lightbox.classList.add('opacity-0', 'pointer-events-none');
+        };
+
+        if (lightbox) {
+            document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+            document.querySelector('.lightbox-prev').addEventListener('click', () => showLightboxItem(currentIndex - 1));
+            document.querySelector('.lightbox-next').addEventListener('click', () => showLightboxItem(currentIndex + 1));
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !lightbox.classList.contains('opacity-0')) {
+                    closeLightbox();
+                }
+            });
+        }
+
+        // --- MOBILE VIEW SETUP (omitted for brevity, largely unchanged) ---
+        function setupMobileView() {
+            if (desktopTickerAnimation) desktopTickerAnimation.kill();
+            const mobileTickerInner = document.getElementById('mobileTickerInner');
+            
+            // Clear existing clones if any
+            mobileTickerInner.innerHTML = '';
+
+            originalItems.forEach(item => {
+                const itemContainer = document.createElement('div');
+                itemContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
+                let mediaElement = document.createElement('img');
+                mediaElement.src = item.src; // Set image source from the collected originalItem source (data-src)
+                mediaElement.className = 'h-full w-auto object-cover rounded-md';
+                itemContainer.appendChild(mediaElement);
+                mobileTickerInner.appendChild(itemContainer);
+            });
+
+            const items = mobileTickerInner.querySelectorAll('.mobile-gallery-item');
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                clone.classList.add('cloned'); // Add cloned class to prevent re-cloning
+                mobileTickerInner.appendChild(clone);
+            });
+            
+            setupLightboxListeners('.mobile-gallery-item');
+            gsap.set(mobileTickerInner, {x: 0});
+            mobileTickerAnimation = gsap.to(mobileTickerInner, { x: '-50%', duration: 40, ease: 'none', repeat: -1 });
+            const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
+            const initialScroll = galleryHeight * 0.85;
+            setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
+        }
+
+        // --- DESKTOP VIEW SETUP (omitted for brevity, largely unchanged) ---
+        function setupDesktopView() {
+            if (mobileTickerAnimation) mobileTickerAnimation.kill();
+            const tickerWrapper = document.getElementById('tickerWrapper');
+            const tickerInner = document.getElementById('tickerInner');
+            
+            // Only clone if necessary to ensure smooth looping
+            const originalTickerItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+            if (originalTickerItems.length === originalItems.length) {
+                originalTickerItems.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    clone.classList.add('cloned');
+                    tickerInner.appendChild(clone);
+                });
+            }
+
+            syncHeights();
+            window.addEventListener('resize', syncHeights);
+            observer = new MutationObserver(syncHeights);
+            observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
+
+            let isHovering = false;
+            tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
+            tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
+            
+            function animateScroll() {
+                if (!isHovering && tickerWrapper) {
+                    tickerWrapper.scrollTop += 0.5;
+                    if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) tickerWrapper.scrollTop = 0;
+                }
+                desktopTickerAnimation = requestAnimationFrame(animateScroll);
+            }
+            animateScroll();
+            setupLightboxListeners('.image-ticker-card');
+        }
+
+
+        // --- INITIALIZATION & RESIZE HANDLING (omitted for brevity, unchanged) ---
+        function initializePage() {
+            isMobile = window.innerWidth < 1024;
+            if (isMobile) {
+                setupMobileView();
+            } else {
+                setupDesktopView();
+            }
+            // Initialize the related products section
+            renderRelatedProducts(); 
+            
+            // Ensure the initially open collapse panel is correctly sized for syncHeights on load
+            const initialOpenContent = document.getElementById('collapse-overview');
+            if (initialOpenContent) {
+                setTimeout(() => {
+                    initialOpenContent.style.maxHeight = initialOpenContent.scrollHeight + 'px';
+                    if (!isMobile) syncHeights();
+                }, 50);
+            }
+        }
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const newIsMobile = window.innerWidth < 1024;
+                if (newIsMobile !== isMobile) {
+                    // Reload if breakpoint changes to ensure correct ticker setup
+                    window.location.reload(); 
+                } else if (!newIsMobile) {
+                    syncHeights();
+                }
+            }, 250);
+        });
+        
+        // Initial call
+        initializePage();
+
+
+        // --- COMMON ANIMATIONS & UI ---
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.anim-stagger').forEach(elem => gsap.from(elem, { scrollTrigger: { trigger: elem, start: 'top 95%', toggleActions: 'play none none none', }, opacity: 0, y: 50, duration: 0.8, ease: 'power3.out' }));
+        
+        
+        // --- COLLAPSIBLE CONTENT LOGIC ---
+        const collapseToggleHandler = (event) => {
+            const button = event.currentTarget;
+            const targetId = button.getAttribute('data-target');
+            const content = document.getElementById(targetId);
+            const icon = button.querySelector('i');
+            
+            // Disconnect observer temporarily to prevent flicker/jump on desktop
+            if (!isMobile && observer) observer.disconnect();
+            
+            const isCurrentlyOpen = button.getAttribute('data-open') === 'true';
+
+            if (isCurrentlyOpen) {
+                // Close
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+                button.setAttribute('data-open', 'false');
+            } else {
+                // Close all others first (Accordion behavior)
+                document.querySelectorAll('#product-details-sections .collapse-toggle').forEach(btn => {
+                    if (btn !== button && btn.getAttribute('data-open') === 'true') {
+                        const otherContent = document.getElementById(btn.getAttribute('data-target'));
+                        const otherIcon = btn.querySelector('i');
+                        otherContent.style.maxHeight = '0px';
+                        otherIcon.style.transform = 'rotate(0deg)';
+                        btn.setAttribute('data-open', 'false');
+                    }
+                });
+                // Open current target
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+                button.setAttribute('data-open', 'true');
+            }
+            
+            // Re-sync height for desktop ticker and reconnect observer after animation
+            setTimeout(() => {
+                if (!isMobile) {
+                    syncHeights();
+                    if (observer) observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
+                }
+            }, 500); // Matches CSS transition duration
+        };
+        
+        document.querySelectorAll('.collapse-toggle').forEach(button => {
+            button.addEventListener('click', collapseToggleHandler);
+        });
+        
+        
+        <!-- --- INTEREST FORM INJECTION (omitted for brevity, unchanged) --- -->
+        const formHTML = `
+            <div id="wikd-form-container" data-product-title="C8 Corvette Stingray Titanium Cat-Back System" data-manual-product-id="" class="bg-gray-900/50 border border-gray-800 clip-path-data-section p-6 md:p-8 w-full max-w-2xl mx-auto font-sans text-white">
+                <style>
+                    #wikd-form-container .loader { border-top-color: #00A1FF; animation: wikd-spin 1s linear infinite; }
+                    @keyframes wikd-spin { to { transform: rotate(360deg); } }
+                    #wikd-form-container input, #wikd-form-container select { 
+                        background-color: #1a1a1a;
+                        border-color: #3a3a3a;
+                        color: #eaeaea;
+                    }
+                    #wikd-form-container input::placeholder { color: #888; }
+                    #wikd-form-container input:focus, #wikd-form-container select:focus {
+                        border-color: var(--color-primary);
+                        box-shadow: 0 0 0 1px var(--color-primary);
+                        outline: none;
+                    }
+                    #wikd-form-container select:disabled {
+                        background-color: #333;
+                        cursor: not-allowed;
+                    }
+                </style>
+                <h1 id="form-title" class="text-2xl font-bold mb-2 font-heading uppercase">Submit Your Interest</h1>
+                <p id="form-subtitle" class="text-gray-400 mb-6">Currently unavailable. Fill out the form below to be notified.</p>
+                <form id="interest-form">
+                    <div id="primary-product-container" class="hidden mb-4">
+                        <label class="block text-sm font-semibold text-gray-400 mb-2">Primary Product</label>
+                        <div id="primary-product-name" class="block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md"></div>
+                        <input type="hidden" id="primary-product-id" name="primaryProductId">
+                        <input type="hidden" id="primary-product-title" name="primaryProductTitle">
+                    </div>
+                    
+                    <!-- MODIFIED: Multi-product selection section -->
+                    <div id="additional-product-section" class="mb-4">
+                        <label for="product-select" class="block text-sm font-semibold text-gray-400 mb-2">Add Other Products to Inquiry (Optional)</label>
+                        <div class="flex gap-2">
+                            <select id="product-select" class="block w-full px-4 py-3 rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out appearance-none">
+                                <option value="" disabled selected>Loading products...</option>
+                            </select>
+                            <button type="button" id="add-product-button" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition whitespace-nowrap">Add +</button>
+                        </div>
+                        <div id="added-products-list" class="mt-4 space-y-2">
+                            <!-- Added products will appear here -->
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="first-name" class="block text-sm font-semibold text-gray-400 mb-2">First Name</label>
+                            <input type="text" id="first-name" name="firstName" required class="block w-full px-4 py-3 rounded-md shadow-sm" placeholder="John">
+                        </div>
+                        <div>
+                            <label for="last-name" class="block text-sm font-semibold text-gray-400 mb-2">Last Name</label>
+                            <input type="text" id="last-name" name="lastName" required class="block w-full px-4 py-3 rounded-md shadow-sm" placeholder="Appleseed">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-gray-400 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" required class="block w-full px-4 py-3 rounded-md shadow-sm" placeholder="john.appleseed@email.com">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-semibold text-gray-400 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required class="block w-full px-4 py-3 rounded-md shadow-sm" placeholder="(555) 123-4567">
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <button type="submit" id="submit-button" class="w-full flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                            <span id="button-text">Submit Inquiry</span>
+                            <div id="button-loader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6 ml-3 hidden"></div>
+                        </button>
+                    </div>
+                </form>
+                <div id="status-message" class="mt-4 text-center text-sm"></div>
+            </div>
+        `;
+        document.getElementById('wikd-interest-form').innerHTML = formHTML;
+
+        // --- WAITLIST FORM COLLAPSE LOGIC (omitted for brevity, unchanged) ---
+        const waitlistButton = document.getElementById('waitlist-toggle-button');
+        const formCollapsibleContainer = document.getElementById('form-collapsible-container');
+
+        if (waitlistButton && formCollapsibleContainer) {
+            const icon = waitlistButton.querySelector('i');
+            waitlistButton.addEventListener('click', () => {
+                isAnimatingForm = true; // Set flag to start
+                // Disconnect the observer temporarily to prevent the page from jumping on resize
+                if (observer) observer.disconnect();
+
+                const isOpen = formCollapsibleContainer.style.maxHeight && formCollapsibleContainer.style.maxHeight !== '0px';
+                if (isOpen) {
+                    formCollapsibleContainer.style.maxHeight = '0px';
+                    icon.style.transform = 'rotate(0deg)';
+                    waitlistButton.classList.remove('rounded-b-none');
+                } else {
+                    formCollapsibleContainer.style.maxHeight = formCollapsibleContainer.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                    waitlistButton.classList.add('rounded-b-none');
+                }
+
+                // After the transition ends, re-sync heights and reconnect the observer
+                setTimeout(() => {
+                    if (!isMobile) { // Only do this on desktop
+                        syncHeights();
+                        if (observer) {
+                            observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
+                        }
+                    }
+                    isAnimatingForm = false; // Reset flag at the end
+                }, 700); // Matches the transition duration in CSS (duration-700)
+            });
+
+            // Add an observer to handle resize while open, e.g., if error messages appear
+            const resizeObserver = new ResizeObserver(() => {
+                const stillOpen = formCollapsibleContainer.style.maxHeight && formCollapsibleContainer.style.maxHeight !== '0px';
+                if(stillOpen) {
+                    formCollapsibleContainer.style.maxHeight = formCollapsibleContainer.scrollHeight + 'px';
+                }
+            });
+            resizeObserver.observe(formCollapsibleContainer);
+        }
+
+        // --- FORM LOGIC SCRIPT (omitted for brevity, unchanged) ---
+        (() => {
+            if (document.getElementById('wikd-form-container').hasAttribute('data-js-initialized')) return;
+            document.getElementById('wikd-form-container').setAttribute('data-js-initialized', 'true');
+            const productsUrl = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Shopandgallerydata.json?v=1755272886';
+            const zapierWebhookUrl = 'https://hooks.zapier.com/hooks/catch/19421224/um1sdex/';
+            const formContainer = document.getElementById('wikd-form-container');
+            const form = document.getElementById('interest-form');
+            const formTitle = document.getElementById('form-title');
+            const formSubtitle = document.getElementById('form-subtitle');
+            const productSelect = document.getElementById('product-select');
+            const statusMessage = document.getElementById('status-message');
+            const submitButton = document.getElementById('submit-button');
+            const buttonText = document.getElementById('button-text');
+            const buttonLoader = document.getElementById('button-loader');
+            const primaryProductContainer = document.getElementById('primary-product-container');
+            const primaryProductName = document.getElementById('primary-product-name');
+            const primaryProductIdInput = document.getElementById('primary-product-id');
+            const primaryProductTitleInput = document.getElementById('primary-product-title');
+            let detectedPrimaryProduct = null;
+            
+            // NEW: State for multi-product selection
+            let addedProducts = [];
+            const addProductButton = document.getElementById('add-product-button');
+            const addedProductsList = document.getElementById('added-products-list');
+
+            // NEW: Renders the list of added products
+            function renderAddedProducts() {
+                addedProductsList.innerHTML = '';
+                if (addedProducts.length === 0) {
+                    addedProductsList.innerHTML = '<p class="text-sm text-gray-500 px-2">No additional products added.</p>';
+                    return;
+                }
+                addedProducts.forEach((product, index) => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'flex justify-between items-center bg-gray-800 p-2 rounded-md transition-all animate-fade-in';
+                    productElement.innerHTML = `
+                        <style>.animate-fade-in { animation: fadeIn 0.3s ease-in-out; } @keyframes fadeIn { 0% { opacity: 0; transform: translateY(-5px); } 100% { opacity: 1; transform: translateY(0); } }</style>
+                        <span class="text-gray-300">${product.title}</span>
+                        <button type="button" data-index="${index}" class="remove-product-button text-red-500 hover:text-red-400 text-2xl leading-none px-2">&times;</button>
+                    `;
+                    addedProductsList.appendChild(productElement);
+                });
+
+                document.querySelectorAll('.remove-product-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const indexToRemove = parseInt(e.currentTarget.dataset.index, 10);
+                        const removedProduct = addedProducts.splice(indexToRemove, 1)[0];
+                        const optionToEnable = productSelect.querySelector(`option[value="${removedProduct.id}"]`);
+                        if (optionToEnable) optionToEnable.disabled = false;
+                        productSelect.selectedIndex = 0;
+                        renderAddedProducts();
+                    });
+                });
+            }
+            
+            // NEW: Event listener for the "Add" button
+            if (addProductButton && productSelect) {
+                addProductButton.addEventListener('click', () => {
+                    const selectedOption = productSelect.options[productSelect.selectedIndex];
+                    if (!selectedOption || !selectedOption.value) return;
+                    const productId = selectedOption.value;
+                    const productTitle = selectedOption.textContent;
+                    if (addedProducts.some(p => p.id === productId)) return;
+                    addedProducts.push({ id: productId, title: productTitle });
+                    selectedOption.disabled = true;
+                    productSelect.selectedIndex = 0;
+                    renderAddedProducts();
+                });
+            }
+            
+
+            function normalizeTitle(title) { if (!title) return ''; return title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim(); }
+            async function initializeProducts() {
+                try {
+                    const response = await fetch(productsUrl);
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const data = await response.json();
+                    if (!data || !data.shop || !Array.isArray(data.shop)) { throw new Error("Product data is not in the expected format."); }
+                    const allProducts = data.shop;
+                    let primaryProduct = null;
+                    const manualProductId = formContainer.dataset.manualProductId?.trim();
+                    const productTitleFromData = formContainer.dataset.productTitle?.trim();
+                    if (manualProductId) { primaryProduct = allProducts.find(p => String(p.id) === manualProductId) || null; if(primaryProduct) console.log(`SUCCESS: Matched product via Manual ID: ${manualProductId}`); }
+                    if (!primaryProduct && productTitleFromData) {
+                        const normalizedShopifyTitle = normalizeTitle(productTitleFromData);
+                        const shopifyTitleWords = new Set(normalizedShopifyTitle.split(' '));
+                        let bestMatch = { product: null, score: 0 };
+                        allProducts.forEach(p => {
+                            const normalizedJsonTitle = normalizeTitle(p.title);
+                            if (!normalizedJsonTitle) return;
+                            const jsonTitleWords = new Set(normalizedJsonTitle.split(' '));
+                            if (jsonTitleWords.size === 0) return;
+                            const intersection = new Set([...shopifyTitleWords].filter(word => jsonTitleWords.has(word)));
+                            // FIX: Corrected typo from jsonTitleTitle to jsonTitleWords
+                            const diceCoefficient = (2 * intersection.size) / (shopifyTitleWords.size + jsonTitleWords.size);
+                            const currentScore = isNaN(diceCoefficient) ? 0 : diceCoefficient;
+                            if (currentScore > bestMatch.score) { bestMatch = { product: p, score: currentScore }; }
+                            else if (bestMatch.product && normalizeTitle(productTitleFromData).includes(normalizeTitle(bestMatch.product.title))) { primaryProduct = bestMatch.product; }
+                        });
+                        if (bestMatch.score > 0.4) { primaryProduct = bestMatch.product; } 
+                    }
+                    if (primaryProduct) {
+                        detectedPrimaryProduct = primaryProduct;
+                        formTitle.textContent = `Interest in: ${primaryProduct.title}`;
+                        formSubtitle.textContent = `Fill out your details below to inquire about this product.`;
+                        primaryProductName.textContent = primaryProduct.title;
+                        primaryProductIdInput.value = primaryProduct.id;
+                        primaryProductTitleInput.value = primaryProduct.title;
+                        primaryProductContainer.classList.remove('hidden');
+                    } else {
+                        // Since we hardcoded the product, this part is more of a fallback.
+                        primaryProductName.textContent = "C8 Corvette Stingray Titanium Cat-Back System";
+                        primaryProductTitleInput.value = "C8 Corvette Stingray Titanium Cat-Back System";
+                        primaryProductIdInput.value = "c8-catback-system"; // Example ID
+                        primaryProductContainer.classList.remove('hidden');
+                    }
+                    productSelect.innerHTML = '<option value="">Select a product...</option>';
+                    allProducts.forEach(product => {
+                        if (primaryProduct && product.id === primaryProduct.id) return;
+                        const option = document.createElement('option');
+                        option.value = product.id;
+                        option.textContent = product.title;
+                        productSelect.appendChild(option);
+                    });
+                    renderAddedProducts(); // Initial render for placeholder
+                } catch (error) {
+                    console.error('Error initializing products:', error);
+                    productSelect.innerHTML = '<option value="" disabled>Could not load products</option>';
+                    statusMessage.innerHTML = `<p class="text-red-500">Error: Could not load product data.</p>`;
+                }
+            }
+            async function handleFormSubmit(event) {
+                event.preventDefault();
+                setLoading(true);
+                statusMessage.textContent = '';
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                
+                // MODIFIED: Send the list of added products as a JSON string
+                data.additionalProducts = JSON.stringify(addedProducts.map(p => ({id: p.id, title: p.title})));
+                delete data.additionalProduct; // remove the now-unused select field value
+
+                try {
+                    const response = await fetch(zapierWebhookUrl, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } });
+                    if (!response.ok) throw new Error(`Submission failed. Status: ${response.status}`);
+                    statusMessage.innerHTML = `<p class="text-green-500 font-semibold">Thank you! Your inquiry has been submitted successfully.</p>`;
+                    form.reset();
+                    
+                    // MODIFIED: Reset the multi-product state
+                    addedProducts = [];
+                    productSelect.querySelectorAll('option').forEach(opt => opt.disabled = false);
+                    renderAddedProducts();
+
+                    if (detectedPrimaryProduct) { primaryProductName.textContent = detectedPrimaryProduct.title; }
+                    else { primaryProductName.textContent = "C8 Corvette Stingray Titanium Cat-Back System"; }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    statusMessage.innerHTML = `<p class="text-red-500">Sorry, there was an error submitting your form. Please try again.</p>`;
+                } finally {
+                    setLoading(false);
+                }
+            }
+            function setLoading(isLoading) {
+                if (submitButton) {
+                    submitButton.disabled = isLoading;
+                    buttonText.classList.toggle('hidden', isLoading);
+                    buttonLoader.classList.toggle('hidden', !isLoading);
+                }
+            }
+            if (formContainer) {
+                initializeProducts();
+                form.addEventListener('submit', handleFormSubmit);
+            }
+        })();
+    });
+    </script>
+</body>
+</html>
