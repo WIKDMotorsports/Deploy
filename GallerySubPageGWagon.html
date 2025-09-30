@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIKD Build - 2023 AMG G63</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Custom styles to complement Tailwind */
+    :root {
+      --color-primary: #FF3B30;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0A0A0A;
+      color: #EAEAEA;
+    }
+    .font-heading {
+      font-family: 'Rajdhani', sans-serif;
+    }
+    .lava-gradient-text {
+      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    .lava-gradient-bg {
+      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background-size: 300%;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    @keyframes lavaFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* --- CLIP PATHS --- */
+    .clip-path-custom {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 30px 100%, 0 97%);
+    }
+    .clip-path-data-section {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 95%);
+    }
+    
+    /* -- THEME COLOR CORRECTION -- */
+    *:focus-visible {
+      outline: 2px solid var(--color-primary) !important;
+      outline-offset: 2px;
+    }
+    .mods-section ul li::before {
+      content: '■';
+      color: var(--color-primary);
+      margin-right: 0.75rem;
+      font-size: 0.8em;
+    }
+    #chart-container {
+      position: relative;
+    }
+    
+    /* --- DESKTOP VERTICAL TICKER --- */
+    .ticker-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 40rem;
+      height: 100vh;
+      overflow-y: scroll;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .ticker-wrapper::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, and Opera */
+    }
+    .image-ticker-card {
+      width: 100%;
+      height: auto;
+      margin-bottom: 2rem;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    .image-ticker-card img, .image-ticker-card video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: grayscale(80%);
+      transition: filter 0.3s ease-in-out;
+      object-fit: cover; /* Ensures content fills the area */
+    }
+    .image-ticker-card:hover img, .image-ticker-card:hover video, .ticker-video.saturation-locked {
+      filter: grayscale(0%);
+    }
+    .ticker-inner {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .gradient-overlay-top, .gradient-overlay-bottom {
+      position: sticky;
+      left: 0;
+      width: 100%;
+      height: 10rem;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .gradient-overlay-top {
+      top: 0;
+      background: linear-gradient(to bottom, #0A0A0A, rgba(10, 10, 10, 0));
+    }
+    .gradient-overlay-bottom {
+      bottom: 0;
+      background: linear-gradient(to top, #0A0A0A, rgba(10, 10, 10, 0));
+    }
+
+    /* --- HERO & PARALLAX (Desktop Only) --- */
+    .build-hero {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+    .parallax-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      mix-blend-mode: screen;
+      opacity: 0.8;
+      z-index: 2;
+    }
+    .build-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 70%);
+      z-index: 4;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  
+  <!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
+  <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden">
+    <div id="mobileTickerInner" class="flex h-full will-change-transform">
+      <!-- Mobile gallery items will be populated by JS -->
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+  </div>
+
+  <div class="build-hero">
+    <!-- Parallax video will be hidden on mobile via JS -->
+    <video autoplay loop muted playsinline class="parallax-video hidden lg:block">
+        <source src="https://videos.pexels.com/video-files/3129840/3129840-hd.mp4" type="video/mp4">
+    </video>
+
+    <!-- Main Content Container -->
+    <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
+    
+      <!-- DESKTOP-ONLY: Vertical Image Ticker -->
+      <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
+        <div class="gradient-overlay-top"></div>
+        <div id="tickerInner" class="ticker-inner">
+
+          <!-- Image Card 1 -->
+          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/dsc_0405_1600x.jpg?v=1732037367" alt="WIKD G Gallery Image 1"></div>
+
+          <!-- VIDEO ENTRY -->
+          <a href="https://www.wikdmotorsports.com/pages/euro-tune" target="_blank" rel="noopener noreferrer" class="image-ticker-card block" data-video-card>
+            <div class="relative group w-full h-full flex justify-center items-center overflow-hidden">
+              <video autoplay loop muted playsinline class="pointer-events-none w-full h-full ticker-video" style="object-fit: cover;">
+                  <source src="https://cdn.shopify.com/videos/c/o/v/20defb1edb7548f981a10694810d7e42.mp4" type="video/mp4">
+              </video>
+              <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
+                  <button class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Mute or unmute video">
+                      <i class="fas fa-volume-mute"></i>
+                  </button>
+                  <button class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Lock or unlock ticker scroll">
+                      <i class="fas fa-unlock"></i>
+                  </button>
+              </div>
+            </div>
+          </a>
+          
+          <!-- Image Card 2 -->
+          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/dsc07153-3_1600x.jpg?v=1732037367" alt="WIKD G Gallery Image 2"></div>
+          
+          <!-- Image Card 3 -->
+          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/dsc07147-3_1600x.jpg?v=1732037367" alt="WIKD G Gallery Image 3"></div>
+          
+          <!-- Image Card 4 -->
+           <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/3j4a2211-enhanced-nr_1600x.jpg?v=1732037368" alt="WIKD G Gallery Image 4"></div>
+        </div>
+        <div class="gradient-overlay-bottom"></div>
+      </div>
+      
+      <!-- Content Card -->
+      <main id="contentCard" class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0">
+      
+        <!-- Card Header -->
+        <header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
+          <div class="overflow-hidden"> 
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">WIKD G</h1>
+            <h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">2023 AMG G63</h2>
+          </div>
+          <div class="text-right">
+            <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" data-target="650" style="color: #ff4747;">0 HP</div>
+            <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading whitespace-nowrap" data-target="721" style="color: #ffa500;">0 TQ</div>
+          </div>
+        </header>
+
+        <!-- Divider -->
+        <div class="h-1 w-full lava-gradient-bg"></div>
+
+        <!-- Main Body Content -->
+        <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
+        
+          <!-- Dyno Section -->
+          <section class="anim-stagger">
+            <div id="chart-container">
+              <canvas id="dynoChart"></canvas>
+            </div>
+            <div class="mt-5 bg-gray-900/50 border border-gray-800 clip-path-data-section">
+              <div class="data-header flex justify-between items-center cursor-pointer p-4 transition-colors hover:bg-gray-800/20">
+                <h4 class="text-sm font-semibold uppercase font-heading">WIKD Tuned Session Report</h4>
+                <i class="fas fa-chevron-down transition-transform duration-300"></i>
+              </div>
+              <div class="data-list-collapsible max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                <div class="p-4 border-t border-gray-800">
+                  <p class="text-sm text-gray-300">(+96.17 WHP / +105.65 WTQ vs. Stock)</p>
+                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Power:</strong> 650.16 WHP @ 6,000 RPM</p>
+                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Torque:</strong> 721.04 WTQ @ 3,800 RPM</p>
+                  <p class="text-xs text-gray-500 mt-2">Data extracted from SAE J1349 corrected dyno graph. Stock figures from previous run.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Specifications & Modifications -->
+          <section class="mt-10 anim-stagger">
+            <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Specifications</h3>
+            <ul class="text-lg">
+              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">YEAR</strong><span>2023</span></li>
+              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">MAKE</strong><span>MERCEDES</span></li>
+              <li class="flex justify-between py-3"><strong class="text-gray-400 font-medium">MODEL</strong><span>G63 AMG</span></li>
+            </ul>
+
+            <div class="mods-section mt-10">
+              <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Modifications</h3>
+              <div class="mt-4 space-y-6">
+                <ul class="mt-4 space-y-2 text-gray-300">
+                  <li>VRSF DOWNPIPES & MIDPIPES</li>
+                  <li>AFE POWER MAGNUM FORCE CAI</li>
+                  <li>SNOW PERFORMANCE WATER/METH KIT</li>
+                  <li>E85</li>
+                  <li>WIKDTUNED</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative max-w-4xl max-h-full">
+      <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
+      <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
+      <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
+      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg hidden">
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // --- GLOBAL ELEMENTS & STATE ---
+    const contentCard = document.getElementById('contentCard');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
+    const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
+        const videoEl = card.querySelector('video');
+        if (videoEl) {
+            return { 
+                type: 'video', 
+                src: videoEl.querySelector('source').src, 
+                link: card.href,
+            };
+        } else {
+            return { 
+                type: 'image', 
+                src: card.querySelector('img').src, 
+                link: card.href 
+            };
+        }
+    });
+
+    let currentIndex = 0;
+    let desktopTickerAnimation;
+    let mobileTickerAnimation;
+    let isMobile = window.innerWidth < 1024;
+
+    // --- LIGHTBOX LOGIC ---
+    const showLightboxItem = (index) => {
+      const adjustedIndex = (index + originalItems.length) % originalItems.length;
+      const item = originalItems[adjustedIndex];
+
+      if (item.type === 'video') return;
+
+      currentIndex = adjustedIndex;
+      lightboxImg.style.display = 'none';
+      lightboxImg.removeAttribute('src'); 
+
+      if (item.type === 'image') {
+        lightboxImg.src = item.src;
+        lightboxImg.style.display = 'block';
+      }
+      lightbox.classList.remove('opacity-0', 'pointer-events-none');
+    };
+    
+    const closeLightbox = () => {
+        lightbox.classList.add('opacity-0', 'pointer-events-none');
+    };
+
+    const setupLightboxListeners = (selector) => {
+        document.querySelectorAll(selector).forEach((item, index) => {
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+            
+            newItem.addEventListener('click', (e) => {
+              const adjustedIndex = index % originalItems.length;
+              const itemData = originalItems[adjustedIndex];
+              
+              if (itemData.type === 'image') {
+                showLightboxItem(adjustedIndex);
+              } else if (itemData.type === 'video' && isMobile) {
+                e.preventDefault();
+                if (itemData.link) {
+                  window.open(itemData.link, '_blank');
+                }
+              }
+            });
+        });
+    };
+
+    if (lightbox) {
+      document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+      document.querySelector('.lightbox-prev').addEventListener('click', () => showLightboxItem(currentIndex - 1));
+      document.querySelector('.lightbox-next').addEventListener('click', () => showLightboxItem(currentIndex + 1));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !lightbox.classList.contains('opacity-0')) {
+          closeLightbox();
+        }
+      });
+    }
+
+    // --- MOBILE VIEW SETUP ---
+    function setupMobileView() {
+        if (desktopTickerAnimation) desktopTickerAnimation.kill();
+        
+        const mobileTickerInner = document.getElementById('mobileTickerInner');
+        if (mobileTickerInner.children.length > 0) return;
+
+        originalItems.forEach(item => {
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
+            let mediaElement;
+            if (item.type === 'video') {
+                mediaElement = document.createElement('video');
+                mediaElement.src = item.src;
+                mediaElement.autoplay = true;
+                mediaElement.loop = true;
+                mediaElement.muted = true;
+                mediaElement.playsinline = true;
+                mediaElement.className = 'h-full w-auto object-cover rounded-md';
+            } else { // image
+                mediaElement = document.createElement('img');
+                mediaElement.src = item.src;
+                mediaElement.className = 'h-full w-auto object-cover rounded-md';
+            }
+            itemContainer.appendChild(mediaElement);
+            mobileTickerInner.appendChild(itemContainer);
+        });
+
+        const items = mobileTickerInner.querySelectorAll('.mobile-gallery-item');
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            mobileTickerInner.appendChild(clone);
+        });
+        
+        setupLightboxListeners('.mobile-gallery-item');
+        
+        gsap.set(mobileTickerInner, {x: 0});
+        mobileTickerAnimation = gsap.to(mobileTickerInner, {
+            x: '-50%',
+            duration: 40,
+            ease: 'none',
+            repeat: -1,
+        });
+
+        const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
+        const initialScroll = galleryHeight * 0.85;
+        setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
+    }
+
+    // --- DESKTOP VIEW SETUP ---
+    function setupDesktopView() {
+        if (mobileTickerAnimation) mobileTickerAnimation.kill();
+        
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        const tickerInner = document.getElementById('tickerInner');
+        if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return;
+
+        const originalDesktopItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+        originalDesktopItems.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.classList.add('cloned');
+            tickerInner.appendChild(clone);
+        });
+
+        const syncHeights = () => {
+            if (contentCard && tickerWrapper) {
+                tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
+            }
+        };
+        
+        syncHeights();
+        window.addEventListener('resize', syncHeights);
+        const observer = new MutationObserver(syncHeights);
+        observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
+
+        let isHovering = false;
+        let isTickerLocked = false; 
+        tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
+        tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
+        
+        function animateScroll() {
+            if (!isHovering && !isTickerLocked && tickerWrapper) {
+                tickerWrapper.scrollTop += 0.5;
+                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) {
+                    tickerWrapper.scrollTop = 0;
+                }
+            }
+            desktopTickerAnimation = requestAnimationFrame(animateScroll);
+        }
+        animateScroll();
+        setupLightboxListeners('.image-ticker-card');
+        
+        // --- DESKTOP VIDEO CONTROLS LOGIC ---
+        const videoCards = document.querySelectorAll('.ticker-inner a[data-video-card]');
+
+        videoCards.forEach(card => {
+            const tickerVideo = card.querySelector('.ticker-video');
+            const mediaControls = card.querySelector('.video-controls');
+            const muteButton = card.querySelector('.video-mute-button');
+            const lockButton = card.querySelector('.video-lock-button');
+            let controlsTimeout;
+
+            if (!tickerVideo || !mediaControls || !muteButton || !lockButton) return;
+
+            const showControls = () => {
+                mediaControls.classList.remove('opacity-0');
+                clearTimeout(controlsTimeout);
+                controlsTimeout = setTimeout(() => {
+                    mediaControls.classList.add('opacity-0');
+                }, 2000);
+            };
+
+            const hideControls = () => {
+                mediaControls.classList.add('opacity-0');
+                clearTimeout(controlsTimeout);
+            };
+
+            card.addEventListener('mouseenter', showControls);
+            card.addEventListener('mousemove', showControls);
+            card.addEventListener('mouseleave', hideControls);
+
+            muteButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const isCurrentlyMuted = tickerVideo.muted;
+
+                // Mute all videos first and reset their icons.
+                videoCards.forEach(cardEl => {
+                    cardEl.querySelector('.ticker-video').muted = true;
+                    cardEl.querySelector('.video-mute-button i').className = 'fas fa-volume-mute';
+                });
+
+                // If the clicked video was muted, unmute it and update its icon.
+                if (isCurrentlyMuted) {
+                    tickerVideo.muted = false;
+                    muteButton.querySelector('i').className = 'fas fa-volume-high';
+                }
+            });
+
+            lockButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                isTickerLocked = !isTickerLocked;
+                
+                // Reset saturation on all videos first
+                document.querySelectorAll('.ticker-video.saturation-locked').forEach(vid => {
+                    vid.classList.remove('saturation-locked');
+                });
+
+                if (isTickerLocked) {
+                    tickerVideo.classList.add('saturation-locked');
+                }
+
+                // Apply lock icon state to all lock buttons for visual consistency
+                document.querySelectorAll('.video-lock-button i').forEach(icon => {
+                    icon.className = isTickerLocked ? 'fas fa-lock' : 'fas fa-unlock';
+                });
+            });
+        });
+    }
+
+    // --- COMMON ANIMATIONS & UI ---
+    gsap.registerPlugin(ScrollTrigger);
+    
+    gsap.utils.toArray('.anim-stagger').forEach(elem => {
+      gsap.from(elem, {
+        scrollTrigger: {
+          trigger: elem,
+          start: 'top 95%',
+          toggleActions: 'play none none none',
+        },
+        opacity: 0, y: 50, duration: 0.8, ease: 'power3.out'
+      });
+    });
+
+    gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => {
+      const target = parseInt(stat.dataset.target, 10);
+      const statObject = { val: 0 };
+      gsap.to(statObject, {
+        val: target,
+        duration: 2.5,
+        ease: 'power3.out',
+        delay: 0.5,
+        onUpdate: () => {
+          stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`;
+        }
+      });
+    });
+
+    const dataHeader = document.querySelector('.data-header');
+    if(dataHeader) {
+      const dataList = document.querySelector('.data-list-collapsible');
+      const icon = dataHeader.querySelector('i');
+      dataHeader.addEventListener('click', () => {
+        const isActive = dataHeader.classList.toggle('active');
+        dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0';
+        icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    }
+
+    // --- INITIALIZATION & RESIZE HANDLING ---
+    function initializePage() {
+        isMobile = window.innerWidth < 1024;
+        if (isMobile) {
+            setupMobileView();
+        } else {
+            setupDesktopView();
+        }
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            const newIsMobile = window.innerWidth < 1024;
+            if (newIsMobile !== isMobile) {
+                window.location.reload();
+            }
+        }, 250);
+    });
+
+    initializePage();
+    
+    // --- CHART SCRIPT ---
+    const chartData = [
+        { rpm: 1500, horsepower: 80,  torque: 280 }, { rpm: 1600, horsepower: 100, torque: 328 },
+        { rpm: 1700, horsepower: 125, torque: 386 }, { rpm: 1800, horsepower: 150, torque: 438 },
+        { rpm: 1900, horsepower: 175, torque: 483 }, { rpm: 2000, horsepower: 200, torque: 525 },
+        { rpm: 2100, horsepower: 225, torque: 563 }, { rpm: 2200, horsepower: 250, torque: 597 },
+        { rpm: 2300, horsepower: 275, torque: 628 }, { rpm: 2400, horsepower: 300, torque: 656 },
+        { rpm: 2500, horsepower: 330, torque: 693 }, { rpm: 2600, horsepower: 360, torque: 705 },
+        { rpm: 2700, horsepower: 390, torque: 715 }, { rpm: 2800, horsepower: 420, torque: 720 },
+        { rpm: 2900, horsepower: 450, torque: 720 }, { rpm: 3000, horsepower: 480, torque: 715 },
+        { rpm: 3100, horsepower: 505, torque: 710 }, { rpm: 3200, horsepower: 530, torque: 710 },
+        { rpm: 3300, horsepower: 555, torque: 712 }, { rpm: 3400, horsepower: 580, torque: 715 },
+        { rpm: 3500, horsepower: 600, torque: 718 }, { rpm: 3600, horsepower: 620, torque: 720 },
+        { rpm: 3700, horsepower: 635, torque: 721 }, { rpm: 3800, horsepower: 650, torque: 721.04},
+        { rpm: 3900, horsepower: 660, torque: 718 }, { rpm: 4000, horsepower: 670, torque: 715 },
+        { rpm: 4100, horsepower: 680, torque: 710 }, { rpm: 4200, horsepower: 685, torque: 700 },
+        { rpm: 4300, horsepower: 690, torque: 690 }, { rpm: 4400, horsepower: 695, torque: 680 },
+        { rpm: 4500, horsepower: 700, torque: 670 }, { rpm: 4600, horsepower: 698, torque: 655 },
+        { rpm: 4700, horsepower: 695, torque: 640 }, { rpm: 4800, horsepower: 690, torque: 625 },
+        { rpm: 4900, horsepower: 685, torque: 615 }, { rpm: 5000, horsepower: 680, torque: 605 },
+        { rpm: 5100, horsepower: 675, torque: 595 }, { rpm: 5200, horsepower: 670, torque: 585 },
+        { rpm: 5300, horsepower: 665, torque: 575 }, { rpm: 5400, horsepower: 660, torque: 565 },
+        { rpm: 5500, horsepower: 658, torque: 555 }, { rpm: 5600, horsepower: 655, torque: 545 },
+        { rpm: 5700, horsepower: 653, torque: 535 }, { rpm: 5800, horsepower: 652, torque: 525 },
+        { rpm: 5900, horsepower: 651, torque: 515 }, { rpm: 6000, horsepower: 650.16,torque: 505 },
+        { rpm: 6100, horsepower: 645, torque: 495 }, { rpm: 6200, horsepower: 635, torque: 485 },
+        { rpm: 6300, horsepower: 620, torque: 470 }, { rpm: 6400, horsepower: 590, torque: 455 },
+        { rpm: 6500, horsepower: 570, torque: 435 }
+    ];
+    const peakHpIndex = chartData.findIndex(d => d.horsepower === 650.16);
+    const peakTqIndex = chartData.findIndex(d => d.torque === 721.04);
+    const peakHpData = new Array(chartData.length).fill(null); if (peakHpIndex !== -1) peakHpData[peakHpIndex] = chartData[peakHpIndex].horsepower;
+    const peakTqData = new Array(chartData.length).fill(null); if (peakTqIndex !== -1) peakTqData[peakTqIndex] = chartData[peakTqIndex].torque;
+    const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
+    const chartCanvas = document.getElementById('dynoChart');
+    if (chartCanvas) {
+      const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
+      let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
+      function syncOverlay(chart) { overlayCanvas.width = chart.width; overlayCanvas.height = chart.height; overlayCanvas.style.width = chart.width + 'px'; overlayCanvas.style.height = chart.height + 'px'; const hpMeta = chart.getDatasetMeta(2); const tqMeta = chart.getDatasetMeta(3); if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1); } if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); } }
+      function getPointOnPath(path, progress) { if (!path || path.length < 2) return null; const lengths = []; let totalLength = 0; for (let i = 1; i < path.length; i++) { const p1 = path[i - 1], p2 = path[i]; const dx = p2.x - p1.x, dy = p2.y - p1.y; const length = Math.sqrt(dx * dx + dy * dy); lengths.push(length); totalLength += length; } if (totalLength === 0) return path.length > 0 ? { x: path[0].x, y: path[0].y } : null; const targetLength = totalLength * progress; let lengthTraversed = 0; for (let i = 0; i < lengths.length; i++) { const segmentLength = lengths[i]; if (lengthTraversed + segmentLength >= targetLength) { const p1 = path[i], p2 = path[i + 1]; if (segmentLength === 0) return { x: p1.x, y: p1.y }; const segmentProgress = (targetLength - lengthTraversed) / segmentLength; const x = p1.x + (p2.x - p1.x) * segmentProgress; const y = p1.y + (p2.y - p1.y) * segmentProgress; return { x, y }; } lengthTraversed += segmentLength; } return { x: path[path.length - 1].x, y: path[path.length - 1].y }; }
+      new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+          labels: chartData.map(d => d.rpm),
+          datasets: [
+            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#ff4747', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
+            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#ff4747', yAxisID: 'yHP', showLine: false, order: 0, },
+            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'yHP', showLine: false, order: 0, }
+          ]
+        },
+        options: {
+          animation: {
+            onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(255, 71, 71, 0.7)'); hpGradient.addColorStop(1, 'rgba(255, 71, 71, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); tqGradient.addColorStop(1, 'rgba(255, 165, 0, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(255, 71, 71, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(255, 165, 0, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
+            x: { type: 'number', easing: 'linear', duration: 50, from: NaN, delay(ctx) { if (ctx.type !== 'data' || ctx.xStarted) return 0; ctx.xStarted = true; return ctx.index * 50; } },
+            y: { type: 'number', easing: 'linear', duration: 50, from: (ctx) => (ctx.index === 0) ? ctx.chart.scales.yHP.getBasePixel() : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y, delay(ctx) { if (ctx.type !== 'data' || ctx.yStarted) return 0; ctx.yStarted = true; return ctx.index * 50; } }
+          },
+          onResize: (chart) => { syncOverlay(chart); },
+          responsive: true, maintainAspectRatio: true, aspectRatio: 1.5,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false, },
+            tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
+          },
+          scales: {
+            x: { 
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } },
+              title: { display: false }
+            },
+            yHP: { 
+              type: 'linear', 
+              position: 'left', 
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              ticks: { color: '#a1a1aa', stepSize: 200 }, 
+              min: 0, 
+              max: 800, 
+              title: { display: false } 
+            },
+          }
+        },
+        plugins: [fullBorderPlugin]
+      });
+    }
+  });
+  </script>
+</body>
+</html>
+
