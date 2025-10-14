@@ -1,0 +1,250 @@
+<!-- 
+  Stripped-down version containing only the configurator and map.
+-->
+
+<!-- 1. FONT STYLES (Required) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- 2. CSS STYLES (Required) -->
+<style>
+    /* --- BASE VARIABLES --- */
+    :root {
+        --color-background: #0A0A0A;
+        --color-text: #EAEAEA;
+        --color-text-muted: #888888;
+        --color-primary: #FF3B30;
+        --color-surface: #141414;
+        --color-border: #2A2A2A;
+        --font-heading: 'Rajdhani', sans-serif;
+        --font-body: 'Inter', sans-serif;
+    }
+
+    /* --- FIX: BROWSER RESET --- */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* --- SCOPED STYLES FOR SHOPIFY --- */
+    #wikd-homepage-root {
+        background-color: var(--color-background);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        line-height: 1.6;
+        overflow-x: hidden;
+        /* These margins handle Shopify's theme padding */
+        margin-left: calc(-1 * var(--page-width-margin, 0px));
+        margin-right: calc(-1 * var(--page-width-margin, 0px));
+    }
+
+    #wikd-homepage-root *, 
+    #wikd-homepage-root *::before, 
+    #wikd-homepage-root *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    #wikd-homepage-root img, 
+    #wikd-homepage-root video, 
+    #wikd-homepage-root iframe {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    #wikd-homepage-root .section {
+        padding: 60px 5%;
+        overflow: hidden;
+    }
+
+    #wikd-homepage-root .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    #wikd-homepage-root .contact-header {
+        text-align: center;
+        padding: 60px 5% 40px;
+    }
+
+    #wikd-homepage-root .contact-title {
+        font-family: var(--font-heading);
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        color: var(--color-text);
+    }
+
+    #wikd-homepage-root .contact-blurb {
+        font-size: 1.125rem;
+        color: var(--color-text-muted);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+    }
+
+    #wikd-homepage-root #questionnaire-section { padding-top: 0; padding-bottom: 60px; }
+    #wikd-homepage-root .questionnaire-iframe {
+        border: none;
+        width: 100%;
+        display: block;
+        background-color: transparent;
+        transition: height 0.2s ease-out;
+    }
+    
+    /* --- MAP & LOCATION SECTION --- */
+    #wikd-homepage-root .map-iframe {
+        border: none;
+        width: 100%;
+        display: block;
+        background-color: transparent;
+        height: 600px;
+        border-radius: 16px;
+    }
+    
+    /* --- RESPONSIVE STYLES --- */
+    @media (max-width: 900px) {
+        #wikd-homepage-root .map-iframe { 
+            height: 1000px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #wikd-homepage-root .section { padding: 40px 5%; }
+        #wikd-homepage-root .map-iframe {
+            height: 1000px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #wikd-homepage-root .section { padding: 30px 4%; }
+    }
+</style>
+
+<!-- 3. HTML CONTENT (Required) -->  
+<div id="wikd-homepage-root">
+    <main>
+        <section class="contact-header">
+            <div class="container">
+                <h1 class="contact-title">Get In Touch</h1>
+                <p class="contact-blurb">Your high-performance journey starts here. Our configurator gives us the exact details needed for expert advice and precise pricing. Fill it out to skip the back-and-forth and get straight to building your dream machine.</p>
+            </div>
+        </section>
+
+        <section id="questionnaire-section" class="section">
+            <div class="container">
+                <iframe id="questionnaireFrame" class="questionnaire-iframe" title="WIKD Motorsports Build Questionnaire" loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <!-- MAP & LOCATION SECTION -->
+        <section id="location" class="section">
+            <div class="container">
+                <iframe id="mapFrame" class="map-iframe" title="WIKD Motorsports Location" loading="lazy"></iframe>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- 4. JAVASCRIPT LOGIC (Required) -->
+<script>
+(function() {
+    // This is the master initialization function. It's designed to be idempotent,
+    // meaning it can be called multiple times without breaking anything. This is crucial
+    // for the Shopify theme editor, which can reload sections unpredictably.
+    const runWikdHomepage = function() {
+        const rootElement = document.getElementById('wikd-homepage-root');
+
+        // Guard clause: If the main container isn't in the DOM yet, stop.
+        if (!rootElement) {
+            return;
+        }
+
+        // Guard clause: If this script has already run successfully, stop.
+        if (rootElement.classList.contains('wikd-homepage-initialized')) {
+            return;
+        }
+
+        // Mark as initialized so it doesn't run again.
+        rootElement.classList.add('wikd-homepage-initialized');
+
+        // --- DYNAMIC IFRAME LOADER ---
+        try {
+            const loadDynamicIframe = (frameId, url, isDynamicHeight) => {
+                const iframe = rootElement.querySelector(`#${frameId}`);
+                if (!iframe) return;
+
+                const cacheBustedUrl = `${url}?v=${new Date().getTime()}`;
+
+                if (isDynamicHeight) {
+                    fetch(cacheBustedUrl)
+                        .then(response => response.ok ? response.text() : Promise.reject(`HTTP error ${response.status}`))
+                        .then(html => {
+                            const styles = `<style>body,html{margin:0!important;padding:0!important;overflow:hidden!important}</style>`;
+                            const scripts = `<script>try{const o=new ResizeObserver(o=>{const t=document.documentElement.offsetHeight;window.parent.postMessage({type:"resize",height:t,frameId:"${frameId}"},"*")});o.observe(document.documentElement),window.addEventListener("load",()=>{const o=document.documentElement.offsetHeight;window.parent.postMessage({type:"resize",height:o,frameId:"${frameId}"},"*");const t=()=>window.parent.postMessage({type:"snapToTop",frameId:"${frameId}"},"*");document.getElementById("nextBtn")?.addEventListener("click",t),document.getElementById("prevBtn")?.addEventListener("click",t)})}catch(o){console.error("Error in iframe scripts:",o)}<\/script>`;
+                            let processedHtml = html.replace('</head>', styles + '</head>');
+                            processedHtml = processedHtml.replace('</body>', scripts + '</body>');
+                            iframe.srcdoc = processedHtml;
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching content for ${frameId}:`, error);
+                            if(iframe.parentElement) {
+                                iframe.parentElement.innerHTML = `<p style="color: var(--color-text-muted); text-align: center;">Content failed to load.</p>`;
+                            }
+                        });
+                } else {
+                    iframe.src = cacheBustedUrl;
+                }
+            };
+
+            loadDynamicIframe('questionnaireFrame', 'https://raw.githack.com/WIKDMotorsports/MasterQuestionnaire/main/index.html', true);
+            loadDynamicIframe('mapFrame', 'https://raw.githack.com/WIKDMotorsports/Deploy/main/MapsWidget.html', false);
+
+            window.addEventListener('message', (event) => {
+                const data = event.data;
+                if (!data.type || !data.frameId) return;
+                const iframe = rootElement.querySelector(`#${data.frameId}`);
+                if (!iframe || !iframe.contentWindow || event.source !== iframe.contentWindow) return;
+
+                if (data.type === 'resize' && data.height) {
+                    iframe.style.height = (data.height + 5) + 'px';
+                } else if (data.type === 'snapToTop') {
+                    const section = iframe.closest('.section');
+                    if(section) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("WIKD Homepage Error in Iframe Loader:", error);
+        }
+    };
+
+    // --- ROBUST INITIALIZATION ---
+    // This is the new, foolproof way to run the script. It waits for the browser to be ready
+    // to paint, then checks if our root element exists. If not, it waits for the next frame
+    // and checks again. This is the most reliable way to handle unpredictable script loading
+    // in environments like the Shopify theme editor.
+    const ensureReady = () => {
+        if (document.getElementById('wikd-homepage-root')) {
+            runWikdHomepage();
+        } else {
+            requestAnimationFrame(ensureReady);
+        }
+    };
+
+    // Kick off the check.
+    requestAnimationFrame(ensureReady);
+    
+    // Also listen for Shopify's specific event for when a section is reloaded in the editor.
+    document.addEventListener('shopify:section:load', () => {
+        // When Shopify reloads the section, the old 'initialized' class is gone,
+        // so our script will re-run correctly for the new content.
+        requestAnimationFrame(ensureReady); 
+    });
+})();
+</script>
