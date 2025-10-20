@@ -304,14 +304,16 @@
         transition: height 0.2s ease-out;
     }
 
+    /* Base Grid: 3 columns wide */
     #wikd-homepage-root .packages-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr); 
         gap: 30px;
     }
     #wikd-homepage-root .package-card {
         position: relative;
-        aspect-ratio: 3 / 4;
+        /* Adjusted height slightly for a 3x2 layout */
+        aspect-ratio: 3 / 3.5; 
         overflow: hidden;
         border-radius: 8px;
         border: 1px solid var(--color-border);
@@ -489,7 +491,7 @@
     /* --- RESPONSIVE STYLES --- */
 
     @media (max-width: 1200px) {
-        #wikd-homepage-root .packages-grid,
+        /* Removed .packages-grid here to keep it at 3 columns longer */
         #wikd-homepage-root .gallery-grid { 
             grid-template-columns: repeat(2, 1fr); 
         }
@@ -519,6 +521,7 @@
         #wikd-homepage-root .slide-title-group { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
         #wikd-homepage-root .btn { padding: 12px 28px; font-size: 16px; }
 
+        /* Grid drops to 2 columns here for tablets/mobile */
         #wikd-homepage-root .packages-grid { 
             grid-template-columns: repeat(2, 1fr);
             gap: 20px; 
@@ -622,31 +625,54 @@
                 <h2 class="section-title">Performance Packages</h2>
                 <div class="packages-grid">
                     <a href="https://www.wikdmotorsports.com/pages/corvette-c7-lt4-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/image_1600x.jpg?v=1732117588" alt="Corvette C7 LT4" class="package-card-bg" loading="lazy">
+                        <!-- C7 LT4 Package -->
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7.png?v=1760989861" alt="Corvette C7 LT4" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
                             <h3 class="package-card-title">Corvette C7 LT4</h3>
                             <span class="package-card-link">View Packages &rarr;</span>
                         </div>
                     </a>
                     <a href="https://www.wikdmotorsports.com/pages/c8-lt2-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8_Exhaust_Tuning_Packages_10c50e27-688f-4c5e-a253-f9cb872af5d3.webp?v=1750949635" alt="Corvette C8 LT2" class="package-card-bg" loading="lazy">
+                        <!-- C8 LT2 Package -->
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8.png?v=1760989863" alt="Corvette C8 LT2" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
                             <h3 class="package-card-title">Corvette C8 LT2</h3>
                             <span class="package-card-link">View Packages &rarr;</span>
                         </div>
                     </a>
                     <a href="https://www.wikdmotorsports.com/pages/6th-gen-camaro-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/ZL1.webp?v=1750443336" alt="6th Gen Camaro" class="package-card-bg" loading="lazy">
+                        <!-- 6th Gen Camaro Package -->
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Camaro.png?v=1760989862" alt="6th Gen Camaro" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
                             <h3 class="package-card-title">6th Gen Camaro</h3>
                             <span class="package-card-link">View Packages &rarr;</span>
                         </div>
                     </a>
+                    
+                    <!-- NEW: CTS-V Tuning Packages -->
+                    <a href="https://www.wikdmotorsports.com/pages/cts-v-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/CTS-V.png?v=1760989861" alt="Cadillac CTS-V Tuning" class="package-card-bg" loading="lazy">
+                        <div class="package-card-overlay">
+                            <h3 class="package-card-title">CTS-V Tuning</h3>
+                            <span class="package-card-link">View Packages &rarr;</span>
+                        </div>
+                    </a>
+
                     <a href="https://www.wikdmotorsports.com/pages/ct5-blackwing-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/DSC08715.webp?v=1740518095" alt="CTS V & CT5 V Blackwing" class="package-card-bg" loading="lazy">
+                        <!-- CTS/CT5-V Blackwing Package -->
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/BW.png?v=1760989861" alt="CTS V & CT5 V Blackwing" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
                             <h3 class="package-card-title">CTS/CT5-V Blackwing</h3>
                             <span class="package-card-link">View Packages &rarr;</span>
+                        </div>
+                    </a>
+                    
+                    <!-- NEW: All Tuning/Services -->
+                    <a href="https://www.wikdmotorsports.com/pages/tuning" class="package-card" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_6804.jpg?v=1752528576" alt="All Tuning Services" class="package-card-bg" loading="lazy">
+                        <div class="package-card-overlay">
+                            <h3 class="package-card-title">All Tuning/Services</h3>
+                            <span class="package-card-link">View Services &rarr;</span>
                         </div>
                     </a>
                 </div>
@@ -948,7 +974,7 @@
     
     // Also listen for Shopify's specific event for when a section is reloaded in the editor.
     document.addEventListener('shopify:section:load', () => {
-        // When Shopify reloads the section, the old 'initialized' class is gone,
+        // When Shopify reloads the section, the old 'initialized' class is gone,\
         // so our script will re-run correctly for the new content.
         requestAnimationFrame(ensureReady); 
     });
