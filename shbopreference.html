@@ -1,0 +1,995 @@
+
+on the main page index.html like for depoloy please replace the shop links only wiht ones found on this page so like all the exhausts should only go to pages that are here and stuff:
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WIKD Motorsports - Shop</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- Font Awesome for the arrow icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <style>
+        /* --- CSS RESET & BASE STYLES --- */
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #888888;
+            --color-primary: #FF4500; /* Electric Orange/Red */
+            --color-primary-dark: #CC3700; /* Dark variant for hover/accents */
+            --color-surface: #141414;
+            --color-border: #2A2A2A;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --header-height: 80px;
+            /* Define brand colors as CSS variables for filter buttons to access */
+            --badge-color-corvette: 255, 69, 0;
+            --badge-color-ferrari: 255, 215, 0;
+            --badge-color-lamborghini: 255, 140, 0;
+            --badge-color-mclaren: 147, 112, 219;
+            --badge-color-audi: 100, 100, 100;
+            --badge-color-universal: 70, 70, 70;
+            --badge-color-accessories: 70, 70, 70;
+            --badge-color-default: 255, 69, 0; /* Fallback for 'all' or missing */
+            --badge-color-ford: 0, 17, 107; /* Ford Blue */
+            --badge-color-cadillac: 175, 141, 45; /* Cadillac Gold/Brown */
+            --badge-color-chevy: 255, 69, 0; /* Chevy/Camaro set to same red as Corvette */
+            --badge-color-euro-tune: 255, 140, 0; /* Default Euro Tune color (Lamborghini Orange) */
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        body, h1, h2, h3, p, ul, li { margin: 0; padding: 0; }
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
+
+        /* --- UTILITY CLASSES --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* --- SHOP PAGE STYLES --- */
+        .shop-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            padding: 15px;
+            background-color: var(--color-surface);
+            /* Removed border-radius here to let the buttons define the overall shape */
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap; 
+        }
+        .filter-btn {
+            background-color: var(--color-surface);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            padding: 10px 16px;
+            /* === CRITICAL UPDATE: Applied Asymmetrical Clip Path === */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
+            border-radius: 0; /* Override default rounding */
+           
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .filter-btn:hover {
+            background-color: var(--color-border);
+            color: var(--color-text);
+        }
+       
+        /* Dynamic Active State - CSS Custom Properties used in JS */
+        .filter-btn.active {
+            color: #FFFFFF;
+            border-color: var(--active-border-color, var(--color-primary));
+            background-color: var(--active-bg-color, var(--color-primary));
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            /* Add glow/shadow on active state for the themed color */
+            box-shadow: 0 0 10px rgba(var(--active-color-rgb), 0.5); 
+        }
+
+        .search-bar input {
+            background-color: var(--color-background);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            padding: 10px 15px;
+            border-radius: 6px;
+            width: 250px;
+            font-family: var(--font-body);
+        }
+        .search-bar input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        /* --- SHOP GRID --- */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px;
+            padding-bottom: 60px;
+        }
+        .shop-item {
+            position: relative;
+            background-color: var(--color-surface);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .shop-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--color-primary);
+        }
+        .shop-item-image {
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+        .shop-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .shop-item:hover .shop-item-image img {
+            transform: scale(1.05);
+        }
+        .shop-item-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        /* --- CRITICAL FIX: Force title color to white --- */
+        .shop-item-title {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            flex-grow: 1;
+            /* Added !important to override external theme CSS */
+            color: var(--color-text) !important; 
+        }
+        .shop-item-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+       
+        /* New style for the Explore Tuning button/text */
+        .shop-item-price.explore {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            font-size: 1.25rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        .shop-item:hover .shop-item-price.explore {
+            color: var(--color-text);
+        }
+
+
+        /* --- PRODUCT BADGE STYLES --- */
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: -1px;
+            z-index: 10;
+            padding: 6px 15px 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600; 
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #FFFFFF;
+           
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Brand-specific Colors: THEMATIC OVERRIDE (High Opacity) */
+        .badge-corvette { background-color: rgba(var(--badge-color-corvette), 0.85); }
+        .badge-ferrari { background-color: rgba(var(--badge-color-ferrari), 0.85); } 
+        .badge-lamborghini { background-color: rgba(var(--badge-color-lamborghini), 0.85); } 
+        .badge-mclaren { background-color: rgba(var(--badge-color-mclaren), 0.85); }
+        .badge-audi { background-color: rgba(var(--badge-color-audi), 0.85); }
+        .badge-universal { background-color: rgba(var(--badge-color-universal), 0.85); }
+        .badge-accessories, .badge-uncategorized { background-color: rgba(var(--badge-color-accessories), 0.85); }
+        .badge-ford { background-color: rgba(var(--badge-color-ford), 0.85); } 
+        .badge-cadillac { background-color: rgba(var(--badge-color-cadillac), 0.85); } /* Added Cadillac badge class */
+        .badge-chevy { background-color: rgba(var(--badge-color-chevy), 0.85); } /* Added Chevy badge class */
+        .badge-euro-tune { background-color: rgba(var(--badge-color-euro-tune), 0.85); } /* Default Euro Tune badge */
+
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .shop-controls {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            .search-bar {
+                width: 100%;
+            }
+            .search-bar input {
+                width: 100%;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            grid-column: 1 / -1;
+        }
+        .spinner {
+            border: 4px solid var(--color-border);
+            border-top: 4px solid var(--color-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="container">
+            <section class="shop-controls">
+                <div class="filter-buttons" id="filter-buttons">
+                    <!-- Filter buttons will be generated here -->
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search products...">
+                </div>
+            </section>
+
+            <div class="shop-grid" id="shop-grid">
+                <!-- Products will be loaded here -->
+                    <div class="spinner-container" id="spinner">
+                        <div class="spinner"></div>
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const shopGrid = document.getElementById('shop-grid');
+        const filterButtonsContainer = document.getElementById('filter-buttons');
+        const searchInput = document.getElementById('search-input');
+        const spinner = document.getElementById('spinner');
+        // Using the URL from the prompt
+        const jsonUrl = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/shoponly.json?v=1760970186'; 
+
+        let allProducts = [];
+
+        // --- DYNAMIC IMAGE MAPPING FOR EURO TUNE LISTING ---
+        const euroTuneImageMap = {
+            'lamborghini': 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/huracan.png?v=1760449069',
+            'ferrari': 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Gemini_Generated_Image_em6w57em6w57em6w.png?v=1760478515',
+            'mclaren': 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_6804.jpg?v=1752528576',
+            'default': 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/huracan.png?v=1760449069', // Set default to Huracan
+        };
+       
+        // --- MANUALLY ADDED PACKAGE ENTRIES ---
+        const manualEntries = [
+            // --- FIX: ADD LAMBO/R8 HEADERS MANUALLY WITH CORRECT LINK AND CORRECTED ORIGINAL IMAGE URL ---
+            {
+                title: 'Lamborghini Huracan EVO / Audi R8 Header (Black Ceramic Coated)',
+                price: 4999.99,
+                make: 'lamborghini',
+                categories: ['exhaust', 'headers', 'audi'],
+                link: 'https://www.wikdmotorsports.com/pages/r8-huracan-header',
+                image: {
+                    // Correct URL sourced from the JSON data provided by the user (huracan-r8-header-black entry).
+                    src: 'https://www.wikdmotorsports.com/cdn/shop/files/Huracan_Headers_Blk-1.png?v=1734023095&width=800', 
+                    alt: 'Lamborghini Huracan EVO / Audi R8 Header'
+                },
+                groupKey: 'H_EuroHeaders'
+            },
+            // --- NEW: EURO TUNE ENTRY (Dynamic Image, No Price) ---
+            {
+                title: 'European Custom ECU Tuning',
+                price: 0, // Placeholder price to ensure it sorts correctly (needs to be float)
+                make: 'euro-tune', // Special make for dynamic handling
+                categories: ['tuning', 'service', 'european'],
+                link: 'https://www.wikdmotorsports.com/pages/euro-tune',
+                image: {
+                    src: euroTuneImageMap.default, 
+                    alt: 'European Custom ECU Tuning'
+                },
+                isEuroTune: true, // Identifier for dynamic logic
+                groupKey: 'G_EuroTune' // Group key for sorting
+            },
+            // --- NEW: MODULAR EXHAUST TIPS (Dynamic Badge, Price /ea) ---
+            {
+                title: 'WIKD Modular Exhaust Tips (Multiple Styles)',
+                price: 149.99, // Corrected price
+                make: 'modular-tips', // Special make for dynamic handling
+                categories: ['exhaust', 'tips', 'mclaren', 'corvette'],
+                link: '#', // No link as requested
+                image: {
+                    src: 'https://www.wikdmotorsports.com/cdn/shop/files/DSC_1817.jpg?v=1734029625&width=800',
+                    alt: 'WIKD Modular Exhaust Tips (Multiple Styles)'
+                },
+                isModularTips: true, // Identifier for dynamic logic
+                groupKey: 'M_ModularTips' // Group key for sorting
+            },
+            // F450 Wheel and Tire Package
+            {
+                title: 'Ford F450 Wheel and Tire Package',
+                price: 8799.00,
+                make: 'ford',
+                categories: ['wheels', 'tires', 'universal'],
+                link: 'https://www.wikdmotorsports.com/pages/f450-wheel-tire-package',
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/wmremove-transformed_0_00_00_00_a1b41fae-fb45-4e22-9cc6-486322db3322.png?v=1759764806',
+                    alt: 'Ford F450 Wheel and Tire Package'
+                },
+                groupKey: 'F_FordWheels'
+            },
+            // C8 LT2 Packages
+            {
+                title: 'Corvette C8 LT2 Tuning Packages',
+                price: 5000.00,
+                make: 'corvette',
+                categories: ['tuning', 'package', 'corvette'],
+                link: 'https://www.wikdmotorsports.com/pages/c8-lt2-packages',
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8.jpg?v=1758055597',
+                    alt: 'Corvette C8 LT2 Tuning Packages'
+                },
+                groupKey: 'C_CorvetteTuning'
+            },
+            // CT5 Blackwing Tuning Packages
+            {
+                title: 'CT5 Blackwing Tuning Packages',
+                price: 4500.00,
+                make: 'cadillac',
+                categories: ['tuning', 'package', 'cadillac'],
+                link: 'https://www.wikdmotorsports.com/pages/ct5-blackwing-tuning-packages',
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/BW.jpg?v=1758055597',
+                    alt: 'CT5 Blackwing Tuning Packages'
+                },
+                groupKey: 'A_CadillacTuning'
+            },
+            // CTS-V Tuning Packages
+            {
+                title: 'Cadillac CTS-V Tuning Packages',
+                price: 3335.00,
+                make: 'cadillac',
+                categories: ['tuning', 'package', 'cadillac'],
+                link: 'https://www.wikdmotorsports.com/pages/cts-v-tuning-packages',
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/CTS-V-FX.jpg?v=1758052426',
+                    alt: 'Cadillac CTS-V Tuning Packages'
+                },
+                groupKey: 'A_CadillacTuning'
+            },
+            // ZL1 Camaro Tuning Packages
+            {
+                title: 'ZL1 Camaro 6th Gen Tuning Packages',
+                price: 2600.00,
+                make: 'chevy',
+                categories: ['tuning', 'package', 'chevy'],
+                link: 'https://www.wikdmotorsports.com/pages/6th-gen-camaro-tuning-packages',
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/ZL1_2259f36d-ac38-4e8e-aa56-044cd86ff865.jpg?v=1758055597',
+                    alt: 'ZL1 Camaro Tuning Packages'
+                },
+                groupKey: 'B_ChevyTuning'
+            },
+            // C7 LT4 Tuning Packages
+            {
+                title: 'Corvette C7 LT4 Tuning Packages',
+                price: 2500.00,
+                make: 'corvette',
+                categories: ['tuning', 'package', 'corvette'],
+                link: 'https://www.wikdmotorsports.com/pages/corvette-c7-lt4-tuning-packages',
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7.jpg?v=1758055598',
+                    alt: 'Corvette C7 LT4 Tuning Packages'
+                },
+                groupKey: 'C_CorvetteTuning'
+            },
+            // --- COMBINED FAN LISTING ---
+            {
+                title: 'WIKD Universal & C7 Fan Shroud Kits',
+                price: 1099.99,
+                make: 'universal',
+                categories: ['fan', 'shroud', 'corvette', 'c7', 'universal'],
+                link: 'https://www.wikdmotorsports.com/pages/wikd-fan-universal-c7',
+                image: {
+                    src: 'https://www.wikdmotorsports.com/cdn/shop/files/dsc08287_1.jpg?v=1734036302&width=800',
+                    alt: 'WIKD Universal & C7 Fan Shroud Kits'
+                },
+                groupKey: 'E_Fans' // Group with other fan products
+            },
+            // --- NEW: WIKD Merch Card ---
+            {
+                title: 'WIKD Merch',
+                price: 0, // Placeholder for sorting, will display 'EXPLORE'
+                make: 'accessories', // This will appear under the 'MERCHANDISE' filter
+                categories: ['merchandise', 'accessories'],
+                link: 'https://www.wikdmotorsports.com/pages/merch',
+                image: {
+                    src: 'https://www.wikdmotorsports.com/cdn/shop/files/GET_WIKD_Jet_Tag_-_WIKD.jpg?v=1745934173&width=800', // <-- UPDATED URL
+                    alt: 'WIKD Motorsports Merch'
+                },
+                isMerchCard: true, // Special identifier
+                groupKey: 'Z_misc' // Ensure it sorts near the end
+            }
+        ];
+        // --- END MANUALLY ADDED PACKAGE ENTRIES ---
+       
+        const productLinkMap = {
+            "Corvette C8 Titanium Catback 2020+": "https://www.wikdmotorsports.com/pages/c8-catback-2020",
+            "Mclaren 570S/540C/570GT 3.8L V8 Titanium Downpipe": "https://www.wikdmotorsports.com/pages/570-downpipes",
+            "Lamborghini Huracan EVO/STO 5.2 V10 Titanium Catback With Muffler": "https://www.wikdmotorsports.com/pages/huracan-exhaust-with-muffler",
+            "Lamborghini Huracan EVO/STO 5.2 V10 Titanium Catback": "https://www.wikdmotorsports.com/pages/huracan-exhaust-no-muffler",
+        };
+
+        // Utility to get the raw RGBA string for a given make
+        function getMakeColorRgba(make) {
+            const root = document.documentElement;
+            // Sanitizing the make to match the CSS variable format
+            const colorVar = `--badge-color-${make.toLowerCase().replace(/\s/g, '-')}`;
+           
+            // Try to get the specific color variable, fallback to default
+            let color = getComputedStyle(root).getPropertyValue(colorVar).trim();
+            if (!color) {
+                color = getComputedStyle(root).getPropertyValue('--badge-color-default').trim();
+            }
+            return `rgba(${color}, 1)`;
+        }
+
+
+        // --- FETCH AND PROCESS PRODUCTS ---
+        async function fetchProducts() {
+            try {
+                const response = await fetch(jsonUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+               
+                // Titles to REMOVE (consolidated or obsolete)
+                // --- FIX: Using EXACT titles from screenshots ---
+                const titlesToRemove = [
+                    'Lamborghini Huracan EVO Header / Audi R8 (Golden Ceramic Coated)',
+                    'Lamborghini Huracan EVO / Audi R8 Header (Black Ceramic Coated)',
+                   
+                    // Remove individual fan/shroud listings, now combined manually
+                    'Universal 16" Fan Shroud (C7/Universal)',
+                    '16" SPAL Fan (High Performance)',
+                    'WIKD Motorsports - Fan & Shroud for C7 Corvette', // <-- CORRECTED STRING
+                    'WIKD Motorsports - Universal 18in Fan & Shroud', // <-- CORRECTED STRING
+
+                    // START: Consolidated McLaren Tips to remove, now handled by manual entry
+                    '570S & 720S Titanium Exhaust Tips (Black)',
+                    '570S & 720S Titanium Exhaust Tips (Brushed Purple Finish)',
+                    '570S & 720S Titanium Exhaust Tips Style 1',
+                    '570S & 720S Titanium Exhaust Tips Style 2',
+                    '570S & 720S Titanium Exhaust Tips (Inner Purple Finish)', // This is the old modular tips
+                    // END: Consolidated McLaren Tips
+
+                    // --- NEW: Remove individual merch items ---
+                    'WIKD Tuned Sticker', // <-- CORRECTED STRING
+                    'GET WIKD Jet Tag - WIKD', // <-- CORRECTED STRING
+                    'Custom License Plate Frames'
+                    // --- END NEW ---
+                ];
+                
+                // --- FIX: Create a Set of uppercase titles for case-insensitive filtering ---
+                const titlesToRemoveUpper = new Set(titlesToRemove.map(t => t.toUpperCase()));
+               
+                // Process all products from the JSON data.
+                allProducts = data.shop
+                    .filter(item => !titlesToRemoveUpper.has(item.title.toUpperCase())) // <-- FIX: Case-insensitive filter
+                    .map(item => {
+                        // --- FIX: Use the link directly from the JSON item, fall back to Shopify slug if link is empty or missing ---
+                        let link = productLinkMap[item.title] || item.link || '#product-detail';
+                       
+                        if (link === '#product-detail' || link === 'https://www.wikdmotorsports.com/pages/shop') {
+                            const slug = item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-*|-*$/g, '');
+                            // We assume anything with the generic 'shop' link needs a real link, 
+                            // otherwise use a Shopify product slug as a true last resort fallback.
+                            link = `/products/${slug}`;
+                        }
+                       
+                        if (!item.categories || !Array.isArray(item.categories)) {
+                            const inferredCat = item.title.includes('Exhaust') || item.title.includes('Catback') ? 'Exhaust' : item.title.includes('Downpipe') ? 'Downpipe' : 'Accessories';
+                            item.categories = [inferredCat]; 
+                        }
+                        item.categories = item.categories.map(c => c.toLowerCase());
+                       
+                        let make = 'accessories';
+                        let groupKey = 'Z_misc'; // Default group key for sorting
+                       
+                        const titleLower = item.title.toLowerCase();
+
+                        // --- MAKE AND GROUPING LOGIC ---
+                        if (titleLower.includes('corvette') || titleLower.includes('c8') || titleLower.includes('c7')) {
+                            make = 'corvette';
+                            if (titleLower.includes('exhaust tips') || titleLower.includes('z06')) {
+                                groupKey = 'D_CorvetteTips';
+                            } else if (titleLower.includes('fan') || titleLower.includes('shroud')) {
+                                groupKey = 'E_Fans';
+                            } else {
+                                groupKey = 'C_CorvetteExhaust';
+                            }
+                        } else if (titleLower.includes('camaro') || titleLower.includes('zl1')) {
+                            make = 'chevy';
+                            groupKey = 'B_ChevyTuning';
+                        } else if (titleLower.includes('ct5') || titleLower.includes('cts-v')) {
+                            make = 'cadillac';
+                            groupKey = 'A_CadillacTuning';
+                        } else if (titleLower.includes('f450') || titleLower.includes('ford')) {
+                            make = 'ford';
+                            groupKey = 'F_FordWheels';
+                        } else if (titleLower.includes('lamborghini') || titleLower.includes('huracan') || titleLower.includes('r8')) {
+                            make = 'lamborghini';
+                            if (titleLower.includes('header')) {
+                                groupKey = 'H_EuroHeaders'; // R8/Huracan Headers
+                            } else {
+                                groupKey = 'G_LamborghiniExhaust';
+                            }
+                        } else if (titleLower.includes('ferrari') || titleLower.includes('458')) {
+                            make = 'ferrari';
+                            // Grouping for Ferrari Exhaust/Muffler variants
+                            if (titleLower.includes('catback') && titleLower.includes('muffler')) {
+                                groupKey = 'J_FerrariExhaustMuffler';
+                            } else if (titleLower.includes('catback') || titleLower.includes('downpipe')) {
+                                groupKey = 'K_FerrariExhaust';
+                            }
+                        } else if (titleLower.includes('mclaren') || titleLower.includes('540c') || titleLower.toLowerCase().includes('570s') || titleLower.includes('720s')) {
+                            make = 'mclaren';
+                            // Grouping for tips
+                            if (titleLower.includes('exhaust tips')) {
+                                groupKey = 'M_McLarenTips';
+                            } else {
+                                groupKey = 'L_McLarenExhaust';
+                            }
+                        } else {
+                             // Default logic remains if no specific pattern is found
+                            const makeMatch = item.title.match(/(mclaren|ferrari|lamborghini|audi)\s/i);
+                            make = makeMatch ? makeMatch[1].toLowerCase() : (item.categories.includes('universal') ? 'universal' : 'accessories');
+                        }
+                       
+                        // Specific handling for the generic fan/shroud products to group with Corvette fans
+                        if (titleLower.includes('universal') && (titleLower.includes('fan') || titleLower.includes('shroud'))) {
+                             groupKey = 'E_Fans';
+                             make = 'universal';
+                        }
+
+
+                        item.make = make;
+                        item.groupKey = groupKey; // Assign the determined group key
+
+                        return { ...item, link };
+                    });
+               
+                // --- MANUALLY ADD NEW ENTRIES ---
+                allProducts.push(...manualEntries);
+                // --- END MANUAL ADD ---
+
+                // --- INITIAL SORT: PRICE DESCENDING (Highest First) ---
+                allProducts.sort((a, b) => {
+                    const priceA = parseFloat(a.price);
+                    const priceB = parseFloat(b.price);
+                   
+                    // --- Custom Sort Logic (Used for 'all' filter only) ---
+                    const activeBtn = document.querySelector('.filter-btn.active');
+                    const activeFilterMake = activeBtn ? activeBtn.dataset.filterMake : 'all';
+
+                    if (activeFilterMake === 'all') {
+                        // Special cards are handled separately in filterAndSearch (unshifted to front), skip if comparing them
+                        if (a.isEuroTune || a.isModularTips || a.isMerchCard) return -1; 
+                        if (b.isEuroTune || b.isModularTips || b.isMerchCard) return 1;
+
+                        // Primary Sort: Price Descending
+                        if (priceB !== priceA) {
+                            return priceB - priceA;
+                        }
+                       
+                        // Secondary Sort: Group Key Ascending (Alphabetical sorting by the GroupKey ensures clusters)
+                        if (a.groupKey && b.groupKey) {
+                            return a.groupKey.localeCompare(b.groupKey);
+                        }
+                    }
+                   
+                    // Default/Fallback Sort: Price Descending
+                    return priceB - priceA;
+                });
+
+                populateFilters(allProducts);
+                renderShopItems(allProducts);
+            } catch (error) {
+                console.error("Could not fetch product data:", error);
+                shopGrid.innerHTML = `<p style="color: var(--color-primary); text-align: center; grid-column: 1 / -1;">Failed to load products. Please check the network connection and data source URL.</p>`;
+            } finally {
+                spinner.style.display = 'none';
+            }
+        }
+
+        // --- BADGE FUNCTION: Uses product 'make' data ---
+        function getProductBadge(productMake) {
+            if (!productMake || productMake === 'accessories' || productMake === 'uncategorized' || productMake === 'universal' || productMake === 'euro-tune' || productMake === 'modular-tips') {
+                // If it's one of the dynamic cards, we generate the badge inside renderShopItems, so return empty string here.
+                return ''; 
+            }
+           
+            const badgeClass = `badge-${productMake.toLowerCase().replace(/\s/g, '-')}`;
+            // Display text: use ALL CAPS for makes
+            const badgeText = productMake.toUpperCase(); 
+           
+            return `<div class="product-badge ${badgeClass}">${badgeText}</div>`;
+        }
+       
+        // --- RENDER PRODUCTS ---
+        function renderShopItems(products) {
+            shopGrid.innerHTML = '';
+            if (products.length === 0) {
+                shopGrid.innerHTML = `<p style="text-align: center; grid-column: 1 / -1;">No products found matching your criteria.</p>`;
+                return;
+            }
+            products.forEach(item => {
+                const shopItem = document.createElement('a');
+                shopItem.className = 'shop-item';
+                shopItem.href = item.link;
+               
+                // Determine if it's a special listing for rendering
+                const isEuroTune = item.isEuroTune;
+                const isModularTips = item.isModularTips;
+                const isMerchCard = item.isMerchCard;
+                const priceValue = parseFloat(item.price);
+               
+                // --- Price/CTA Logic ---
+                let priceHtml;
+                if (isEuroTune) {
+                    priceHtml = `<p class="shop-item-price explore">EXPLORE TUNING &nbsp;<i class="fas fa-arrow-right"></i></p>`;
+                } else if (isModularTips) {
+                    const priceText = isNaN(priceValue) ? 'N/A' : `$${priceValue.toFixed(2)} /ea`;
+                    priceHtml = `<p class="shop-item-price">${priceText}</p>`;
+                } else if (isMerchCard) {
+                    priceHtml = `<p class="shop-item-price explore">EXPLORE MERCH &nbsp;<i class="fas fa-arrow-right"></i></p>`;
+                } else {
+                    const priceText = isNaN(priceValue) ? 'N/A' : (item.title.toLowerCase().includes('package') || item.title.toLowerCase().includes('starting at') ? `Starting at $${priceValue.toFixed(2).replace(/\.00$/, '')}` : `$${priceValue.toFixed(2)}`);
+                    priceHtml = `<p class="shop-item-price">${priceText}</p>`;
+                }
+
+                // --- Badge Logic ---
+                let badgeHtml = getProductBadge(item.make);
+                let customId = '';
+               
+                if (isEuroTune) {
+                    // Placeholder values for initial/dynamic rendering
+                    customId = 'euro-tune-card';
+                    // We generate a default badge here to ensure structure exists before dynamic update
+                    badgeHtml = `<div class="product-badge badge-euro-tune" id="${customId}-badge">EUROPEAN</div>`;
+                } else if (isModularTips) {
+                    customId = 'modular-tips-card';
+                    // Default badge
+                    badgeHtml = `<div class="product-badge badge-universal" id="${customId}-badge">MODULAR</div>`;
+                } else if (isMerchCard) {
+                    // Static badge for merch card
+                    badgeHtml = `<div class="product-badge badge-accessories">MERCHANDISE</div>`;
+                }
+
+                const imageUrl = item.image && item.image.src ? item.image.src : 'https://placehold.co/300x300/141414/eaeaea?text=Image+Unavailable';
+                const imageAlt = item.image && item.image.alt ? item.image.alt : item.title;
+               
+                let cleanedTitle = item.title.replace(/\s*\(Starting Price\)\s*/i, '').trim();
+
+               
+                shopItem.innerHTML = `
+                    ${badgeHtml}
+                    <div class="shop-item-image" ${customId ? `id="${customId}-image-container"` : ''}>
+                        <img src="${imageUrl}" alt="${imageAlt}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/300x300/141414/eaeaea?text=Image+Error';">
+                    </div>
+                    <div class="shop-item-content">
+                        <h3 class="shop-item-title">${cleanedTitle}</h3>
+                        ${priceHtml}
+                    </div>
+                `;
+                shopGrid.appendChild(shopItem);
+            });
+        }
+       
+        // --- FILTERING AND SEARCH LOGIC ---
+        function populateFilters(products) {
+            const makes = new Set(['all']);
+            products.forEach(p => makes.add(p.make));
+           
+            filterButtonsContainer.innerHTML = '';
+           
+            const cleanedMakes = Array.from(makes)
+                .map(make => make === 'accessories' ? 'merchandise' : make)
+                .filter(make => make !== 'uncategorized' && make !== 'euro-tune' && make !== 'modular-tips'); // Hide special handler makes
+
+            const sortedMakes = cleanedMakes.sort((a, b) => {
+                if (a === 'all') return -1;
+                if (b === 'all') return 1;
+                return a.localeCompare(b);
+            });
+           
+            sortedMakes.forEach(make => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn';
+                button.dataset.filterMake = make;
+                const displayText = make.toUpperCase(); 
+                button.textContent = displayText === 'MERCHANDISE' ? 'MERCHANDISE' : displayText; 
+
+                if (make === 'all') {
+                    button.classList.add('active');
+                    button.style.setProperty('--active-bg-color', `var(--color-primary)`);
+                    button.style.setProperty('--active-border-color', `var(--color-primary)`);
+                    button.style.setProperty('--active-color-rgb', `255, 69, 0`); 
+                }
+               
+                filterButtonsContainer.appendChild(button);
+            });
+        }
+       
+        // --- DYNAMIC CARD UPDATE (IMAGE AND BADGE) ---
+        function updateDynamicCards(activeFilterMake) {
+            const makeKey = activeFilterMake.toLowerCase();
+
+            // --- 1. Euro Tune Card ---
+            const euroTuneImage = document.querySelector('#euro-tune-card-image-container img');
+            const euroTuneBadge = document.querySelector('#euro-tune-card-badge');
+            
+            if (euroTuneImage) {
+                const isEuroMake = ['lamborghini', 'ferrari', 'mclaren'].includes(makeKey);
+                const displayKey = isEuroMake ? makeKey : 'default';
+                const newSrc = euroTuneImageMap[displayKey] || euroTuneImageMap.default;
+               
+                euroTuneImage.src = newSrc;
+                euroTuneImage.alt = `European Custom ECU Tuning (${displayKey.toUpperCase()})`;
+
+                if (euroTuneBadge) {
+                    const newBadgeText = isEuroMake ? makeKey.toUpperCase() : 'EUROPEAN';
+                    const newBadgeClass = isEuroMake ? `badge-${makeKey}` : 'badge-euro-tune';
+                   
+                    euroTuneBadge.className = 'product-badge'; 
+                    euroTuneBadge.classList.add(newBadgeClass);
+                    euroTuneBadge.textContent = newBadgeText;
+                }
+            }
+
+            // --- 2. Modular Tips Card ---
+            const modularTipsBadge = document.querySelector('#modular-tips-card-badge');
+            if (modularTipsBadge) {
+                const isTipsMake = ['mclaren', 'corvette'].includes(makeKey);
+                const newBadgeText = isTipsMake ? makeKey.toUpperCase() : 'MODULAR';
+                const newBadgeClass = isTipsMake ? `badge-${makeKey}` : 'badge-universal'; // Use brand color or default grey
+
+                modularTipsBadge.className = 'product-badge';
+                modularTipsBadge.classList.add(newBadgeClass);
+                modularTipsBadge.textContent = newBadgeText;
+            }
+        }
+
+
+        function filterAndSearch() {
+            const activeBtn = document.querySelector('.filter-btn.active');
+            if (!activeBtn) return;
+
+            const activeFilterMake = activeBtn.dataset.filterMake;
+            const searchTerm = searchInput.value.toLowerCase();
+
+            let filteredProducts = allProducts;
+
+            // --- STEP 1: FILTERING ---
+            if (activeFilterMake !== 'all') {
+                if (activeFilterMake === 'merchandise') {
+                    filteredProducts = filteredProducts.filter(p => p.make === 'accessories');
+                } else if (activeFilterMake === 'euro-tune') {
+                    // Include all European makes when 'Euro Tune' is selected (if we made a button for it)
+                    filteredProducts = filteredProducts.filter(p => ['lamborghini', 'ferrari', 'mclaren'].includes(p.make));
+                } else {
+                    filteredProducts = filteredProducts.filter(p => p.make === activeFilterMake);
+                }
+            }
+           
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(p => 
+                    p.title.toLowerCase().includes(searchTerm) || 
+                    p.categories.some(c => c.includes(searchTerm)) ||
+                    p.make.includes(searchTerm)
+                );
+            }
+           
+            // --- Ensure the special cards are visible if the criteria includes them ---
+            const euroTuneCard = allProducts.find(p => p.isEuroTune);
+            const shouldShowEuroTune = (activeFilterMake === 'all' || ['lamborghini', 'ferrari', 'mclaren'].includes(activeFilterMake));
+            
+            const modularTipsCard = allProducts.find(p => p.isModularTips);
+            const shouldShowModularTips = (activeFilterMake === 'all' || ['mclaren', 'corvette'].includes(activeFilterMake));
+
+            const merchCard = allProducts.find(p => p.isMerchCard);
+            const shouldShowMerch = (activeFilterMake === 'all' || activeFilterMake === 'merchandise');
+           
+            if (euroTuneCard && shouldShowEuroTune) {
+                if (!filteredProducts.includes(euroTuneCard)) {
+                    // Prepend the Euro Tune card only if it's not already in the list
+                    filteredProducts.unshift(euroTuneCard);
+                }
+            }
+            if (modularTipsCard && shouldShowModularTips) {
+                if (!filteredProducts.includes(modularTipsCard)) {
+                    // Prepend the Tips card
+                    filteredProducts.unshift(modularTipsCard);
+                }
+            }
+            if (merchCard && shouldShowMerch) {
+                if (!filteredProducts.includes(merchCard)) {
+                    filteredProducts.push(merchCard); // Add merch to the end
+                }
+            }
+           
+            // --- STEP 2: CUSTOM SORTING ---
+            if (activeFilterMake === 'corvette') {
+                // Custom Corvette sorting: C8 first, then C7, both sorted by price descending
+                filteredProducts.sort((a, b) => {
+                    const isAC8 = a.title.toLowerCase().includes('c8');
+                    const isBC8 = b.title.toLowerCase().includes('c8');
+                    // Ensure special cards don't interfere with this sort
+                    if (a.isEuroTune || a.isModularTips || b.isEuroTune || b.isModularTips) return 0;
+
+                    const priceA = parseFloat(a.price);
+                    const priceB = parseFloat(b.price);
+                   
+                    if (isAC8 && !isBC8) return -1;
+                    if (!isAC8 && isBC8) return 1;
+                    return priceB - priceA;
+                });
+            } else if (activeFilterMake === 'all' && filteredProducts.length > 0) {
+                 // Primary sort (Price DESC) then Secondary sort (GroupKey ASC) for ALL view
+                filteredProducts.sort((a, b) => {
+                    const priceA = parseFloat(a.price);
+                    const priceB = parseFloat(b.price);
+                   
+                    // Special cards are already unshifted to the front, skip if comparing them
+                    if (a.isEuroTune || a.isModularTips) return -1; 
+                    if (b.isEuroTune || b.isModularTips) return 1;
+                    // Merch card goes to the end
+                    if (a.isMerchCard) return 1;
+                    if (b.isMerchCard) return -1;
+
+
+                    // Primary Sort: Price Descending
+                    if (priceB !== priceA) {
+                        return priceB - priceA;
+                    }
+                   
+                    // Secondary Sort: Group Key Ascending (Alphabetical sorting by the GroupKey ensures clusters)
+                    if (a.groupKey && b.groupKey) {
+                        return a.groupKey.localeCompare(b.groupKey);
+                    }
+                    return 0;
+                });
+
+            } else {
+                // Default Sort: Price Descending (Highest First) for all other filters
+                filteredProducts.sort((a, b) => {
+                    // Keep special cards at the top if they exist
+                    if (a.isEuroTune || a.isModularTips) return -1;
+                    if (b.isEuroTune || b.isModularTips) return 1;
+                    if (a.isMerchCard) return 1;
+                    if (b.isMerchCard) return -1;
+                    return parseFloat(b.price) - parseFloat(a.price);
+                });
+            }
+           
+            // Re-render and update the dynamic card images and badges
+            renderShopItems(filteredProducts);
+           
+            // Call the dynamic card update AFTER rendering
+            if (shouldShowEuroTune || shouldShowModularTips) {
+                updateDynamicCards(activeFilterMake);
+            }
+        }
+
+        filterButtonsContainer.addEventListener('click', (e) => {
+            const target = e.target.closest('.filter-btn');
+            if (target) {
+                const currentActive = document.querySelector('.filter-btn.active');
+                if (currentActive) {
+                    currentActive.classList.remove('active');
+                    currentActive.style.removeProperty('--active-bg-color');
+                    currentActive.style.removeProperty('--active-border-color');
+                    currentActive.style.removeProperty('--active-color-rgb');
+                }
+                target.classList.add('active');
+               
+                // --- Dynamic Color Application ---
+                let makeKey = target.dataset.filterMake;
+                if (makeKey === 'merchandise') {
+                    makeKey = 'accessories';
+                }
+
+                const colorVar = `--badge-color-${makeKey.toLowerCase().replace(/\s/g, '-')}`;
+                let colorRgb = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
+
+                if (makeKey === 'all' || !colorRgb) {
+                    colorRgb = getComputedStyle(document.documentElement).getPropertyValue('--badge-color-default').trim();
+                }
+               
+                target.style.setProperty('--active-bg-color', `rgba(${colorRgb}, 1)`);
+                target.style.setProperty('--active-border-color', `rgba(${colorRgb}, 1)`);
+                target.style.setProperty('--active-color-rgb', colorRgb); 
+               
+                // Force a re-run of filter/search logic
+                filterAndSearch();
+            }
+        });
+
+        searchInput.addEventListener('input', filterAndSearch);
+
+        // Initial fetch
+        fetchProducts();
+    });
+    </script>
+</body>
+</html>
+
+zdfhbdfrg
