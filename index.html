@@ -1,4 +1,4 @@
-<!-- 
+<!--
   Instructions for Shopify:
   1. Go to your Shopify Admin > Online Store > Theme editor.
   2. Add a new "Custom Liquid" section to your homepage.
@@ -46,16 +46,16 @@
         margin-right: calc(-1 * var(--page-width-margin, 0px));
     }
 
-    #wikd-homepage-root *, 
-    #wikd-homepage-root *::before, 
+    #wikd-homepage-root *,
+    #wikd-homepage-root *::before,
     #wikd-homepage-root *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
 
-    #wikd-homepage-root h1, 
-    #wikd-homepage-root h2, 
+    #wikd-homepage-root h1,
+    #wikd-homepage-root h2,
     #wikd-homepage-root h3 {
         font-family: var(--font-heading);
         font-weight: 700;
@@ -63,8 +63,8 @@
         text-transform: uppercase;
     }
 
-    #wikd-homepage-root img, 
-    #wikd-homepage-root video, 
+    #wikd-homepage-root img,
+    #wikd-homepage-root video,
     #wikd-homepage-root iframe {
         max-width: 100%;
         height: auto;
@@ -85,7 +85,7 @@
         max-width: 1400px;
         margin: 0 auto;
     }
-    
+
     #wikd-homepage-root .section-title {
         text-align: center;
         font-size: clamp(2.5rem, 6vw, 4rem);
@@ -158,7 +158,7 @@
         transition: opacity 0.8s ease-in-out, visibility 0.8s;
         z-index: 1;
     }
-    
+
     #wikd-homepage-root .slide-content {
         position: absolute;
         bottom: 0;
@@ -173,7 +173,7 @@
         padding: 40px;
         height: 100%;
     }
-    
+
     #wikd-homepage-root .slide-content::after {
         content: '';
         position: absolute;
@@ -195,7 +195,7 @@
     #wikd-homepage-root video.slide-background {
         object-fit: contain;
     }
-    
+
     #wikd-homepage-root .slide.active {
         opacity: 1;
         visibility: visible;
@@ -219,7 +219,7 @@
         margin: 0;
         transition: background-image 0.8s ease-in-out;
     }
-    
+
     #wikd-homepage-root .slide.active .slide-title-group {
         transform: translateY(0);
         opacity: 1;
@@ -307,13 +307,13 @@
     /* Base Grid: 3 columns wide */
     #wikd-homepage-root .packages-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); 
+        grid-template-columns: repeat(3, 1fr);
         gap: 30px;
     }
     #wikd-homepage-root .package-card {
         position: relative;
         /* Adjusted height slightly for a 3x2 layout */
-        aspect-ratio: 3 / 3.5; 
+        aspect-ratio: 3 / 3.5;
         overflow: hidden;
         border-radius: 8px;
         border: 1px solid var(--color-border);
@@ -358,7 +358,7 @@
         max-width: 1400px; margin: 0 auto; width: 100%;
         overflow: hidden; position: relative;
     }
-    #wikd-homepage-root .ticker-wrap::before, 
+    #wikd-homepage-root .ticker-wrap::before,
     #wikd-homepage-root .ticker-wrap::after {
         content: ''; position: absolute; top: 0;
         width: 100px; height: 100%; z-index: 2;
@@ -383,10 +383,10 @@
     #wikd-homepage-root .exhaust-card-price { font-size: 1.6rem; font-weight: 700; color: var(--color-primary); margin-top: auto; font-family: var(--font-heading); }
     @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    #wikd-homepage-root .gallery-grid { 
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
-        gap: 20px; 
+    #wikd-homepage-root .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
     }
     #wikd-homepage-root .gallery-item { overflow: hidden; border-radius: 8px; cursor: pointer; border: 1px solid var(--color-border); }
     #wikd-homepage-root .gallery-item img { transition: transform 0.4s ease; }
@@ -401,7 +401,7 @@
         height: 600px;
         border-radius: 16px;
     }
-    
+
     #wikd-homepage-root .lightbox {
         position: fixed; inset: 0;
         background: rgba(0,0,0,0.9); z-index: 99999;
@@ -411,15 +411,15 @@
     #wikd-homepage-root .lightbox.active { opacity: 1; pointer-events: all; }
     #wikd-homepage-root .lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
     #wikd-homepage-root .lightbox-content img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
-    #wikd-homepage-root .lightbox-close, 
-    #wikd-homepage-root .lightbox-prev, 
+    #wikd-homepage-root .lightbox-close,
+    #wikd-homepage-root .lightbox-prev,
     #wikd-homepage-root .lightbox-next {
         position: absolute; background: none; border: none;
         color: white; font-size: 3rem; cursor: pointer; z-index: 1;
         transition: color 0.3s ease;
     }
-    #wikd-homepage-root .lightbox-close:hover, 
-    #wikd-homepage-root .lightbox-prev:hover, 
+    #wikd-homepage-root .lightbox-close:hover,
+    #wikd-homepage-root .lightbox-prev:hover,
     #wikd-homepage-root .lightbox-next:hover { color: var(--color-primary); }
     #wikd-homepage-root .lightbox-close { top: 20px; right: 30px; }
     #wikd-homepage-root .lightbox-prev { top: 50%; left: 20px; transform: translateY(-50%); }
@@ -492,17 +492,17 @@
 
     @media (max-width: 1200px) {
         /* Removed .packages-grid here to keep it at 3 columns longer */
-        #wikd-homepage-root .gallery-grid { 
-            grid-template-columns: repeat(2, 1fr); 
+        #wikd-homepage-root .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 
     @media (max-width: 900px) {
         #wikd-homepage-root .hero { padding-top: 100px; }
-        #wikd-homepage-root .hero-wrapper, 
+        #wikd-homepage-root .hero-wrapper,
         #wikd-homepage-root .slideshow-container { aspect-ratio: 16 / 9; }
-        
-        #wikd-homepage-root .map-iframe { 
+
+        #wikd-homepage-root .map-iframe {
             height: 1000px;
         }
     }
@@ -510,21 +510,21 @@
     @media (max-width: 768px) {
         #wikd-homepage-root .section { padding: 40px 5%; }
         #wikd-homepage-root .section-title { margin-bottom: 40px; }
-        
-        #wikd-homepage-root .hero { 
-            padding-top: 80px; 
+
+        #wikd-homepage-root .hero {
+            padding-top: 80px;
             padding-bottom: 40px;
         }
-        
+
         #wikd-homepage-root .hero-wrapper { aspect-ratio: 4 / 3; }
         #wikd-homepage-root .slide-content { padding: 25px; }
         #wikd-homepage-root .slide-title-group { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
         #wikd-homepage-root .btn { padding: 12px 28px; font-size: 16px; }
 
         /* Grid drops to 2 columns here for tablets/mobile */
-        #wikd-homepage-root .packages-grid { 
+        #wikd-homepage-root .packages-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px; 
+            gap: 20px;
         }
         #wikd-homepage-root .gallery-grid {
             grid-template-columns: repeat(2, 1fr);
@@ -532,11 +532,11 @@
         }
         #wikd-homepage-root .package-card { aspect-ratio: 1 / 1; }
         #wikd-homepage-root .package-card-title { font-size: 1.75rem; }
-        
-        #wikd-homepage-root .ticker-wrap::before, 
+
+        #wikd-homepage-root .ticker-wrap::before,
         #wikd-homepage-root .ticker-wrap::after { width: 50px; }
         #wikd-homepage-root .exhaust-card { width: 80vw; max-width: 320px; margin: 0 10px; }
-        
+
         #wikd-homepage-root .map-iframe {
             height: 1000px;
         }
@@ -544,18 +544,18 @@
 
     @media (max-width: 480px) {
         #wikd-homepage-root .section { padding: 30px 4%; }
-        
-        #wikd-homepage-root .hero { 
+
+        #wikd-homepage-root .hero {
             padding-left: 4%;
             padding-right: 4%;
         }
-        
+
         #wikd-homepage-root .hero-wrapper { aspect-ratio: 1 / 1; }
 
         #wikd-homepage-root .slide-content { padding: 20px; }
         #wikd-homepage-root .slide h1 { font-size: clamp(1.8rem, 10vw, 2.5rem); }
         #wikd-homepage-root .btn { padding: 10px 24px; font-size: 15px; }
-        
+
         #wikd-homepage-root .exhaust-card { width: 85vw; margin: 0 8px; }
         #wikd-homepage-root .exhaust-card-title { font-size: 1.1rem; }
         #wikd-homepage-root .exhaust-card-price { font-size: 1.4rem; }
@@ -650,7 +650,7 @@
                             <span class="package-card-link">View Packages &rarr;</span>
                         </div>
                     </a>
-                    
+
                     <!-- NEW: CTS-V Tuning Packages -->
                     <a href="https://www.wikdmotorsports.com/pages/cts-v-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/CTS-V.png?v=1760989861" alt="Cadillac CTS-V Tuning" class="package-card-bg" loading="lazy">
@@ -668,7 +668,7 @@
                             <span class="package-card-link">View Packages &rarr;</span>
                         </div>
                     </a>
-                    
+
                     <!-- NEW: All Tuning/Services -->
                     <a href="https://www.wikdmotorsports.com/pages/tuning" class="package-card" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_6804.jpg?v=1752528576" alt="All Tuning Services" class="package-card-bg" loading="lazy">
@@ -723,7 +723,7 @@
                 </div>
             </div>
             <div class="section-cta">
-                <a href="https://www.wikdmotorsports.com/collections/exhausts" class="btn btn-primary" target="_blank"><span>See All</span></a>
+                <a href="https://www.wikdmotorsports.com/pages/shop" class="btn btn-primary" target="_blank"><span>See All</span></a>
             </div>
         </section>
 
@@ -750,7 +750,7 @@
             </div>
         </section>
     </main>
-    
+
     <!-- FOOTER SECTION -->
     <footer class="wikd-footer">
         <div class="footer-container">
@@ -834,7 +834,7 @@
                         heroWrapper.classList.remove(slideThemes[currentIndex]);
                         slideshow.classList.remove(slideThemes[currentIndex]);
                     }
-                    
+
                     currentIndex = index;
                     const newSlide = slides[index];
                     const newVideo = newSlide.querySelector('video.slide-background');
@@ -864,7 +864,7 @@
                     clearInterval(slideInterval);
                     slideInterval = setInterval(nextSlide, 7000);
                 };
-                
+
                 if (slides.length > 0) {
                     showSlide(0);
                     startInterval();
@@ -973,12 +973,12 @@
 
     // Kick off the check.
     requestAnimationFrame(ensureReady);
-    
+
     // Also listen for Shopify's specific event for when a section is reloaded in the editor.
     document.addEventListener('shopify:section:load', () => {
         // When Shopify reloads the section, the old 'initialized' class is gone,\
         // so our script will re-run correctly for the new content.
-        requestAnimationFrame(ensureReady); 
+        requestAnimationFrame(ensureReady);
     });
 })();
 </script>
