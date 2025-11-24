@@ -298,24 +298,81 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* PRINT OVERRIDES */
+        /* --- PRINT & PDF EXPORT OPTIMIZATION --- */
         @media print {
+            @page {
+                margin: 0; /* Minimize margins */
+                size: auto;
+            }
+
+            /* FORCE BACKGROUND COLORS */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-shadow: none !important;
+            }
+
             body {
                 background-color: #050505 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                color: #ffffff !important;
+                margin: 0;
+                padding: 0;
             }
-            .hero-section { min-height: 120px; margin-bottom: 1rem; }
-            .content-container, .hero-content { max-width: 100% !important; width: 100%; padding: 0; }
-            .chevron-container, .chevron { display: none !important; }
+
+            /* Keep Layout Centered for PDF */
+            .content-container {
+                max-width: 650px !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                padding: 0 1rem 2rem !important;
+            }
+
+            /* Hero adjustments */
+            .hero-section { 
+                min-height: 140px !important; 
+                margin-bottom: 1.5rem !important;
+                border-bottom: 2px solid #FF3B30 !important;
+                background-color: #050505 !important; /* Fallback if img fails */
+            }
+            
+            /* Ensure Title is WHITE not Black */
+            .hero-title { 
+                color: #ffffff !important; 
+                font-size: 2rem !important;
+                -webkit-text-fill-color: #ffffff !important; /* Override gradient */
+                background: none !important;
+                text-shadow: none !important;
+            }
+
+            /* Panels - Solid Dark Backgrounds */
             .glass-panel, .info-card {
+                background-color: #111111 !important;
+                border: 1px solid #333333 !important;
                 break-inside: avoid;
-                border: 1px solid #333;
-                background: #111 !important;
-                box-shadow: none;
             }
-            th, td { padding: 0.25rem 0.5rem; font-size: 10px; }
-            .hero-title { font-size: 1.5rem; color: black; -webkit-text-fill-color: initial; }
+
+            /* Table Readability */
+            th { 
+                background-color: #1a1a1a !important; 
+                color: #cccccc !important;
+                border-bottom: 1px solid #444 !important;
+            }
+            td {
+                color: #ffffff !important;
+                border-bottom: 1px solid #222 !important;
+            }
+            
+            .retail-col { color: #ffffff !important; }
+            .cost-col { color: #FF3B30 !important; }
+            .referral-col { color: #999999 !important; }
+
+            /* Hide UI Elements */
+            .chevron-container, .chevron { display: none !important; }
+            
+            /* Ensure footer is visible */
+            .disclaimer-section {
+                color: #888888 !important;
+            }
         }
     </style>
 </head>
