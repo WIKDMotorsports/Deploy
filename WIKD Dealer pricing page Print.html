@@ -38,14 +38,14 @@
         /* --- HERO SECTION --- */
         .hero-section {
             position: relative;
-            min-height: 160px; 
+            min-height: 200px; 
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             border-bottom: 1px solid var(--color-primary);
             margin-bottom: 1.5rem;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
         }
 
         .hero-bg {
@@ -54,6 +54,7 @@
             object-fit: cover;
             opacity: 0.4;
             z-index: 0;
+            transform: scale(1.22); /* Scale up by 22% */
         }
 
         .hero-overlay {
@@ -63,28 +64,44 @@
             z-index: 1;
         }
 
+        /* Center Block - Fixed Width to ensure alignment */
         .hero-content {
             position: relative;
             z-index: 10;
-            text-align: center;
-            width: 100%;
-            max-width: 650px; 
-            padding: 0 1rem;
+            width: 420px; 
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+        }
+
+        /* LOGO Z-PLANE CONTAINER */
+        /* Keeps logo in flow but allows it to scale visually outside bounds */
+        .logo-container {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .hero-logo {
-            width: 160px; 
-            height: auto;
-            display: block;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            /* Reduced scale by ~22% from 0.45 to 0.35 */
+            transform: translate(-50%, -50%) scale(0.35); 
+            z-index: 20;
         }
 
         .hero-title {
-            font-size: 2.2rem;
+            width: 100%;
+            /* Changed from justify to center to fix the gap */
+            text-align: center;
+            font-size: 3rem;
             font-weight: 700;
             color: white; 
             background: linear-gradient(to bottom, #fff, #999);
@@ -92,22 +109,27 @@
             -webkit-text-fill-color: transparent;
             margin: 0;
             text-shadow: 0 0 20px rgba(255, 59, 48, 0.1);
+            /* Adjusted line-height and letter-spacing for better stacking */
             line-height: 1;
+            letter-spacing: 1px;
         }
 
         .hero-subtitle {
-            font-size: 0.75rem;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7rem;
             color: var(--color-primary);
-            letter-spacing: 3px;
-            font-weight: 600;
-            margin: 0;
-            opacity: 0.9;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            opacity: 1;
+            letter-spacing: 5.5px; 
+            text-transform: uppercase;
         }
 
         /* --- CONTENT CONTAINER --- */
         .content-container {
             width: 100%;
-            max-width: 650px; 
+            max-width: 650px; /* Restored to original compact width */
             margin: 0 auto;
             padding: 0 1rem 3rem;
             position: relative;
@@ -255,18 +277,76 @@
         .data-value { color: white; font-weight: 600; font-family: var(--font-heading); font-size: 0.95rem; }
         .data-value.red { color: var(--color-primary); }
 
+        /* --- DISCLAIMER & FOOTER --- */
         .disclaimer-section {
             margin-top: 2rem;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 1rem;
             color: #777;
-            font-size: 0.7rem;
+            font-size: 0.65rem; /* Reduced font size for two-column layout */
             line-height: 1.5;
             text-align: justify;
         }
 
-        .disclaimer-section p { margin-bottom: 0.5rem; }
+        /* Two-column grid layout for footer */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .footer-text {
+             /* Ensure text takes up available space */
+             flex: 1;
+        }
+
+        .footer-text p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* QR Code Styles */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            /* No top margin or border needed in grid layout */
+        }
+
+        .qr-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            /* Removed white background for blending */
+            padding: 4px;
+            /* Removed box-shadow for cleaner look */
+        }
+
+        .qr-label {
+            font-family: var(--font-heading);
+            color: var(--color-primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-top: 0.25rem;
+            text-align: center;
+        }
         
+        /* Contact Info Bar */
+        .contact-bar {
+            padding-top: 1rem;
+            border-top: 1px border-gray-800;
+            text-align: center;
+            color: #6b7280; /* text-gray-500 */
+            font-size: 0.6rem; /* text-[9px] equivalent */
+            letter-spacing: 0.05em; /* tracking-wider */
+            text-transform: uppercase;
+            margin-top: 1rem;
+            width: 100%; /* Full width below grid */
+        }
+
         .chevron {
             transition: transform 0.3s ease;
             transform: rotate(0deg);
@@ -290,23 +370,32 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Responsive stack for mobile */
+        @media (max-width: 600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .qr-container {
+                align-items: center;
+                margin: 0 auto;
+            }
+        }
+
         /* =========================================
            EXACT LOOK PRINT STYLES
            ========================================= */
         @media print {
-            /* 1. Remove Margins so dark bg hits edge */
             @page {
                 margin: 0;
                 size: auto;
             }
 
-            /* 2. Force Exact Color Reproduction */
             body, html, * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
 
-            /* 3. Re-Apply Dark Backgrounds explicitly */
             body {
                 background-color: #050505 !important;
                 color: #FFFFFF !important;
@@ -314,56 +403,98 @@
             }
 
             .content-container {
-                /* Ensure it stays centered and sized correctly */
                 max-width: 650px !important;
                 margin: 0 auto !important;
                 padding-top: 1rem !important;
             }
 
-            /* 4. Fix Hero Image */
-            .hero-bg {
+            .hero-bg, .hero-overlay {
                 display: block !important;
                 opacity: 0.4 !important;
                 position: absolute !important;
-            }
-            .hero-overlay {
-                display: block !important;
-            }
-            .hero-title {
-                -webkit-text-fill-color: transparent !important; /* Keep gradient */
-                background: linear-gradient(to bottom, #fff, #999) !important;
-                -webkit-background-clip: text !important;
+                transform: scale(1.22) !important; /* Ensure scale is applied in print */
             }
 
-            /* 5. FIX THE GLITCH: Remove Blur, Keep Dark Transparency */
-            /* This prevents PDF renderers from crashing/black-boxing the panels */
+            /* Force Block Layout */
+            .hero-content {
+                width: 420px !important;
+            }
+            .logo-container {
+                height: 80px !important;
+                position: relative !important;
+                width: 100% !important;
+            }
+            .hero-logo {
+                /* Ensure reduced scale is maintained for print (0.35) */
+                transform: translate(-50%, -50%) scale(0.35) !important;
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                width: 100% !important;
+            }
+
+            .hero-title {
+                -webkit-text-fill-color: transparent !important;
+                background: linear-gradient(to bottom, #fff, #999) !important;
+                -webkit-background-clip: text !important;
+                font-size: 3rem !important;
+                /* Ensure print spacing matches screen */
+                text-align: center !important;
+                letter-spacing: 1px !important;
+                line-height: 1 !important;
+                width: 100% !important;
+            }
+            .hero-subtitle {
+                 letter-spacing: 5.5px !important;
+                 width: 100% !important;
+            }
+
             .glass-panel {
                 backdrop-filter: none !important; 
-                background: rgba(17, 17, 17, 1) !important; /* Solid dark fallback */
+                background: rgba(17, 17, 17, 1) !important; 
                 border: 1px solid rgba(255,255,255,0.1) !important;
             }
-            
             .info-card {
                  background: #111111 !important;
                  border: 1px solid rgba(255,255,255,0.1) !important;
             }
 
-            /* 6. Ensure text contrast remains white */
             h1, h2, h3, h4, p, span, td, th {
                 color: #ffffff !important;
             }
-            
             .text-muted, .referral-col, .data-label {
                 color: #9CA3AF !important;
             }
-            
-            .text-\[\#FF3B30\], .cost-col, .data-value.red, th.highlight-red {
+            .text-\[\#FF3B30\], .cost-col, .data-value.red, th.highlight-red, .qr-label {
                 color: #FF3B30 !important;
             }
 
-            /* Hide chevrons for cleaner print */
             .chevron-container {
                 display: none !important;
+            }
+            
+            /* Ensure footer grid layout holds in print */
+            .footer-grid {
+                display: grid !important;
+                grid-template-columns: 1fr auto !important;
+                gap: 2rem !important;
+            }
+            
+            .contact-bar {
+                 position: relative !important;
+                 width: 100% !important;
+                 display: block !important;
+            }
+
+            /* Print-Specific QR Styling */
+            .qr-container {
+                page-break-inside: avoid;
+                margin-top: 0 !important; /* Remove top margin for grid */
+            }
+            /* Ensure QR blends in print too */
+            .qr-image {
+                background: #050505 !important; /* Match page bg */
+                border: none !important;
             }
         }
     </style>
@@ -371,12 +502,16 @@
 <body>
 
     <div class="hero-section">
-        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_EngineBay_1_46d7c3ca-66f2-42ea-972a-9daabcca666c_1600x.jpg?v=1732120285" alt="WIKD Performance Hero" class="hero-bg">
+        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/6-2024_Social_Media_Youtube_Banner.png?v=1763997169" alt="WIKD Performance Hero" class="hero-bg">
         <div class="hero-overlay"></div>
         
         <div class="hero-content">
-            <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/WIKD-Logo-500x500-WHITE.png?v=1733430178" alt="WIKD Logo" class="hero-logo fade-in">
-            <h1 class="hero-title fade-in delay-100">Dealer Pricing</h1>
+            <!-- Logo in its own Z-Plane Container -->
+            <div class="logo-container fade-in">
+                <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/WIKD-Logo-500x500-WHITE.png?v=1733430178" alt="WIKD Logo" class="hero-logo">
+            </div>
+            
+            <h1 class="hero-title fade-in delay-100">DEALER PRICING</h1>
             <p class="hero-subtitle fade-in delay-200">Authorized Vendor Reference</p>
         </div>
     </div>
@@ -391,7 +526,6 @@
                 </div>
                 <div class="flex items-center gap-4 chevron-container">
                     <span class="text-[9px] bg-[#FF3B30]/20 text-[#FF3B30] px-2 py-0.5 rounded uppercase font-bold border border-[#FF3B30]/20 hidden sm:inline-block">Reference</span>
-                    <!-- Chevron Removed -->
                 </div>
             </div>
             <div class="table-responsive" id="tuning-table">
@@ -418,7 +552,6 @@
             <div class="info-card">
                 <h3 onclick="toggleCard(this)">
                     <span>Custom Branded Flash Tunes<sup class="text-[#FF3B30] ml-1">†</sup></span>
-                    <!-- Chevron Removed -->
                 </h3>
                 <div class="card-content">
                     <div class="data-row">
@@ -440,7 +573,6 @@
             <div class="info-card">
                 <h3 onclick="toggleCard(this)">
                     <span>Performance Mod Installation<sup class="text-[#FF3B30] ml-1">‡</sup></span>
-                    <!-- Chevron Removed -->
                 </h3>
                 <div class="card-content">
                     <div class="bg-white/5 p-2 text-center text-[9px] text-gray-400 uppercase font-bold border-b border-white/5 tracking-wider">Labor Rates</div>
@@ -467,23 +599,34 @@
 
         </div>
 
-        <!-- DISCLAIMERS -->
+        <!-- DISCLAIMERS & FOOTER -->
         <div class="disclaimer-section">
-            <p>
-                <strong class="text-[#FF3B30] text-sm mr-1">†</strong> 
-                Listed vehicles are references. Actual suggested retail and cost may vary by year, make, model, drivetrain modifications, and desired tune specifications. Actual cost will be the standard market value less the extended wholesale discount. Listed price does not include costs for ECU unlock or vehicle disassembly for dynamometer tuning if required. These will be billed and given a suggested retail price as necessary.
-            </p>
-            <p>
-                <strong class="text-[#FF3B30] text-sm mr-1">‡</strong> 
-                Will vary on a case by case basis.
-            </p>
-            <p class="mb-4">
-                <strong class="text-[#FF3B30] text-sm mr-1">§</strong> 
-                See Standard Labor Rate Policy on Page 16 of the Wholesale Vendor Agreement.
-            </p>
-            <p class="text-[#FF3B30] italic mb-4">Additional discounts/higher referral bonuses are granted for higher volumes met per billing cycle. Please refer to your dealer agreement.</p>
-            
-            <div class="pt-4 border-t border-gray-800 text-center text-gray-500 text-[9px] tracking-wider uppercase">
+            <div class="footer-grid">
+                <div class="footer-text">
+                    <p>
+                        <strong class="text-[#FF3B30] text-sm mr-1">†</strong> 
+                        Listed vehicles are references. Actual suggested retail and cost may vary by year, make, model, drivetrain modifications, and desired tune specifications. Actual cost will be the standard market value less the extended wholesale discount. Listed price does not include costs for ECU unlock or vehicle disassembly for dynamometer tuning if required. These will be billed and given a suggested retail price as necessary.
+                    </p>
+                    <p>
+                        <strong class="text-[#FF3B30] text-sm mr-1">‡</strong> 
+                        Will vary on a case by case basis.
+                    </p>
+                    <p class="mb-2">
+                        <strong class="text-[#FF3B30] text-sm mr-1">§</strong> 
+                        See Standard Labor Rate Policy on Page 16 of the Wholesale Vendor Agreement.
+                    </p>
+                    <p class="text-[#FF3B30] italic">Additional discounts/higher referral bonuses are granted for higher volumes met per billing cycle. Please refer to your dealer agreement.</p>
+                </div>
+                
+                <!-- QR Code Container -->
+                <div class="qr-container">
+                    <!-- QR Code linking to the specified URL with page background color for blending -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.wikdmotorsports.com/pages/authorized-vendor-reference&color=FF3B30&bgcolor=050505&margin=0" alt="Scan for Digital Reference" class="qr-image">
+                    <span class="qr-label">Scan For Digital Reference</span>
+                </div>
+            </div>
+
+            <div class="contact-bar">
                 <p>WIKD Motorsports | 417 Metro Park Dr. McKinney, TX, 75071 | (844) 232-9453 | sales@wikdmotorsports.com</p>
             </div>
         </div>
@@ -527,7 +670,6 @@
             const chevron = header.querySelector('.chevron');
             
             content.classList.toggle('collapsed');
-            // Safe check for chevron before toggling
             if (chevron) chevron.classList.toggle('closed');
         }
 
@@ -536,7 +678,6 @@
             const chevron = header.querySelector('.chevron');
             
             content.classList.toggle('collapsed');
-            // Safe check for chevron before toggling
             if (chevron) chevron.classList.toggle('closed');
         }
 
