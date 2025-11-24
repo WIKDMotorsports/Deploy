@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIKD Dealer Pricing Reference</title>
+    <title>WIKD Dealer Pricing Reference (Light)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -11,12 +11,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-bg: #050505;
-            --color-surface: #111111;
-            --color-surface-highlight: #1a1a1a;
-            --color-primary: #FF3B30; /* WIKD Red */
-            --color-text-main: #FFFFFF;
-            --color-text-muted: #9CA3AF;
+            /* LIGHT MODE VARIABLES */
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-surface-highlight: #F3F4F6;
+            --color-primary: #FF3B30; /* WIKD Red stays the same */
+            --color-text-main: #111827; /* Deep Black/Gray */
+            --color-text-muted: #6B7280; /* Medium Gray */
+            --color-border: #E5E7EB; /* Light Gray Border */
             --font-heading: 'Rajdhani', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
@@ -54,17 +56,18 @@
             object-fit: cover;
             opacity: 0.4;
             z-index: 0;
-            transform: scale(1.22); /* Scale up by 22% */
+            transform: scale(1.22);
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.9), rgba(5,5,5,0.7));
+            /* Light Mode: White Gradient Overlay - Opacity Reduced by 50% */
+            background: linear-gradient(to bottom, rgba(255,255,255,0.475), rgba(255,255,255,0.4));
             z-index: 1;
         }
 
-        /* Center Block - Fixed Width to ensure alignment */
+        /* Center Block */
         .hero-content {
             position: relative;
             z-index: 10;
@@ -76,7 +79,6 @@
         }
 
         /* LOGO Z-PLANE CONTAINER */
-        /* Keeps logo in flow but allows it to scale visually outside bounds */
         .logo-container {
             position: relative;
             width: 100%;
@@ -92,24 +94,25 @@
             width: 100%;
             top: 50%;
             left: 50%;
-            /* Reduced scale by ~22% from 0.45 to 0.35 */
             transform: translate(-50%, -50%) scale(0.35); 
             z-index: 20;
+            /* LIGHT MODE FIX: Invert white logo to black */
+            filter: invert(1); 
         }
 
         .hero-title {
             width: 100%;
-            /* Changed from justify to center to fix the gap */
             text-align: center;
             font-size: 3rem;
-            font-weight: 700;
-            color: white; 
-            background: linear-gradient(to bottom, #fff, #999);
+            font-weight: 800;
+            /* Light Mode Text Colors */
+            color: var(--color-text-main); 
+            background: linear-gradient(to bottom, #000, #333);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
-            text-shadow: 0 0 20px rgba(255, 59, 48, 0.1);
-            /* Adjusted line-height and letter-spacing for better stacking */
+            /* Removed shadow for clean light look */
+            text-shadow: none; 
             line-height: 1;
             letter-spacing: 1px;
         }
@@ -129,30 +132,31 @@
         /* --- CONTENT CONTAINER --- */
         .content-container {
             width: 100%;
-            max-width: 650px; /* Restored to original compact width */
+            max-width: 650px; 
             margin: 0 auto;
             padding: 0 1rem 3rem;
             position: relative;
             z-index: 20;
         }
 
-        /* --- PANELS --- */
+        /* --- PANELS (Light Mode) --- */
         .glass-panel {
-            background: rgba(17, 17, 17, 0.9);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--color-border);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            /* Softer shadow for light mode */
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
             margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
 
         .panel-header {
             padding: 0.75rem 1.5rem;
-            background: rgba(255, 59, 48, 0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: #F3F4F6; /* Light Gray */
+            border-bottom: 1px solid var(--color-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -161,12 +165,13 @@
         }
 
         .panel-header:hover {
-            background: rgba(255, 59, 48, 0.08);
+            background: #E5E7EB;
         }
 
         .panel-header h2 {
             font-size: 1.1rem;
             letter-spacing: 0.5px;
+            color: var(--color-text-main);
         }
 
         .table-responsive {
@@ -189,7 +194,7 @@
         }
 
         th {
-            background-color: #1a1a1a;
+            background-color: #F9FAFB;
             color: var(--color-text-muted);
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -197,29 +202,29 @@
             padding: 0.6rem 1rem;
             text-align: left;
             font-weight: 600;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--color-border);
             white-space: nowrap;
         }
 
         th.highlight-red { color: var(--color-primary); }
-        th.highlight-white { color: white; }
+        th.highlight-white { color: var(--color-text-main); }
 
         td {
             padding: 0.5rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: white;
+            border-bottom: 1px solid #F3F4F6;
+            color: var(--color-text-main);
             font-size: 0.85rem;
         }
 
         tr:hover td {
-            background-color: rgba(255, 59, 48, 0.02);
+            background-color: #F9FAFB;
         }
 
         .cost-col { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); font-size: 0.95rem; }
-        .retail-col { font-family: var(--font-heading); color: white; font-size: 0.95rem; }
+        .retail-col { font-family: var(--font-heading); color: var(--color-text-main); font-size: 0.95rem; }
         .referral-col { font-family: var(--font-heading); color: var(--color-text-muted); font-size: 0.95rem; }
 
-        /* --- INFO GRID --- */
+        /* --- INFO GRID (Light Mode) --- */
         .info-grid {
             display: flex;
             flex-direction: column;
@@ -227,20 +232,21 @@
         }
 
         .info-card {
-            background: var(--color-surface);
+            background: var(--color-bg);
             border: 1px solid var(--color-border);
             border-radius: 8px;
             padding: 0;
             overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .info-card h3 {
-            background: rgba(255,255,255,0.03);
+            background: #F9FAFB;
             padding: 0.75rem 1.5rem;
             margin: 0;
             border-bottom: 1px solid var(--color-border);
             font-size: 1rem;
-            color: white;
+            color: var(--color-text-main);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -249,7 +255,7 @@
         }
         
         .info-card h3:hover {
-             background: rgba(255,255,255,0.06);
+             background: #F3F4F6;
         }
 
         .card-content {
@@ -269,26 +275,25 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid #F3F4F6;
         }
         .data-row:last-child { border-bottom: none; }
 
         .data-label { color: var(--color-text-muted); font-size: 0.8rem; }
-        .data-value { color: white; font-weight: 600; font-family: var(--font-heading); font-size: 0.95rem; }
+        .data-value { color: var(--color-text-main); font-weight: 600; font-family: var(--font-heading); font-size: 0.95rem; }
         .data-value.red { color: var(--color-primary); }
 
         /* --- DISCLAIMER & FOOTER --- */
         .disclaimer-section {
             margin-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid var(--color-border);
             padding-top: 1rem;
-            color: #777;
-            font-size: 0.65rem; /* Reduced font size for two-column layout */
+            color: var(--color-text-muted);
+            font-size: 0.65rem;
             line-height: 1.5;
             text-align: justify;
         }
 
-        /* Two-column grid layout for footer */
         .footer-grid {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -296,14 +301,8 @@
             align-items: start;
         }
 
-        .footer-text {
-             /* Ensure text takes up available space */
-             flex: 1;
-        }
-
-        .footer-text p {
-            margin-bottom: 0.5rem;
-        }
+        .footer-text { flex: 1; }
+        .footer-text p { margin-bottom: 0.5rem; }
 
         /* QR Code Styles */
         .qr-container {
@@ -311,16 +310,12 @@
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-            /* No top margin or border needed in grid layout */
         }
 
         .qr-image {
             width: 100px;
             height: 100px;
-            border-radius: 8px;
-            /* Removed white background for blending */
-            padding: 4px;
-            /* Removed box-shadow for cleaner look */
+            /* Removed border-radius, padding, and border */
         }
 
         .qr-label {
@@ -334,17 +329,16 @@
             text-align: center;
         }
         
-        /* Contact Info Bar */
         .contact-bar {
             padding-top: 1rem;
-            border-top: 1px border-gray-800;
+            border-top: 1px solid var(--color-border);
             text-align: center;
-            color: #6b7280; /* text-gray-500 */
-            font-size: 0.6rem; /* text-[9px] equivalent */
-            letter-spacing: 0.05em; /* tracking-wider */
+            color: var(--color-text-muted);
+            font-size: 0.6rem;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             margin-top: 1rem;
-            width: 100%; /* Full width below grid */
+            width: 100%;
         }
 
         .chevron {
@@ -355,6 +349,19 @@
         }
         .chevron.closed {
             transform: rotate(-90deg);
+        }
+
+        /* --- PREMIUM NOISE TEXTURE --- */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.035; /* Slightly lower opacity for light mode */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         .fade-in {
@@ -370,26 +377,16 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive stack for mobile */
         @media (max-width: 600px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            .qr-container {
-                align-items: center;
-                margin: 0 auto;
-            }
+            .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .qr-container { align-items: center; margin: 0 auto; }
         }
 
         /* =========================================
-           EXACT LOOK PRINT STYLES
+           EXACT LOOK PRINT STYLES (Light Mode)
            ========================================= */
         @media print {
-            @page {
-                margin: 0;
-                size: auto;
-            }
+            @page { margin: 0; size: auto; }
 
             body, html, * {
                 -webkit-print-color-adjust: exact !important;
@@ -397,8 +394,8 @@
             }
 
             body {
-                background-color: #050505 !important;
-                color: #FFFFFF !important;
+                background-color: #FFFFFF !important;
+                color: #111827 !important;
                 margin: 0;
             }
 
@@ -408,37 +405,35 @@
                 padding-top: 1rem !important;
             }
 
+            /* Keep the light overlay */
             .hero-bg, .hero-overlay {
                 display: block !important;
                 opacity: 0.4 !important;
                 position: absolute !important;
-                transform: scale(1.22) !important; /* Ensure scale is applied in print */
+                transform: scale(1.22) !important;
+            }
+            
+            /* Ensure gradient overlay works in print - Opacity Reduced by 50% */
+            .hero-overlay {
+                background: linear-gradient(to bottom, rgba(255,255,255,0.475), rgba(255,255,255,0.4)) !important;
             }
 
-            /* Force Block Layout */
-            .hero-content {
-                width: 420px !important;
-            }
-            .logo-container {
-                height: 80px !important;
-                position: relative !important;
-                width: 100% !important;
-            }
+            .hero-content { width: 420px !important; }
+            .logo-container { height: 80px !important; position: relative !important; width: 100% !important; }
+            
             .hero-logo {
-                /* Ensure reduced scale is maintained for print (0.35) */
                 transform: translate(-50%, -50%) scale(0.35) !important;
                 position: absolute !important;
                 top: 50% !important;
                 left: 50% !important;
                 width: 100% !important;
+                filter: invert(1) !important; /* Keep logo black in print */
             }
 
             .hero-title {
-                -webkit-text-fill-color: transparent !important;
-                background: linear-gradient(to bottom, #fff, #999) !important;
-                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: #111827 !important; /* Solid dark for print readability */
+                background: none !important;
                 font-size: 3rem !important;
-                /* Ensure print spacing matches screen */
                 text-align: center !important;
                 letter-spacing: 1px !important;
                 line-height: 1 !important;
@@ -447,66 +442,51 @@
             .hero-subtitle {
                  letter-spacing: 5.5px !important;
                  width: 100% !important;
+                 color: #FF3B30 !important;
             }
 
             .glass-panel {
                 backdrop-filter: none !important; 
-                background: rgba(17, 17, 17, 1) !important; 
-                border: 1px solid rgba(255,255,255,0.1) !important;
+                background: #FFFFFF !important; 
+                border: 1px solid #E5E7EB !important;
             }
             .info-card {
-                 background: #111111 !important;
-                 border: 1px solid rgba(255,255,255,0.1) !important;
+                 background: #FFFFFF !important;
+                 border: 1px solid #E5E7EB !important;
             }
 
-            h1, h2, h3, h4, p, span, td, th {
-                color: #ffffff !important;
-            }
-            .text-muted, .referral-col, .data-label {
-                color: #9CA3AF !important;
-            }
-            .text-\[\#FF3B30\], .cost-col, .data-value.red, th.highlight-red, .qr-label {
-                color: #FF3B30 !important;
-            }
+            /* Text Colors for Print */
+            h1, h2, h3, h4, p, span, td, th { color: #111827 !important; }
+            .text-muted, .referral-col, .data-label, .contact-bar, .disclaimer-section { color: #6B7280 !important; }
+            .text-\[\#FF3B30\], .cost-col, .data-value.red, th.highlight-red, .qr-label { color: #FF3B30 !important; }
 
-            .chevron-container {
-                display: none !important;
-            }
+            .chevron-container { display: none !important; }
             
-            /* Ensure footer grid layout holds in print */
-            .footer-grid {
-                display: grid !important;
-                grid-template-columns: 1fr auto !important;
-                gap: 2rem !important;
-            }
-            
-            .contact-bar {
-                 position: relative !important;
-                 width: 100% !important;
-                 display: block !important;
-            }
+            .footer-grid { display: grid !important; grid-template-columns: 1fr auto !important; gap: 2rem !important; }
+            .contact-bar { position: relative !important; width: 100% !important; display: block !important; }
 
-            /* Print-Specific QR Styling */
-            .qr-container {
-                page-break-inside: avoid;
-                margin-top: 0 !important; /* Remove top margin for grid */
-            }
-            /* Ensure QR blends in print too */
+            .qr-container { page-break-inside: avoid; margin-top: 0 !important; }
             .qr-image {
-                background: #050505 !important; /* Match page bg */
-                border: none !important;
+                background: #FFFFFF !important;
+                /* Removed border for print */
             }
+
+            /* Hide Noise for Print */
+            .noise-overlay { display: none !important; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
 
     <div class="hero-section">
         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/6-2024_Social_Media_Youtube_Banner.png?v=1763997169" alt="WIKD Performance Hero" class="hero-bg">
         <div class="hero-overlay"></div>
         
         <div class="hero-content">
-            <!-- Logo in its own Z-Plane Container -->
+            <!-- Logo (Inverted to Black via CSS) -->
             <div class="logo-container fade-in">
                 <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/WIKD-Logo-500x500-WHITE.png?v=1733430178" alt="WIKD Logo" class="hero-logo">
             </div>
@@ -522,7 +502,7 @@
         <div class="glass-panel collapsible-section">
             <div class="panel-header" onclick="toggleTable(this)">
                 <div class="flex items-center gap-2">
-                    <h2 class="text-white m-0 font-bold">ECU Performance Tuning<sup class="text-[#FF3B30] ml-1">†</sup></h2>
+                    <h2 class="text-[#111827] m-0 font-bold">ECU Performance Tuning<sup class="text-[#FF3B30] ml-1">†</sup></h2>
                 </div>
                 <div class="flex items-center gap-4 chevron-container">
                     <span class="text-[9px] bg-[#FF3B30]/20 text-[#FF3B30] px-2 py-0.5 rounded uppercase font-bold border border-[#FF3B30]/20 hidden sm:inline-block">Reference</span>
@@ -575,7 +555,7 @@
                     <span>Performance Mod Installation<sup class="text-[#FF3B30] ml-1">‡</sup></span>
                 </h3>
                 <div class="card-content">
-                    <div class="bg-white/5 p-2 text-center text-[9px] text-gray-400 uppercase font-bold border-b border-white/5 tracking-wider">Labor Rates</div>
+                    <div class="bg-[#F3F4F6] p-2 text-center text-[9px] text-gray-500 uppercase font-bold border-b border-[#E5E7EB] tracking-wider">Labor Rates</div>
                     <div class="data-row">
                         <span class="data-label">Your Cost</span>
                         <span class="data-value red">Extended Billed Rate<sup class="text-[#FF3B30] ml-1">§</sup></span>
@@ -585,7 +565,7 @@
                         <span class="data-value">Standard Billed Rate</span>
                     </div>
 
-                    <div class="bg-white/5 p-2 text-center text-[9px] text-gray-400 uppercase font-bold border-y border-white/5 tracking-wider">Parts Pricing</div>
+                    <div class="bg-[#F3F4F6] p-2 text-center text-[9px] text-gray-500 uppercase font-bold border-y border-[#E5E7EB] tracking-wider">Parts Pricing</div>
                     <div class="data-row">
                         <span class="data-label">Your Cost</span>
                         <span class="data-value red">Cost + 15%</span>
@@ -618,10 +598,10 @@
                     <p class="text-[#FF3B30] italic">Additional discounts/higher referral bonuses are granted for higher volumes met per billing cycle. Please refer to your dealer agreement.</p>
                 </div>
                 
-                <!-- QR Code Container -->
+                <!-- QR Code Container (Light Mode QR) -->
                 <div class="qr-container">
-                    <!-- QR Code linking to the specified URL with page background color for blending -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.wikdmotorsports.com/pages/authorized-vendor-reference&color=FF3B30&bgcolor=050505&margin=0" alt="Scan for Digital Reference" class="qr-image">
+                    <!-- Changed bgcolor to FFFFFF for Light Mode -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.wikdmotorsports.com/pages/authorized-vendor-reference&color=FF3B30&bgcolor=FFFFFF&margin=0" alt="Scan for Digital Reference" class="qr-image">
                     <span class="qr-label">Scan For Digital Reference</span>
                 </div>
             </div>
