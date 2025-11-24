@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIKD Dealer Pricing Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-bg: #050505;
+            --color-surface: #111111;
+            --color-surface-highlight: #1a1a1a;
+            --color-primary: #FF3B30; /* WIKD Red */
+            --color-text-main: #FFFFFF;
+            --color-text-muted: #9CA3AF;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            font-family: var(--font-body);
+            margin: 0;
+            overflow-x: hidden;
+            font-size: 12px; /* Reduced base font size */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+        }
+
+        /* --- HERO SECTION (ULTRA COMPACT) --- */
+        .hero-section {
+            position: relative;
+            height: 160px; /* Significantly reduced */
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom: 1px solid var(--color-primary);
+            margin-bottom: 1.5rem; /* Reduced margin */
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.8), var(--color-bg));
+            z-index: 1;
+        }
+
+        .hero-logo {
+            width: 120px; /* Increased from 80px */
+            height: auto;
+            margin-top: -15px;    /* Pull up to fit in container */
+            margin-bottom: -10px; /* Pull text up closer */
+            z-index: 10;
+            position: relative;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 2.25rem; /* Reduced */
+            font-weight: 700;
+            background: linear-gradient(to bottom, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0;
+            text-shadow: 0 0 20px rgba(255, 59, 48, 0.1);
+            line-height: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        /* --- CONTENT LAYOUT --- */
+        .content-container {
+            max-width: 1000px; /* More constrained width for density */
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* --- TABLES & PANELS --- */
+        .glass-panel {
+            background: rgba(17, 17, 17, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; /* Tighter radius */
+            overflow: hidden;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1.5rem; /* Reduced gap */
+            transition: all 0.3s ease;
+        }
+
+        .panel-header {
+            padding: 0.75rem 1.5rem; /* Compact padding */
+            background: rgba(255, 59, 48, 0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .panel-header:hover {
+            background: rgba(255, 59, 48, 0.08);
+        }
+
+        .panel-header h2 {
+            font-size: 1.1rem; /* Smaller heading */
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 1;
+            max-height: 2000px;
+        }
+        
+        .table-responsive.collapsed {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background-color: #1a1a1a;
+            color: var(--color-text-muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 1.5rem; /* Compact padding */
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th.highlight-red { color: var(--color-primary); }
+        th.highlight-white { color: white; }
+
+        td {
+            padding: 0.4rem 1.5rem; /* Very compact padding */
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 59, 48, 0.02);
+        }
+
+        .cost-col { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); font-size: 0.95rem; }
+        .retail-col { font-family: var(--font-heading); color: white; font-size: 0.95rem; }
+        .referral-col { font-family: var(--font-heading); color: var(--color-text-muted); font-size: 0.95rem; }
+
+        /* --- GRID SECTIONS --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Smaller min-width */
+            gap: 1.5rem; /* Reduced gap */
+        }
+
+        .info-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+            height: fit-content;
+        }
+
+        .info-card h3 {
+            background: rgba(255,255,255,0.03);
+            padding: 0.6rem 1.5rem;
+            margin: 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        
+        .info-card h3:hover {
+             background: rgba(255,255,255,0.06);
+        }
+
+        .card-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 1;
+            max-height: 1000px;
+        }
+        
+        .card-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 1.5rem; /* Compact */
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .data-row:last-child { border-bottom: none; }
+
+        .data-label { color: var(--color-text-muted); font-size: 0.8rem; }
+        .data-value { color: white; font-weight: 600; font-family: var(--font-heading); font-size: 0.95rem; }
+        .data-value.red { color: var(--color-primary); }
+
+        .disclaimer-section {
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1rem;
+            color: #777;
+            font-size: 0.7rem; /* Tiny legalese */
+            line-height: 1.5;
+            max-width: 100%;
+        }
+
+        .disclaimer-section p { margin-bottom: 0.5rem; }
+        
+        /* Chevron Rotation */
+        .chevron {
+            transition: transform 0.3s ease;
+            transform: rotate(0deg);
+            color: var(--color-primary);
+            font-size: 0.8rem;
+        }
+        .chevron.closed {
+            transform: rotate(-90deg);
+        }
+
+        /* Fade In Animation */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PRINT SPECIFIC OVERRIDES */
+        @media print {
+            body {
+                background-color: #050505 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .hero-section {
+                height: 100px; /* Even smaller for print */
+                min-height: 100px;
+                margin-bottom: 1rem;
+            }
+            .hero-title { font-size: 1.8rem; color: black; -webkit-text-fill-color: initial; }
+            .chevron-container, .chevron { display: none !important; }
+            .glass-panel, .info-card {
+                break-inside: avoid;
+                border: 1px solid #333;
+                background: #111 !important;
+            }
+            .content-container { padding: 0; width: 100%; max-width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section { height: 140px; min-height: 140px; }
+            .hero-logo { width: 60px; }
+            .content-container { padding: 0 15px 40px; }
+            .info-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .hero-title { font-size: 1.8rem; }
+            .panel-header { padding: 1rem; }
+            th, td, .data-row { padding: 0.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_EngineBay_1_46d7c3ca-66f2-42ea-972a-9daabcca666c_1600x.jpg?v=1732120285" alt="WIKD Performance Hero" class="hero-bg">
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/WIKD-Logo-500x500-WHITE.png?v=1733430178" alt="WIKD Logo" class="hero-logo fade-in">
+            <h1 class="hero-title fade-in delay-100">Dealer Pricing</h1>
+            <p class="hero-subtitle fade-in delay-200">Authorized Vendor Reference</p>
+        </div>
+    </div>
+
+    <div class="content-container fade-in delay-300">
+        
+        <!-- MAIN PRICING TABLE -->
+        <div class="glass-panel collapsible-section">
+            <div class="panel-header" onclick="toggleTable(this)">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-white m-0 font-bold">ECU Performance Tuning Packages<sup class="text-[#FF3B30] ml-1">†</sup></h2>
+                </div>
+                <div class="flex items-center gap-4 chevron-container">
+                    <span class="text-[10px] bg-[#FF3B30]/20 text-[#FF3B30] px-2 py-0.5 rounded uppercase font-bold border border-[#FF3B30]/20 hidden sm:inline-block">Dealer Reference</span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+            </div>
+            <div class="table-responsive" id="tuning-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Vehicle</th>
+                            <th class="highlight-white">Market Retail Price</th>
+                            <th class="highlight-red">Your Cost</th>
+                            <th>Referral Bonus</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pricing-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ADDITIONAL SERVICES GRID -->
+        <div class="info-grid mb-8">
+            
+            <!-- Custom Tunes -->
+            <div class="info-card">
+                <h3 onclick="toggleCard(this)">
+                    <span>Custom Branded Flash Tunes<sup class="text-[#FF3B30] ml-1">†</sup></span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </h3>
+                <div class="card-content">
+                    <div class="data-row">
+                        <span class="data-label">Development Cost</span>
+                        <span class="data-value red">From $1,449.28</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Cost Per Use</span>
+                        <span class="data-value">From $700</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Suggested Retail</span>
+                        <span class="data-value">From $1,999.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Installation -->
+            <div class="info-card">
+                <h3 onclick="toggleCard(this)">
+                    <span>Performance Mod Installation<sup class="text-[#FF3B30] ml-1">‡</sup></span>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </h3>
+                <div class="card-content">
+                    <div class="bg-white/5 p-2 text-center text-[10px] text-gray-400 uppercase font-bold border-b border-white/5 tracking-wider">Labor Rates</div>
+                    <div class="data-row">
+                        <span class="data-label">Your Cost</span>
+                        <span class="data-value red">Extended Billed Rate<sup class="text-[#FF3B30] ml-1">§</sup></span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Suggested Retail</span>
+                        <span class="data-value">Standard Billed Rate</span>
+                    </div>
+
+                    <div class="bg-white/5 p-2 text-center text-[10px] text-gray-400 uppercase font-bold border-y border-white/5 tracking-wider">Parts Pricing</div>
+                    <div class="data-row">
+                        <span class="data-label">Your Cost</span>
+                        <span class="data-value red">Cost + 15%</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Suggested Retail</span>
+                        <span class="data-value">Cost + 25%</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DISCLAIMERS -->
+        <div class="disclaimer-section">
+            <p>
+                <strong class="text-[#FF3B30] text-sm mr-1">†</strong> 
+                Listed vehicles are references. Actual suggested retail and cost may vary by year, make, model, drivetrain modifications, and desired tune specifications. Actual cost will be the standard market value less the extended wholesale discount. Listed price does not include costs for ECU unlock or vehicle disassembly for dynamometer tuning if required. These will be billed and given a suggested retail price as necessary.
+            </p>
+            <p>
+                <strong class="text-[#FF3B30] text-sm mr-1">‡</strong> 
+                Will vary on a case by case basis.
+            </p>
+            <p class="mb-4">
+                <strong class="text-[#FF3B30] text-sm mr-1">§</strong> 
+                See Standard Labor Rate Policy on Page 16 of the Wholesale Vendor Agreement.
+            </p>
+            <p class="text-[#FF3B30] italic mb-4">Additional discounts/higher referral bonuses are granted for higher volumes met per billing cycle. Please refer to your dealer agreement.</p>
+            
+            <div class="pt-4 border-t border-gray-800 text-center text-gray-500 text-[10px] tracking-wider uppercase">
+                <p>WIKD Motorsports | 417 Metro Park Dr. McKinney, TX, 75071 | (844) 232-9453 | sales@wikdmotorsports.com</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data Source
+        const pricingData = [
+            { name: "BMW B58 (G8X, Supra)", retail: 3199.00, cost: 2319.28, referral: 559.83 },
+            { name: "Mercedes-AMG 4.0TT", retail: 2499.00, cost: 1811.78, referral: 437.33 },
+            { name: "McLaren 720s", retail: 3999.00, cost: 2899.28, referral: 699.83 },
+            { name: "McLaren 765lt", retail: 4999.00, cost: 3624.28, referral: 874.83 },
+            { name: "Lamborghini Aventador", retail: 2999.00, cost: 2174.28, referral: 524.83 },
+            { name: "Lamborghini Huracan", retail: 2999.00, cost: 2174.28, referral: 524.83 },
+            { name: "Audi R8 V10 (G3)", retail: 2799.00, cost: 2029.28, referral: 489.83 },
+            { name: "Porsche 911 Turbo S (992)", retail: 2999.00, cost: 2174.28, referral: 524.83 },
+            { name: "Porsche 911 GT3 RS (992)", retail: 6500.00, cost: 4712.50, referral: 1137.50 },
+            { name: "Ferrari 488 GTB", retail: 4499.00, cost: 3261.78, referral: 787.33 },
+            { name: "Ferrari SF90", retail: 6499.00, cost: 4711.78, referral: 1137.33 }
+        ];
+
+        function init() {
+            const tbody = document.getElementById('pricing-tbody');
+            
+            pricingData.forEach((car, index) => {
+                // Populate Table
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${car.name}</td>
+                    <td class="retail-col">$${car.retail.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="cost-col">$${car.cost.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="referral-col">$${car.referral.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function toggleTable(header) {
+            const content = document.getElementById('tuning-table');
+            const chevron = header.querySelector('.chevron');
+            
+            content.classList.toggle('collapsed');
+            chevron.classList.toggle('closed');
+        }
+
+        function toggleCard(header) {
+            const content = header.nextElementSibling;
+            const chevron = header.querySelector('.chevron');
+            
+            content.classList.toggle('collapsed');
+            chevron.classList.toggle('closed');
+        }
+
+        // Run Init
+        init();
+    </script>
+
+</body>
+</html>
