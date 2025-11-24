@@ -27,7 +27,7 @@
             font-family: var(--font-body);
             margin: 0;
             overflow-x: hidden;
-            font-size: 12px; /* Reduced base font size */
+            font-size: 11px; /* Slightly tighter for mobile-width fit */
         }
 
         h1, h2, h3, h4 {
@@ -35,78 +35,85 @@
             text-transform: uppercase;
         }
 
-        /* --- HERO SECTION (ULTRA COMPACT) --- */
+        /* --- HERO SECTION --- */
         .hero-section {
             position: relative;
-            height: 160px; /* Significantly reduced */
-            min-height: 160px;
+            /* Height adapts to content but stays compact */
+            min-height: 180px; 
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             border-bottom: 1px solid var(--color-primary);
-            margin-bottom: 1.5rem; /* Reduced margin */
+            margin-bottom: 1.5rem;
+            padding: 1rem 0;
         }
 
         .hero-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover;
-            opacity: 0.5;
+            opacity: 0.4;
             z-index: 0;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.8), var(--color-bg));
+            background: linear-gradient(to bottom, rgba(5,5,5,0.9), rgba(5,5,5,0.7));
             z-index: 1;
-        }
-
-        .hero-logo {
-            width: 120px; /* Increased from 80px */
-            height: auto;
-            margin-top: -15px;    /* Pull up to fit in container */
-            margin-bottom: -10px; /* Pull text up closer */
-            z-index: 10;
-            position: relative;
         }
 
         .hero-content {
             position: relative;
             z-index: 10;
             text-align: center;
-            padding: 0 20px;
+            /* Constrain content width to match body */
+            width: 100%;
+            max-width: 650px; 
+            padding: 0 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            gap: 0.25rem; /* Clean vertical rhythm */
+        }
+
+        /* Balanced Logo/Title Scaling */
+        .hero-logo {
+            width: 140px; 
+            height: auto;
+            display: block;
+            margin-bottom: 0.25rem;
         }
 
         .hero-title {
-            font-size: 2.25rem; /* Reduced */
+            font-size: 2rem;
             font-weight: 700;
             background: linear-gradient(to bottom, #fff, #999);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0;
+            margin: 0;
             text-shadow: 0 0 20px rgba(255, 59, 48, 0.1);
             line-height: 1;
         }
 
         .hero-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--color-primary);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             font-weight: 600;
-            margin-bottom: 0;
+            margin: 0;
             opacity: 0.9;
         }
 
-        /* --- CONTENT LAYOUT --- */
+        /* --- CENTERED CONTENT LAYOUT --- */
         .content-container {
-            max-width: 1000px; /* More constrained width for density */
+            /* Mobile-first centered column */
+            width: 100%;
+            max-width: 650px; 
             margin: 0 auto;
-            padding: 0 20px 40px;
+            padding: 0 1rem 3rem;
             position: relative;
             z-index: 20;
         }
@@ -117,15 +124,15 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px; /* Tighter radius */
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-            margin-bottom: 1.5rem; /* Reduced gap */
+            margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
 
         .panel-header {
-            padding: 0.75rem 1.5rem; /* Compact padding */
+            padding: 0.75rem 1.25rem;
             background: rgba(255, 59, 48, 0.05);
             border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex;
@@ -140,7 +147,8 @@
         }
 
         .panel-header h2 {
-            font-size: 1.1rem; /* Smaller heading */
+            font-size: 1rem;
+            letter-spacing: 0.5px;
         }
 
         .table-responsive {
@@ -156,47 +164,50 @@
             overflow: hidden;
         }
 
+        /* Tight table spacing for narrow column */
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px;
+            min-width: 100%; /* Force fit */
         }
 
         th {
             background-color: #1a1a1a;
             color: var(--color-text-muted);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 0.5rem 1.5rem; /* Compact padding */
+            padding: 0.5rem 0.75rem; /* Very tight padding */
             text-align: left;
             font-weight: 600;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
         }
 
         th.highlight-red { color: var(--color-primary); }
         th.highlight-white { color: white; }
 
         td {
-            padding: 0.4rem 1.5rem; /* Very compact padding */
+            padding: 0.4rem 0.75rem;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             color: white;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         tr:hover td {
             background-color: rgba(255, 59, 48, 0.02);
         }
 
-        .cost-col { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); font-size: 0.95rem; }
-        .retail-col { font-family: var(--font-heading); color: white; font-size: 0.95rem; }
-        .referral-col { font-family: var(--font-heading); color: var(--color-text-muted); font-size: 0.95rem; }
+        .cost-col { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); font-size: 0.9rem; }
+        .retail-col { font-family: var(--font-heading); color: white; font-size: 0.9rem; }
+        .referral-col { font-family: var(--font-heading); color: var(--color-text-muted); font-size: 0.9rem; }
 
-        /* --- GRID SECTIONS --- */
+        /* --- STACKED CARDS --- */
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Smaller min-width */
-            gap: 1.5rem; /* Reduced gap */
+            /* Single column stack for mobile feel */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .info-card {
@@ -205,15 +216,14 @@
             border-radius: 8px;
             padding: 0;
             overflow: hidden;
-            height: fit-content;
         }
 
         .info-card h3 {
             background: rgba(255,255,255,0.03);
-            padding: 0.6rem 1.5rem;
+            padding: 0.6rem 1.25rem;
             margin: 0;
             border-bottom: 1px solid var(--color-border);
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: white;
             cursor: pointer;
             display: flex;
@@ -241,23 +251,24 @@
         .data-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 1.5rem; /* Compact */
+            align-items: center;
+            padding: 0.5rem 1.25rem;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .data-row:last-child { border-bottom: none; }
 
-        .data-label { color: var(--color-text-muted); font-size: 0.8rem; }
-        .data-value { color: white; font-weight: 600; font-family: var(--font-heading); font-size: 0.95rem; }
+        .data-label { color: var(--color-text-muted); font-size: 0.75rem; }
+        .data-value { color: white; font-weight: 600; font-family: var(--font-heading); font-size: 0.9rem; }
         .data-value.red { color: var(--color-primary); }
 
         .disclaimer-section {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 1rem;
-            color: #777;
-            font-size: 0.7rem; /* Tiny legalese */
-            line-height: 1.5;
-            max-width: 100%;
+            color: #666;
+            font-size: 0.65rem;
+            line-height: 1.4;
+            text-align: justify;
         }
 
         .disclaimer-section p { margin-bottom: 0.5rem; }
@@ -267,7 +278,7 @@
             transition: transform 0.3s ease;
             transform: rotate(0deg);
             color: var(--color-primary);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
         .chevron.closed {
             transform: rotate(-90deg);
@@ -287,36 +298,24 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* PRINT SPECIFIC OVERRIDES */
+        /* PRINT OVERRIDES */
         @media print {
             body {
                 background-color: #050505 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            .hero-section {
-                height: 100px; /* Even smaller for print */
-                min-height: 100px;
-                margin-bottom: 1rem;
-            }
-            .hero-title { font-size: 1.8rem; color: black; -webkit-text-fill-color: initial; }
+            .hero-section { min-height: 120px; margin-bottom: 1rem; }
+            .content-container, .hero-content { max-width: 100% !important; width: 100%; padding: 0; }
             .chevron-container, .chevron { display: none !important; }
             .glass-panel, .info-card {
                 break-inside: avoid;
                 border: 1px solid #333;
                 background: #111 !important;
+                box-shadow: none;
             }
-            .content-container { padding: 0; width: 100%; max-width: 100%; }
-        }
-
-        @media (max-width: 768px) {
-            .hero-section { height: 140px; min-height: 140px; }
-            .hero-logo { width: 60px; }
-            .content-container { padding: 0 15px 40px; }
-            .info-grid { grid-template-columns: 1fr; gap: 1rem; }
-            .hero-title { font-size: 1.8rem; }
-            .panel-header { padding: 1rem; }
-            th, td, .data-row { padding: 0.5rem 1rem; }
+            th, td { padding: 0.25rem 0.5rem; font-size: 10px; }
+            .hero-title { font-size: 1.5rem; color: black; -webkit-text-fill-color: initial; }
         }
     </style>
 </head>
@@ -339,10 +338,10 @@
         <div class="glass-panel collapsible-section">
             <div class="panel-header" onclick="toggleTable(this)">
                 <div class="flex items-center gap-2">
-                    <h2 class="text-white m-0 font-bold">ECU Performance Tuning Packages<sup class="text-[#FF3B30] ml-1">†</sup></h2>
+                    <h2 class="text-white m-0 font-bold">ECU Performance Tuning<sup class="text-[#FF3B30] ml-1">†</sup></h2>
                 </div>
                 <div class="flex items-center gap-4 chevron-container">
-                    <span class="text-[10px] bg-[#FF3B30]/20 text-[#FF3B30] px-2 py-0.5 rounded uppercase font-bold border border-[#FF3B30]/20 hidden sm:inline-block">Dealer Reference</span>
+                    <span class="text-[9px] bg-[#FF3B30]/20 text-[#FF3B30] px-2 py-0.5 rounded uppercase font-bold border border-[#FF3B30]/20 hidden sm:inline-block">Reference</span>
                     <i class="fas fa-chevron-down chevron"></i>
                 </div>
             </div>
@@ -350,10 +349,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 35%;">Vehicle</th>
-                            <th class="highlight-white">Market Retail Price</th>
-                            <th class="highlight-red">Your Cost</th>
-                            <th>Referral Bonus</th>
+                            <th style="width: 40%;">Vehicle</th>
+                            <th class="highlight-white">Retail</th>
+                            <th class="highlight-red">Cost</th>
+                            <th>Bonus</th>
                         </tr>
                     </thead>
                     <tbody id="pricing-tbody">
@@ -364,7 +363,7 @@
         </div>
 
         <!-- ADDITIONAL SERVICES GRID -->
-        <div class="info-grid mb-8">
+        <div class="info-grid mb-6">
             
             <!-- Custom Tunes -->
             <div class="info-card">
@@ -395,7 +394,7 @@
                     <i class="fas fa-chevron-down chevron"></i>
                 </h3>
                 <div class="card-content">
-                    <div class="bg-white/5 p-2 text-center text-[10px] text-gray-400 uppercase font-bold border-b border-white/5 tracking-wider">Labor Rates</div>
+                    <div class="bg-white/5 p-2 text-center text-[9px] text-gray-400 uppercase font-bold border-b border-white/5 tracking-wider">Labor Rates</div>
                     <div class="data-row">
                         <span class="data-label">Your Cost</span>
                         <span class="data-value red">Extended Billed Rate<sup class="text-[#FF3B30] ml-1">§</sup></span>
@@ -405,7 +404,7 @@
                         <span class="data-value">Standard Billed Rate</span>
                     </div>
 
-                    <div class="bg-white/5 p-2 text-center text-[10px] text-gray-400 uppercase font-bold border-y border-white/5 tracking-wider">Parts Pricing</div>
+                    <div class="bg-white/5 p-2 text-center text-[9px] text-gray-400 uppercase font-bold border-y border-white/5 tracking-wider">Parts Pricing</div>
                     <div class="data-row">
                         <span class="data-label">Your Cost</span>
                         <span class="data-value red">Cost + 15%</span>
@@ -435,7 +434,7 @@
             </p>
             <p class="text-[#FF3B30] italic mb-4">Additional discounts/higher referral bonuses are granted for higher volumes met per billing cycle. Please refer to your dealer agreement.</p>
             
-            <div class="pt-4 border-t border-gray-800 text-center text-gray-500 text-[10px] tracking-wider uppercase">
+            <div class="pt-4 border-t border-gray-800 text-center text-gray-500 text-[9px] tracking-wider uppercase">
                 <p>WIKD Motorsports | 417 Metro Park Dr. McKinney, TX, 75071 | (844) 232-9453 | sales@wikdmotorsports.com</p>
             </div>
         </div>
@@ -466,7 +465,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${car.name}</td>
-                    <td class="retail-col">$${car.retail.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="retail-col">$${car.retail.toLocaleString('en-US', {minimumFractionDigits: 0})}</td>
                     <td class="cost-col">$${car.cost.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                     <td class="referral-col">$${car.referral.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                 `;
