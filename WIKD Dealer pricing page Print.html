@@ -74,11 +74,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem; /* Standardized gap, no negative margins */
+            gap: 1rem;
         }
 
         .hero-logo {
-            width: 150px; 
+            width: 160px; 
             height: auto;
             display: block;
         }
@@ -86,7 +86,7 @@
         .hero-title {
             font-size: 2.2rem;
             font-weight: 700;
-            color: white; /* Explicit color for print safety */
+            color: white; 
             background: linear-gradient(to bottom, #fff, #999);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -291,71 +291,78 @@
         }
 
         /* =========================================
-           FIXED DARK MODE PRINT STYLES
+           EXACT LOOK PRINT STYLES
            ========================================= */
         @media print {
-            /* Force Backgrounds and Exact Colors */
-            * {
+            /* 1. Remove Margins so dark bg hits edge */
+            @page {
+                margin: 0;
+                size: auto;
+            }
+
+            /* 2. Force Exact Color Reproduction */
+            body, html, * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
 
+            /* 3. Re-Apply Dark Backgrounds explicitly */
             body {
                 background-color: #050505 !important;
                 color: #FFFFFF !important;
                 margin: 0;
             }
 
-            /* Main Container */
             .content-container {
-                width: 100% !important;
-                max-width: 650px !important; /* Keep the center column look */
+                /* Ensure it stays centered and sized correctly */
+                max-width: 650px !important;
                 margin: 0 auto !important;
-                padding: 0 !important;
+                padding-top: 1rem !important;
             }
 
-            /* Panels - Force Dark Background */
-            .glass-panel, .info-card {
-                background-color: #111111 !important;
-                border: 1px solid #333 !important;
-                box-shadow: none !important;
-                page-break-inside: avoid;
+            /* 4. Fix Hero Image */
+            .hero-bg {
+                display: block !important;
+                opacity: 0.4 !important;
+                position: absolute !important;
+            }
+            .hero-overlay {
+                display: block !important;
+            }
+            .hero-title {
+                -webkit-text-fill-color: transparent !important; /* Keep gradient */
+                background: linear-gradient(to bottom, #fff, #999) !important;
+                -webkit-background-clip: text !important;
             }
 
-            /* Headers */
-            .panel-header, .info-card h3 {
-                background-color: #1a1a1a !important;
-                border-bottom: 1px solid #333 !important;
+            /* 5. FIX THE GLITCH: Remove Blur, Keep Dark Transparency */
+            /* This prevents PDF renderers from crashing/black-boxing the panels */
+            .glass-panel {
+                backdrop-filter: none !important; 
+                background: rgba(17, 17, 17, 1) !important; /* Solid dark fallback */
+                border: 1px solid rgba(255,255,255,0.1) !important;
             }
             
-            /* Text Visibility Fixes */
-            h1, h2, h3, h4, th, td, p, span, div {
-                color: #FFFFFF !important;
+            .info-card {
+                 background: #111111 !important;
+                 border: 1px solid rgba(255,255,255,0.1) !important;
+            }
+
+            /* 6. Ensure text contrast remains white */
+            h1, h2, h3, h4, p, span, td, th {
+                color: #ffffff !important;
             }
             
-            /* Specific Color Overrides for Hierarchy */
+            .text-muted, .referral-col, .data-label {
+                color: #9CA3AF !important;
+            }
+            
             .text-\[\#FF3B30\], .cost-col, .data-value.red, th.highlight-red {
                 color: #FF3B30 !important;
             }
-            
-            .text-muted, .referral-col, .data-label, .disclaimer-section {
-                color: #9CA3AF !important;
-            }
 
-            /* Hero Fixes */
-            .hero-section {
-                background-color: #050505 !important;
-                border-bottom: 2px solid #FF3B30 !important;
-                min-height: 140px !important;
-            }
-            .hero-title {
-                -webkit-text-fill-color: #FFFFFF !important;
-                background: none !important;
-                color: #FFFFFF !important;
-            }
-
-            /* Hide interactive bits */
-            .chevron, .chevron-container {
+            /* Hide chevrons for cleaner print */
+            .chevron-container {
                 display: none !important;
             }
         }
@@ -384,7 +391,7 @@
                 </div>
                 <div class="flex items-center gap-4 chevron-container">
                     <span class="text-[9px] bg-[#FF3B30]/20 text-[#FF3B30] px-2 py-0.5 rounded uppercase font-bold border border-[#FF3B30]/20 hidden sm:inline-block">Reference</span>
-                    <i class="fas fa-chevron-down chevron"></i>
+                    <!-- Chevron Removed -->
                 </div>
             </div>
             <div class="table-responsive" id="tuning-table">
@@ -411,7 +418,7 @@
             <div class="info-card">
                 <h3 onclick="toggleCard(this)">
                     <span>Custom Branded Flash Tunes<sup class="text-[#FF3B30] ml-1">†</sup></span>
-                    <i class="fas fa-chevron-down chevron"></i>
+                    <!-- Chevron Removed -->
                 </h3>
                 <div class="card-content">
                     <div class="data-row">
@@ -433,7 +440,7 @@
             <div class="info-card">
                 <h3 onclick="toggleCard(this)">
                     <span>Performance Mod Installation<sup class="text-[#FF3B30] ml-1">‡</sup></span>
-                    <i class="fas fa-chevron-down chevron"></i>
+                    <!-- Chevron Removed -->
                 </h3>
                 <div class="card-content">
                     <div class="bg-white/5 p-2 text-center text-[9px] text-gray-400 uppercase font-bold border-b border-white/5 tracking-wider">Labor Rates</div>
@@ -520,7 +527,8 @@
             const chevron = header.querySelector('.chevron');
             
             content.classList.toggle('collapsed');
-            chevron.classList.toggle('closed');
+            // Safe check for chevron before toggling
+            if (chevron) chevron.classList.toggle('closed');
         }
 
         function toggleCard(header) {
@@ -528,7 +536,8 @@
             const chevron = header.querySelector('.chevron');
             
             content.classList.toggle('collapsed');
-            chevron.classList.toggle('closed');
+            // Safe check for chevron before toggling
+            if (chevron) chevron.classList.toggle('closed');
         }
 
         // Run Init
