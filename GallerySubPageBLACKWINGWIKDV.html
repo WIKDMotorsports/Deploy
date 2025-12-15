@@ -460,8 +460,8 @@
         data: {
           labels: chartData.map(d => d.rpm),
           datasets: [
-            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#FF3B30', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1 },
-            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1 },
+            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#FF3B30', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : '#FF3B30', borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : '#ffa500', borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
             { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#FF3B30', yAxisID: 'yHP', showLine: false, order: 0, },
             { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'yHP', showLine: false, order: 0, }
           ]
@@ -554,5 +554,3 @@
   </script>
 </body>
 </html>
-
-
