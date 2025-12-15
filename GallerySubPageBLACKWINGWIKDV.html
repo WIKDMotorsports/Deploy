@@ -1,41 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+
+<html class="scroll-smooth" lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WIKD Build - WIKD V - 2024 CT5-V Blackwing</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    /* --- Custom styles for WIKD Theme --- */
-    :root {
-      --color-primary: #FF3B30;
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WIKD Build - WIKD V - 2024 CT5-V Blackwing</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    /* Custom styles to complement Tailwind */
+    :root { --color-primary: #FF3B30;
       --color-secondary: #ffa500;
-      --color-text-main: #EAEAEA;
-    }
+      --color-text-main: #EAEAEA; }
     body {
       font-family: 'Inter', sans-serif;
       background-color: #0A0A0A;
-      color: var(--color-text-main);
+      color: #EAEAEA;
     }
     .font-heading {
       font-family: 'Rajdhani', sans-serif;
     }
     .lava-gradient-text {
-      color: var(--color-primary);
+      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background-size: 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: lavaFlow 4s ease-in-out infinite;
     }
     .lava-gradient-bg {
-      background-color: var(--color-primary);
+      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background-size: 300%;
+      animation: lavaFlow 4s ease-in-out infinite;
+    }
+    @keyframes lavaFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     /* --- CLIP PATHS --- */
     .clip-path-custom {
@@ -50,7 +56,7 @@
       outline: 2px solid var(--color-primary) !important;
       outline-offset: 2px;
     }
-    .mods-list li::before {
+    .mods-list li::before, .mods-section ul li::before {
       content: '■';
       color: var(--color-primary);
       margin-right: 0.75rem;
@@ -83,21 +89,36 @@
       cursor: pointer;
       box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
-    .image-ticker-card img {
+    .image-ticker-card img, .image-ticker-card video {
       width: 100%;
-      height: 100%;
+      height: auto;
       display: block;
       filter: grayscale(80%);
       transition: filter 0.3s ease-in-out;
-      object-fit: cover;
     }
-    .image-ticker-card:hover img {
+    .image-ticker-card:hover img, .image-ticker-card:hover video {
       filter: grayscale(0%);
     }
     .ticker-inner {
       display: flex;
       flex-direction: column;
       will-change: transform;
+    }
+    .gradient-overlay-top, .gradient-overlay-bottom {
+      position: sticky;
+      left: 0;
+      width: 100%;
+      height: 10rem;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .gradient-overlay-top {
+      top: 0;
+      background: linear-gradient(to bottom, #0A0A0A, rgba(10, 10, 10, 0));
+    }
+    .gradient-overlay-bottom {
+      bottom: 0;
+      background: linear-gradient(to top, #0A0A0A, rgba(10, 10, 10, 0));
     }
 
     /* --- HERO & PARALLAX (Desktop Only) --- */
@@ -114,142 +135,146 @@
       height: 100%;
       object-fit: cover;
       mix-blend-mode: screen;
-      opacity: 0.6;
+      opacity: 0.8;
       z-index: 2;
+    }
+    .build-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 70%);
+      z-index: 4;
     }
   </style>
 </head>
 <body class="overflow-x-hidden">
-  
-  <!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
-  <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden">
-    <div id="mobileTickerInner" class="flex h-full will-change-transform">
-      <!-- Mobile gallery items will be populated by JS -->
-    </div>
-  </div>
-
-  <div class="build-hero">
-    <!-- Parallax video will be hidden on mobile via JS -->
-    <video autoplay loop muted playsinline class="parallax-video hidden lg:block">
-        <source src="https://videos.pexels.com/video-files/7995213/7995213-hd.mp4" type="video/mp4">
-    </video>
-
-    <!-- Main Content Container -->
-    <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
-    
-      <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-      <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
-        <div id="tickerInner" class="ticker-inner">
-          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1237.jpg?v=1739992128&width=533" alt="WIKD V Gallery Image 1"></div>
-          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1296_1600x.jpg?v=1739992128" alt="WIKD V Gallery Image 2"></div>
-          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1311_1600x.jpg?v=1739992128" alt="WIKD V Gallery Image 3"></div>
-          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1240_1600x.jpg?v=1739992128" alt="WIKD V Gallery Image 4"></div>
-        </div>
-      </div>
-      
-      <!-- Content Card -->
-      <main id="contentCard" class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0">
-      
-        <!-- Card Header -->
-        <header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
-          <div class="overflow-hidden"> 
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">WIKD V</h1>
-            <h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">2024 CT5-V Blackwing</h2>
-          </div>
-          <div class="text-right">
-            <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" data-target="1113" style="color: var(--color-primary);">0 HP</div>
-            <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading whitespace-nowrap" data-target="1182" style="color: var(--color-secondary);">0 TQ</div>
-          </div>
-        </header>
-
-        <!-- Divider -->
-        <div class="h-1 w-full lava-gradient-bg"></div>
-
-        <!-- Main Body Content -->
-        <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
-        
-          <!-- Dyno Section -->
-          <section class="anim-stagger">
-            <div id="chart-container">
-              <canvas id="dynoChart"></canvas>
-            </div>
-            <div class="mt-5 bg-gray-900/50 border border-gray-800 clip-path-data-section">
-              <div class="data-header flex justify-between items-center cursor-pointer p-4 transition-colors hover:bg-gray-800/20">
-                <h4 class="text-sm font-semibold uppercase font-heading">WIKD Tuned Session Report</h4>
-                <i class="fas fa-chevron-down transition-transform duration-300"></i>
-              </div>
-              <div class="data-list-collapsible max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                <div class="p-4 border-t border-gray-800">
-                  <p class="text-sm text-gray-300"><strong>World Record:</strong> 10.98s 1/4 Mile (Stock Trans)</p>
-                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Power:</strong> 1113.1 WHP @ 5,800 RPM</p>
-                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Torque:</strong> 1182.0 WTQ @ 4,100 RPM</p>
-                  <p class="text-xs text-gray-500 mt-2">Data extracted from SAE J1349 corrected dyno graph run on full E85.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Specifications & Modifications -->
-          <section class="mt-10 anim-stagger">
-            <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Specifications</h3>
-            <ul class="text-lg">
-              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">YEAR</strong><span>2024</span></li>
-              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">MAKE</strong><span>Cadillac</span></li>
-              <li class="flex justify-between py-3"><strong class="text-gray-400 font-medium">MODEL</strong><span>CT5-V Blackwing</span></li>
-            </ul>
-
-            <div class="mods-section mt-10">
-              <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Modifications</h3>
-              <ul class="mt-4 space-y-2 text-gray-300 mods-list">
-                  <li>SBE LT4 with unported Magnuson 2650</li>
-                  <li>Kooks Headers</li>
-                  <li>Too High PSI Port Injection</li>
-                  <li>Reflex Kit and Billet Lid</li>
-                  <li>Smooth Boost Controller</li>
-                  <li>WIKD Custom Camshaft</li>
-                  <li>Grip Tech Upper Pulley</li>
-                  <li>ATI Lower</li>
-                  <li>Snow Performance Meth Injection</li>
-                  <li>Nick Williams 103mm Throttle Body</li>
-                  <li>Monster LT1S Triple Disc Clutch</li>
-                  <li>WIKD Custom Fuel System</li>
-                  <li>WIKD Custom Cold Air Intake</li>
-                  <li>Full E85 Fuel</li>
-              </ul>
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
-  </div>
-
-  <!-- Lightbox -->
-  <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="relative max-w-4xl max-h-full">
-      <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
-      <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
-      <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
-      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg hidden">
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <script>
+<!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
+<div class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden" id="mobileGalleryWrapper">
+<div class="flex h-full will-change-transform" id="mobileTickerInner">
+<!-- Mobile gallery items will be populated by JS -->
+</div>
+<div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+</div>
+<div class="build-hero">
+<!-- Parallax video will be hidden on mobile via JS -->
+<video autoplay="" class="parallax-video hidden lg:block" loop="" muted="" playsinline="">
+<source src="https://videos.pexels.com/video-files/7995213/7995213-hd.mp4" type="video/mp4"/>
+</video>
+<!-- Main Content Container -->
+<div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
+<!-- DESKTOP-ONLY: Vertical Image Ticker -->
+<div class="ticker-wrapper hidden lg:block" id="tickerWrapper">
+<div class="gradient-overlay-top"></div>
+<div class="ticker-inner" id="tickerInner"><div class="image-ticker-card"><img alt="WIKD V Gallery Image 1" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1237.jpg?v=1739992128&amp;width=533"/></div><div class="image-ticker-card"><img alt="WIKD V Gallery Image 2" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1296_1600x.jpg?v=1739992128"/></div><div class="image-ticker-card"><img alt="WIKD V Gallery Image 3" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1311_1600x.jpg?v=1739992128"/></div><div class="image-ticker-card"><img alt="WIKD V Gallery Image 4" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_1240_1600x.jpg?v=1739992128"/></div></div>
+<div class="gradient-overlay-bottom"></div>
+</div>
+<!-- Content Card -->
+<main class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0" id="contentCard">
+<!-- Card Header -->
+<header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
+<div class="overflow-hidden">
+<h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">WIKD V</h1>
+<h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">2024 CT5-V Blackwing</h2>
+</div>
+<div class="text-right">
+<div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" data-target="1113" style="color: var(--color-primary);">0 HP</div>
+<div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading whitespace-nowrap" data-target="1182" style="color: var(--color-secondary);">0 TQ</div>
+</div>
+</header>
+<!-- Divider -->
+<div class="h-1 w-full lava-gradient-bg"></div>
+<!-- Main Body Content -->
+<div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
+<!-- Dyno Section -->
+<section class="anim-stagger">
+<div id="chart-container">
+<canvas id="dynoChart"></canvas>
+</div>
+<div class="mt-5 bg-gray-900/50 border border-gray-800 clip-path-data-section">
+<div class="data-header flex justify-between items-center cursor-pointer p-4 transition-colors hover:bg-gray-800/20">
+<h4 class="text-sm font-semibold uppercase font-heading">WIKD Tuned Session Report</h4>
+<i class="fas fa-chevron-down transition-transform duration-300"></i>
+</div>
+<div class="data-list-collapsible max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+<div class="p-4 border-t border-gray-800">
+<p class="text-sm text-gray-300"><strong>World Record:</strong> 10.98s 1/4 Mile (Stock Trans)</p>
+<p class="text-sm text-gray-300 mt-2"><strong>Peak Power:</strong> 1113.1 WHP @ 5,800 RPM</p>
+<p class="text-sm text-gray-300 mt-2"><strong>Peak Torque:</strong> 1182.0 WTQ @ 4,100 RPM</p>
+<p class="text-xs text-gray-500 mt-2">Data extracted from SAE J1349 corrected dyno graph run on full E85.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Specifications & Modifications -->
+<section class="mt-10 anim-stagger">
+<h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Specifications</h3>
+<ul class="text-lg">
+<li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">YEAR</strong><span>2024</span></li>
+<li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">MAKE</strong><span>Cadillac</span></li>
+<li class="flex justify-between py-3"><strong class="text-gray-400 font-medium">MODEL</strong><span>CT5-V Blackwing</span></li>
+</ul>
+<div class="mods-section mt-10">
+<h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Modifications</h3>
+<div class="mt-4 space-y-6"><ul class="mt-4 space-y-2 text-gray-300 mods-list">
+<li>SBE LT4 with unported Magnuson 2650</li>
+<li>Kooks Headers</li>
+<li>Too High PSI Port Injection</li>
+<li>Reflex Kit and Billet Lid</li>
+<li>Smooth Boost Controller</li>
+<li>WIKD Custom Camshaft</li>
+<li>Grip Tech Upper Pulley</li>
+<li>ATI Lower</li>
+<li>Snow Performance Meth Injection</li>
+<li>Nick Williams 103mm Throttle Body</li>
+<li>Monster LT1S Triple Disc Clutch</li>
+<li>WIKD Custom Fuel System</li>
+<li>WIKD Custom Cold Air Intake</li>
+<li>Full E85 Fuel</li>
+</ul></div></div>
+</section>
+</div>
+</main>
+</div>
+</div>
+<!-- Lightbox -->
+<div class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300" id="lightbox">
+<div class="relative max-w-4xl max-h-full">
+<button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">×</button>
+<button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
+<button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
+<img alt="Lightbox image" class="max-w-full max-h-[90vh] rounded-lg hidden" id="lightboxImg" src=""/>
+<video class="max-w-full max-h-[90vh] rounded-lg hidden" controls="" id="lightboxVideo" src=""></video>
+</div>
+</div>
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
   document.addEventListener('DOMContentLoaded', function() {
     // --- GLOBAL ELEMENTS & STATE ---
     const contentCard = document.getElementById('contentCard');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxVideo = document.getElementById('lightboxVideo');
 
     const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
-        return { 
-            type: 'image', 
-            src: card.querySelector('img').src, 
-        };
+        const isVideoLink = card.tagName === 'A' && card.querySelector('video');
+        const isVideoDiv = card.tagName === 'DIV' && card.querySelector('video');
+
+        if (isVideoLink) {
+             const vid = card.querySelector('video source');
+             return { type: 'video', src: vid ? vid.src : '', link: card.href };
+        } else if (isVideoDiv) {
+             const vid = card.querySelector('video source');
+             return { type: 'video', src: vid ? vid.src : '' };
+        } else {
+             const img = card.querySelector('img');
+             return { type: 'image', src: img ? img.src : '' };
+        }
     });
 
     let currentIndex = 0;
@@ -260,21 +285,52 @@
     // --- LIGHTBOX LOGIC ---
     const showLightboxItem = (index) => {
       const adjustedIndex = (index + originalItems.length) % originalItems.length;
+      const item = originalItems[adjustedIndex];
+
+      // Ensure we don't try to open a video in the lightbox
+      if (item.type === 'video') return;
+
       currentIndex = adjustedIndex;
-      lightboxImg.src = originalItems[currentIndex].src;
+
+      lightboxImg.style.display = 'none';
+      if(lightboxVideo) {
+          lightboxVideo.style.display = 'none';
+          if (!lightboxVideo.paused) lightboxVideo.pause();
+          lightboxVideo.removeAttribute('src');
+      }
+
+      if (item.type === 'image') {
+        lightboxImg.src = item.src;
+        lightboxImg.style.display = 'block';
+      }
       lightbox.classList.remove('opacity-0', 'pointer-events-none');
-    };
-    
-    const closeLightbox = () => {
-        lightbox.classList.add('opacity-0', 'pointer-events-none');
     };
 
     const setupLightboxListeners = (selector) => {
         document.querySelectorAll(selector).forEach((item, index) => {
-            const newItem = item.cloneNode(true);
-            item.parentNode.replaceChild(newItem, item);
-            newItem.addEventListener('click', () => showLightboxItem(index % originalItems.length));
+          const newItem = item.cloneNode(true);
+          item.parentNode.replaceChild(newItem, item);
+
+          newItem.addEventListener('click', (e) => {
+            const adjustedIndex = index % originalItems.length;
+            const itemData = originalItems[adjustedIndex];
+
+            if (itemData.type === 'image') {
+              showLightboxItem(adjustedIndex);
+            } else if (isMobile && itemData.type === 'video' && itemData.link) {
+              e.preventDefault();
+              window.open(itemData.link, '_blank');
+            }
+          });
         });
+    }
+
+    const closeLightbox = () => {
+        lightbox.classList.add('opacity-0', 'pointer-events-none');
+        if (lightboxVideo && !lightboxVideo.paused) {
+            lightboxVideo.pause();
+            lightboxVideo.removeAttribute('src');
+        }
     };
 
     if (lightbox) {
@@ -291,15 +347,24 @@
     // --- MOBILE VIEW SETUP ---
     function setupMobileView() {
         if (desktopTickerAnimation) desktopTickerAnimation.kill();
-        
         const mobileTickerInner = document.getElementById('mobileTickerInner');
         if (mobileTickerInner.children.length > 0) return;
 
         originalItems.forEach(item => {
             const itemContainer = document.createElement('div');
             itemContainer.className = 'mobile-gallery-item h-full flex-shrink-0 mr-4';
-            let mediaElement = document.createElement('img');
-            mediaElement.src = item.src;
+            let mediaElement;
+            if (item.type === 'video') {
+                mediaElement = document.createElement('video');
+                mediaElement.src = item.src;
+                mediaElement.autoplay = true;
+                mediaElement.loop = true;
+                mediaElement.muted = true;
+                mediaElement.playsinline = true;
+            } else {
+                mediaElement = document.createElement('img');
+                mediaElement.src = item.src;
+            }
             mediaElement.className = 'h-full w-auto object-cover rounded-md';
             itemContainer.appendChild(mediaElement);
             mobileTickerInner.appendChild(itemContainer);
@@ -312,15 +377,8 @@
         });
         
         setupLightboxListeners('.mobile-gallery-item');
-        
         gsap.set(mobileTickerInner, {x: 0});
-        mobileTickerAnimation = gsap.to(mobileTickerInner, {
-            x: '-50%',
-            duration: 40,
-            ease: 'none',
-            repeat: -1,
-        });
-
+        mobileTickerAnimation = gsap.to(mobileTickerInner, { x: '-50%', duration: 40, ease: 'none', repeat: -1 });
         const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
         const initialScroll = galleryHeight * 0.85;
         setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
@@ -329,111 +387,114 @@
     // --- DESKTOP VIEW SETUP ---
     function setupDesktopView() {
         if (mobileTickerAnimation) mobileTickerAnimation.kill();
-        
         const tickerWrapper = document.getElementById('tickerWrapper');
         const tickerInner = document.getElementById('tickerInner');
         if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return;
 
-        const originalDesktopItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
-        originalDesktopItems.forEach(item => {
+        const originalTickerItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+        originalTickerItems.forEach(item => {
             const clone = item.cloneNode(true);
             clone.classList.add('cloned');
             tickerInner.appendChild(clone);
         });
 
-        const syncHeights = () => {
-            if (contentCard && tickerWrapper) {
-                tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
-            }
-        };
-        
+        const syncHeights = () => { if (contentCard && tickerWrapper) tickerWrapper.style.height = `${contentCard.offsetHeight}px`; };
         syncHeights();
         window.addEventListener('resize', syncHeights);
         const observer = new MutationObserver(syncHeights);
         observer.observe(contentCard, { attributes: true, childList: true, subtree: true });
 
         let isHovering = false;
+        let isTickerLocked = false;
+        tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
+        tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
         
         function animateScroll() {
-            if (!isHovering && tickerWrapper) {
+            if (!isHovering && !isTickerLocked && tickerWrapper) {
                 tickerWrapper.scrollTop += 0.5;
-                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) {
-                    tickerWrapper.scrollTop = 0;
-                }
+                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) tickerWrapper.scrollTop = 0;
             }
             desktopTickerAnimation = requestAnimationFrame(animateScroll);
         }
         animateScroll();
         setupLightboxListeners('.image-ticker-card');
         
-        tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
-        tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
+        // --- NEW VIDEO CONTROLS LOGIC (Class-based) ---
+        const videoCards = document.querySelectorAll('.ticker-inner a[data-video-card]');
+
+        videoCards.forEach(card => {
+            const tickerVideo = card.querySelector('.ticker-video');
+            const mediaControls = card.querySelector('.video-controls');
+            const muteButton = card.querySelector('.video-mute-button');
+            const lockButton = card.querySelector('.video-lock-button');
+            let controlsTimeout;
+
+            if (!tickerVideo || !mediaControls || !muteButton || !lockButton) return;
+
+            const showControls = () => {
+                mediaControls.classList.remove('opacity-0');
+                clearTimeout(controlsTimeout);
+                controlsTimeout = setTimeout(() => {
+                    mediaControls.classList.add('opacity-0');
+                }, 2000);
+            };
+
+            const hideControls = () => {
+                mediaControls.classList.add('opacity-0');
+                clearTimeout(controlsTimeout);
+            };
+
+            card.addEventListener('mouseenter', showControls);
+            card.addEventListener('mousemove', showControls);
+            card.addEventListener('mouseleave', hideControls);
+
+            muteButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                tickerVideo.muted = !tickerVideo.muted;
+                muteButton.querySelector('i').className = tickerVideo.muted ? 'fas fa-volume-mute' : 'fas fa-volume-high';
+            });
+
+            lockButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                isTickerLocked = !isTickerLocked;
+                document.querySelectorAll('.video-lock-button i').forEach(icon => {
+                    icon.className = isTickerLocked ? 'fas fa-lock' : 'fas fa-unlock';
+                });
+            });
+        });
     }
+
 
     // --- COMMON ANIMATIONS & UI ---
     gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.utils.toArray('.anim-stagger').forEach(elem => {
-      gsap.from(elem, {
-        scrollTrigger: {
-          trigger: elem,
-          start: 'top 95%',
-          toggleActions: 'play none none none',
-        },
-        opacity: 0, y: 50, duration: 0.8, ease: 'power3.out'
-      });
-    });
-
+    gsap.utils.toArray('.anim-stagger').forEach(elem => gsap.from(elem, { scrollTrigger: { trigger: elem, start: 'top 95%', toggleActions: 'play none none none', }, opacity: 0, y: 50, duration: 0.8, ease: 'power3.out' }));
     gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => {
-      const target = parseInt(stat.dataset.target, 10);
-      const statObject = { val: 0 };
-      gsap.to(statObject, {
-        val: target,
-        duration: 2.5,
-        ease: 'power3.out',
-        delay: 0.5,
-        onUpdate: () => {
-          stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`;
-        }
-      });
+        const target = parseInt(stat.dataset.target, 10);
+        if(isNaN(target)) return; // Skip animation if no target
+        const statObject = { val: 0 };
+        gsap.to(statObject, {
+            val: target,
+            duration: 2.5,
+            ease: 'power3.out',
+            delay: 0.5,
+            onUpdate: () => {
+                stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`;
+            }
+        });
     });
-
     const dataHeader = document.querySelector('.data-header');
-    if(dataHeader) {
-      const dataList = document.querySelector('.data-list-collapsible');
-      const icon = dataHeader.querySelector('i');
-      dataHeader.addEventListener('click', () => {
-        const isActive = dataHeader.classList.toggle('active');
-        dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0';
-        icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
-      });
-    }
+    if(dataHeader) { const dataList = document.querySelector('.data-list-collapsible'); const icon = dataHeader.querySelector('i'); dataHeader.addEventListener('click', () => { const isActive = dataHeader.classList.toggle('active'); dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0'; icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)'; }); }
 
     // --- INITIALIZATION & RESIZE HANDLING ---
-    function initializePage() {
-        isMobile = window.innerWidth < 1024;
-        if (isMobile) {
-            setupMobileView();
-        } else {
-            setupDesktopView();
-        }
-    }
-
+    function initializePage() { isMobile = window.innerWidth < 1024; if (isMobile) setupMobileView(); else setupDesktopView(); }
     let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            const newIsMobile = window.innerWidth < 1024;
-            if (newIsMobile !== isMobile) {
-                window.location.reload();
-            }
-        }, 250);
-    });
-
+    window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { const newIsMobile = window.innerWidth < 1024; if (newIsMobile !== isMobile) window.location.reload(); }, 250); });
     initializePage();
     
     // --- CHART SCRIPT ---
-    const chartData = [
+    const fullChartData = [
       { rpm: 2000, horsepower: 300, torque: 800 }, { rpm: 2500, horsepower: 450, torque: 1000 },
       { rpm: 3000, horsepower: 650, torque: 1100 }, { rpm: 3500, horsepower: 800, torque: 1150 },
       { rpm: 4000, horsepower: 900, torque: 1180 }, { rpm: 4100, horsepower: 925, torque: 1182 },
@@ -442,92 +503,140 @@
       { rpm: 6000, horsepower: 1100, torque: 999 }, { rpm: 6200, horsepower: 1080, torque: 950 },
       { rpm: 6500, horsepower: 1050, torque: 880 }, { rpm: 7000, horsepower: 900, torque: 750 },
     ];
-    const peakHpIndex = chartData.findIndex(d => d.horsepower === 1113.1);
-    const peakTqIndex = chartData.findIndex(d => d.torque === 1182);
-    const peakHpData = new Array(chartData.length).fill(null); if (peakHpIndex !== -1) peakHpData[peakHpIndex] = chartData[peakHpIndex].horsepower;
-    const peakTqData = new Array(chartData.length).fill(null); if (peakTqIndex !== -1) peakTqData[peakTqIndex] = chartData[peakTqIndex].torque;
-    const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
-    const chartCanvas = document.getElementById('dynoChart');
-    if (chartCanvas) {
-      const initChart = () => {
-      const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
-      let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
-      function syncOverlay(chart) { overlayCanvas.width = chart.width; overlayCanvas.height = chart.height; overlayCanvas.style.width = chart.width + 'px'; overlayCanvas.style.height = chart.height + 'px'; const hpMeta = chart.getDatasetMeta(2); const tqMeta = chart.getDatasetMeta(3); if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1); } if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); } }
-      function getPointOnPath(path, progress) { if (!path || path.length < 2) return null; const lengths = []; let totalLength = 0; for (let i = 1; i < path.length; i++) { const p1 = path[i - 1], p2 = path[i]; const dx = p2.x - p1.x, dy = p2.y - p1.y; const length = Math.sqrt(dx * dx + dy * dy); lengths.push(length); totalLength += length; } if (totalLength === 0) return path.length > 0 ? { x: path[0].x, y: path[0].y } : null; const targetLength = totalLength * progress; let lengthTraversed = 0; for (let i = 0; i < lengths.length; i++) { const segmentLength = lengths[i]; if (lengthTraversed + segmentLength >= targetLength) { const p1 = path[i], p2 = path[i + 1]; if (segmentLength === 0) return { x: p1.x, y: p1.y }; const segmentProgress = (targetLength - lengthTraversed) / segmentLength; const x = p1.x + (p2.x - p1.x) * segmentProgress; const y = p1.y + (p2.y - p1.y) * segmentProgress; return { x, y }; } lengthTraversed += segmentLength; } return { x: path[path.length - 1].x, y: path[path.length - 1].y }; }
-      
-      new Chart(chartCanvas, {
-        type: 'line',
-        data: {
-          labels: chartData.map(d => d.rpm),
-          datasets: [
-            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#FF3B30', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1 },
-            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1 },
-            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#FF3B30', yAxisID: 'yHP', showLine: false, order: 0, },
-            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'yHP', showLine: false, order: 0, }
-          ]
-        },
-        options: {
-          animation: {
-            onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(255, 59, 48, 0.7)'); hpGradient.addColorStop(1, 'rgba(255, 59, 48, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); tqGradient.addColorStop(1, 'rgba(255, 165, 0, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(255, 59, 48, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(255, 165, 0, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
-            x: { type: 'number', easing: 'linear', duration: 50, from: NaN, delay(ctx) { if (ctx.type !== 'data' || ctx.xStarted) return 0; ctx.xStarted = true; return ctx.index * 50; } },
-            y: { 
-                type: 'number', 
-                easing: 'linear', 
-                duration: 50, 
-                from: (ctx) => {
-                    if (ctx.index === 0) {
-                        const meta = ctx.chart.getDatasetMeta(ctx.datasetIndex);
-                        const yScale = ctx.chart.scales[meta.yAxisID];
-                        return yScale.getBasePixel();
-                    }
-                    return ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
-                },
-                delay(ctx) { if (ctx.type !== 'data' || ctx.yStarted) return 0; ctx.yStarted = true; return ctx.index * 50; } 
-            }
-          },
-          onResize: (chart) => { syncOverlay(chart); },
-          responsive: true, maintainAspectRatio: true, aspectRatio: 1.5,
-          plugins: {
-            legend: { display: false, },
-            tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
-          },
-          scales: {
-            x: { 
-              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
-              ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } },
-              title: { display: false }
-            },
-            yHP: { 
-              type: 'linear', position: 'left', 
-              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
-              ticks: { color: '#a1a1aa', stepSize: 200 }, 
-              min: 0, max: 1200, 
-              title: { display: false } 
-            }
-          }
-        },
-        plugins: [fullBorderPlugin]
-      });
-      };
+    const chartData = fullChartData;
+    if (chartData.length > 0) {
+        const peakHpIndex = chartData.findIndex(d => d.horsepower === Math.max(...chartData.map(o => o.horsepower)));
+        const peakTqIndex = chartData.findIndex(d => d.torque === Math.max(...chartData.map(o => o.torque)));
+        const peakHpData = new Array(chartData.length).fill(null); if (peakHpIndex !== -1) peakHpData[peakHpIndex] = chartData[peakHpIndex].horsepower;
+        const peakTqData = new Array(chartData.length).fill(null); if (peakTqIndex !== -1) peakTqData[peakTqIndex] = chartData[peakTqIndex].torque;
+        const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
+        const chartCanvas = document.getElementById('dynoChart');
+        if (chartCanvas) {
+          const initChart = () => {
+          const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
+          let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
+          function syncOverlay(chart) {
+            overlayCanvas.width = chart.width;
+            overlayCanvas.height = chart.height;
+            overlayCanvas.style.width = chart.width + 'px';
+            overlayCanvas.style.height = chart.height + 'px';
 
-      if (window.IntersectionObserver) {
-        const observer = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
-            initChart();
-            observer.disconnect();
+            if (!chart.chartArea) return;
+
+            const hpMeta = chart.getDatasetMeta(2);
+            const tqMeta = chart.getDatasetMeta(3);
+            const fullHpMeta = chart.getDatasetMeta(0);
+
+            if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = fullHpMeta.data.slice(0, peakHpIndex + 1); }
+            if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); }
           }
-        }, { rootMargin: '0px 0px 100px 0px' });
-        observer.observe(chartCanvas);
-      } else {
-        initChart();
-      }
+          function getPointOnPath(path, progress) { if (!path || path.length < 2) return null; const lengths = []; let totalLength = 0; for (let i = 1; i < path.length; i++) { const p1 = path[i - 1], p2 = path[i]; const dx = p2.x - p1.x, dy = p2.y - p1.y; const length = Math.sqrt(dx * dx + dy * dy); lengths.push(length); totalLength += length; } if (totalLength === 0) return path.length > 0 ? { x: path[0].x, y: path[0].y } : null; const targetLength = totalLength * progress; let lengthTraversed = 0; for (let i = 0; i < lengths.length; i++) { const segmentLength = lengths[i]; if (lengthTraversed + segmentLength >= targetLength) { const p1 = path[i], p2 = path[i + 1]; if (segmentLength === 0) return { x: p1.x, y: p1.y }; const segmentProgress = (targetLength - lengthTraversed) / segmentLength; const x = p1.x + (p2.x - p1.x) * segmentProgress; const y = p1.y + (p2.y - p1.y) * segmentProgress; return { x, y }; } lengthTraversed += segmentLength; } return { x: path[path.length - 1].x, y: path[path.length - 1].y }; }
+          new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+              labels: chartData.map(d => d.rpm),
+              datasets: [
+                { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#ff4747', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+                { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
+                { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#ff4747', yAxisID: 'y', showLine: false, order: 0, },
+                { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'y', showLine: false, order: 0, }
+              ]
+            },
+            options: {
+              animation: {
+                onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(255, 71, 71, 0.7)'); hpGradient.addColorStop(1, 'rgba(255, 71, 71, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); tqGradient.addColorStop(1, 'rgba(255, 165, 0, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(255, 71, 71, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(255, 165, 0, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
+                x: { type: 'number', easing: 'linear', duration: 50, from: NaN, delay(ctx) { if (ctx.type !== 'data' || ctx.xStarted) return 0; ctx.xStarted = true; return ctx.index * 50; } },
+                y: {
+                    type: 'number',
+                    easing: 'linear',
+                    duration: 50,
+                    from: (ctx) => {
+                        if (ctx.datasetIndex > 1) return undefined;
+                        if (ctx.index === 0) return ctx.chart.scales.y.getBasePixel();
+                        const datasetMeta = ctx.chart.getDatasetMeta(ctx.datasetIndex);
+                        const prevModel = datasetMeta.data[ctx.index - 1];
+                        if (prevModel && !prevModel.skip && !isNaN(prevModel.getProps(['y'], true).y)) {
+                             return prevModel.getProps(['y'], true).y;
+                        }
+                        return ctx.chart.scales.y.getBasePixel();
+                    },
+                    delay(ctx) { if (ctx.type !== 'data' || ctx.yStarted) return 0; ctx.yStarted = true; return ctx.index * 50; }
+                }
+              },
+              onResize: (chart) => { syncOverlay(chart); },
+              responsive: true, maintainAspectRatio: true, aspectRatio: 1.5,
+              interaction: { mode: 'index', intersect: false },
+              plugins: {
+                legend: { display: false, },
+                tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
+              },
+              scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)',
+                        drawTicks: false
+                    },
+                    ticks: {
+                        color: '#a1a1aa',
+                        autoSkip: false,
+                        maxRotation: 0,
+                        callback: function(val, index, ticks) {
+                            const totalLabels = this.chart.data.labels.length;
+                            if (val === 0 || val === totalLabels - 1) {
+                                const tickValue = this.getLabelForValue(val);
+                                return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
+                            }
+                            return '';
+                        }
+                    },
+                    afterBuildTicks: axis => {
+                        const dataLength = axis.chart.data.labels.length;
+                        const step = Math.ceil(dataLength / 10);
+                        axis.ticks = axis.ticks.filter(tick => {
+                            const val = tick.value;
+                            return val === 0 || val === dataLength - 1 || val % step === 0;
+                        });
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    position: 'left',
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)',
+                        drawTicks: false
+                    },
+                    ticks: {
+                        color: '#a1a1aa',
+                        callback: function(val, index, ticks) {
+                            if (index === 0 || index === ticks.length - 1) {
+                                return val;
+                            }
+                            return '';
+                        }
+                    },
+                    min: 0,
+                    title: { display: false }
+                }
+              }
+            },
+            plugins: [fullBorderPlugin]
+          });
+          };
+
+          if (window.IntersectionObserver) {
+            const observer = new IntersectionObserver((entries) => {
+              if (entries[0].isIntersecting) {
+                initChart();
+                observer.disconnect();
+              }
+            }, { rootMargin: '0px 0px 100px 0px' });
+            observer.observe(chartCanvas);
+          } else {
+            initChart();
+          }
+        }
     }
   });
-  </script>
-
-
+    </script>
 </body>
-
 </html>
-
-
