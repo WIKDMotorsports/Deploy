@@ -500,11 +500,32 @@
 
         const JSON_URL = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Shopandgallerydata.json?v=1755204797';
 
+        // Mapping of JSON IDs to local subpage HTML files
+        const urlMapping = {
+            "wikd-z06": "WIKDC7Z06GallerySubPage.html",
+            "wikd-720s": "720GallerySubpage.html",
+            "gray-matter": "GallerySubPageGrayMatter.html",
+            "mrs-wikd": "GallerSubPageMrsWIKD.html",
+            "wikd-v": "GallerySubPageBLACKWINGWIKDV.html",
+            "wikd-f450": "GallerySubpageF450.html",
+            "artemis": "GallerySubPageArtemis.html",
+            "wikd-bull": "GallerySubpageHuracan.html",
+            "z06-2024": "GallerySubPageC8Z06.html",
+            "wikd-c6": "GallerySubpageWIKDC6.html",
+            "m4-2022": "GallerySubPageBMWM6RED.html",
+            "wikd-g": "GallerySubPageGWagon.html",
+            "wikd-ws6": "GallersubpageWS6TransAm.html",
+            "macan-s-2024": "GallerySubPageMacanS.html"
+        };
+
         function createGalleryCardHTML(item) {
             const isWikd = item.isWikdBuild;
             const specialBuild = item.specialBuild || '';
             const subtitleHTML = item.subtitle ? `<span class="gallery-card-subtitle">${item.subtitle}</span>` : '';
             const placeholder = `https://placehold.co/800x600/141414/eaeaea?text=${encodeURIComponent(item.title)}`;
+
+            // Use mapped URL if available, otherwise fallback to item.link
+            const cardLink = urlMapping[item.id] || item.link;
 
             if (isWikd) {
                 const videoHTML = item.video && item.video.overlaySrc 
@@ -519,7 +540,7 @@
 
                 return `
                 <div class="gallery-card-wrapper" data-brand="${item.brand}" data-wikd="true" data-special-build="${specialBuild}">
-                    <a href="${item.link}" class="gallery-card" data-brand="${item.brand}" data-wikd="true">
+                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}" data-wikd="true">
                         <div class="card-shaker">
                             <div class="card-media-container">
                                 <img src="${item.images.background}" class="media-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
@@ -542,7 +563,7 @@
             } else {
                 return `
                 <div class="gallery-card-wrapper" data-brand="${item.brand}">
-                    <a href="${item.link}" class="gallery-card" data-brand="${item.brand}">
+                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}">
                         <img src="${item.images.background}" class="gallery-card-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
                         <div class="gallery-card-overlay">
                             <div class="card-badge-container">
