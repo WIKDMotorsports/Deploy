@@ -479,6 +479,11 @@
     const chartCanvas = document.getElementById('dynoChart');
     if (chartCanvas) {
       const initChart = () => {
+      const ctx = chartCanvas.getContext('2d');
+      const hpFillGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      hpFillGradient.addColorStop(0, 'rgba(255, 0, 166, 0.5)');
+      hpFillGradient.addColorStop(1, 'rgba(255, 0, 166, 0)');
+
       const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
       let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
       function syncOverlay(chart) { overlayCanvas.width = chart.width; overlayCanvas.height = chart.height; overlayCanvas.style.width = chart.width + 'px'; overlayCanvas.style.height = chart.height + 'px'; const hpMeta = chart.getDatasetMeta(2); const tqMeta = chart.getDatasetMeta(3); if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1); } if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); } }
@@ -488,7 +493,7 @@
         data: {
           labels: chartData.map(d => d.rpm),
           datasets: [
-            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#FF00A6', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : '#FF00A6', borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#FF00A6', backgroundColor: hpFillGradient, fill: true, borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : '#FF00A6', borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
             { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#EAEAEA', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : '#EAEAEA', borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
             { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#FF00A6', yAxisID: 'yHP', showLine: false, order: 0, },
             { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#EAEAEA', yAxisID: 'yHP', showLine: false, order: 0, }
@@ -508,7 +513,7 @@
           },
           scales: {
             x: { 
-              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
@@ -531,7 +536,7 @@
             yHP: { 
               type: 'linear', 
               position: 'left', 
-              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));

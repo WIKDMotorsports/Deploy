@@ -543,6 +543,11 @@
     const chartCanvas = document.getElementById('dynoChart');
     if (chartCanvas) {
       const initChart = () => {
+      const ctx = chartCanvas.getContext('2d');
+      const hpFillGradient = ctx.createLinearGradient(0, 0, 0, 400);
+      hpFillGradient.addColorStop(0, 'rgba(255, 71, 71, 0.5)');
+      hpFillGradient.addColorStop(1, 'rgba(255, 71, 71, 0)');
+
       const chartContainer = document.getElementById('chart-container');
       const overlayCanvas = document.createElement('canvas');
       overlayCanvas.style.position = 'absolute';
@@ -624,7 +629,8 @@
               label: 'Horsepower (WHP)',
               data: chartData.map(d => d.horsepower),
               borderColor: '#ff4747',
-              backgroundColor: '#ff4747',
+              backgroundColor: hpFillGradient,
+              fill: true,
               borderWidth: 2,
               pointRadius: 0,
               pointStyle: 'triangle',
@@ -801,7 +807,7 @@
           },
           scales: {
             x: {
-              grid: { color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               max: lastRpmPoint,
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
@@ -826,7 +832,7 @@
             },
             yHP: {
               type: 'linear', position: 'left',
-              grid: { color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
