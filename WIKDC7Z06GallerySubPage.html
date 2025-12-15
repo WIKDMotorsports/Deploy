@@ -814,12 +814,20 @@
             x: {
               grid: { color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               max: lastRpmPoint,
-              afterBuildTicks: axis => axis.ticks = [{value: axis.min}, {value: axis.max}],
+              afterBuildTicks: axis => {
+                const ticks = axis.ticks;
+                if (!ticks.find(t => t.value === axis.min)) ticks.push({value: axis.min});
+                if (!ticks.find(t => t.value === axis.max)) ticks.push({value: axis.max});
+                axis.ticks.sort((a, b) => a.value - b.value);
+              },
               ticks: {
                 color: '#a1a1aa',
                 callback: function(val) {
-                  const tickValue = this.getLabelForValue(val);
-                  return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
+                  if (val === this.min || val === this.max) {
+                    const tickValue = this.getLabelForValue(val);
+                    return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
+                  }
+                  return '';
                 },
                 maxRotation: 0,
                 autoSkipPadding: 20
@@ -829,11 +837,17 @@
             yHP: {
               type: 'linear', position: 'left',
               grid: { color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
-              afterBuildTicks: axis => axis.ticks = [{value: axis.min}, {value: axis.max}],
+              afterBuildTicks: axis => {
+                const ticks = axis.ticks;
+                if (!ticks.find(t => t.value === axis.min)) ticks.push({value: axis.min});
+                if (!ticks.find(t => t.value === axis.max)) ticks.push({value: axis.max});
+                axis.ticks.sort((a, b) => a.value - b.value);
+              },
               ticks: {
                 color: '#a1a1aa',
                 callback: function(value) {
-                  return value;
+                  if (value === this.max || value === this.min) { return value; }
+                  return '';
                 }
               },
               title: { display: false },
