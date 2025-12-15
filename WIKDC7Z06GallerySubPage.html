@@ -542,6 +542,7 @@
 
     const chartCanvas = document.getElementById('dynoChart');
     if (chartCanvas) {
+      const initChart = () => {
       const chartContainer = document.getElementById('chart-container');
       const overlayCanvas = document.createElement('canvas');
       overlayCanvas.style.position = 'absolute';
@@ -853,6 +854,19 @@
         },
         plugins: [fullBorderPlugin]
       });
+      };
+
+      if (window.IntersectionObserver) {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            initChart();
+            observer.disconnect();
+          }
+        }, { rootMargin: '0px 0px 100px 0px' });
+        observer.observe(chartCanvas);
+      } else {
+        initChart();
+      }
     }
   });
   </script>
