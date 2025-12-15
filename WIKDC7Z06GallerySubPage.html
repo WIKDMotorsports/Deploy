@@ -814,17 +814,12 @@
             x: {
               grid: { color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               max: lastRpmPoint,
+              afterBuildTicks: axis => axis.ticks = [{value: axis.min}, {value: axis.max}],
               ticks: {
-                includeBounds: true,
                 color: '#a1a1aa',
-                callback: function(val, index, ticks) {
+                callback: function(val) {
                   const tickValue = this.getLabelForValue(val);
-
-                  if (val === this.min || val === this.max || index === 0 || index === ticks.length - 1) {
-                    return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
-                  }
-                  
-                  return '';
+                  return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                 },
                 maxRotation: 0,
                 autoSkipPadding: 20
@@ -834,12 +829,11 @@
             yHP: {
               type: 'linear', position: 'left',
               grid: { color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
+              afterBuildTicks: axis => axis.ticks = [{value: axis.min}, {value: axis.max}],
               ticks: {
-                includeBounds: true,
-                color: '#a1a1aa', stepSize: 25,
+                color: '#a1a1aa',
                 callback: function(value) {
-                  if (value === this.max || value === this.min) { return value; }
-                  return '';
+                  return value;
                 }
               },
               title: { display: false },

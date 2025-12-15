@@ -505,15 +505,12 @@
           scales: {
             x: { 
               grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              afterBuildTicks: axis => axis.ticks = [{value: axis.min}, {value: axis.max}],
               ticks: {
-                includeBounds: true,
                 color: '#a1a1aa',
-                callback: function(val, index, ticks) {
+                callback: function(val) {
                   const tickValue = this.getLabelForValue(val);
-                  if (val === this.min || val === this.max || index === 0 || index === ticks.length - 1) {
-                    return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
-                  }
-                  return '';
+                  return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                 }
               },
               title: { display: false }
@@ -522,12 +519,11 @@
               type: 'linear', 
               position: 'left', 
               grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
+              afterBuildTicks: axis => axis.ticks = [{value: axis.min}, {value: axis.max}],
               ticks: {
-                includeBounds: true,
-                color: '#a1a1aa', stepSize: 100,
+                color: '#a1a1aa',
                 callback: function(value) {
-                  if (value === this.max || value === this.min) { return value; }
-                  return '';
+                  return value;
                 }
               },
               min: 0, 
