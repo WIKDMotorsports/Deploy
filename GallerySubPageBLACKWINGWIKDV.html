@@ -495,13 +495,14 @@
             x: { 
               grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
               ticks: {
+                includeBounds: true,
                 color: '#a1a1aa',
                 callback: function(val, index, ticks) {
                   const tickValue = this.getLabelForValue(val);
                   if (val === this.min || val === this.max || index === 0 || index === ticks.length - 1) {
                     return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                   }
-                  return (tickValue % 500 === 0) ? `${tickValue / 1000}k` : '';
+                  return '';
                 }
               },
               title: { display: false }
@@ -510,9 +511,10 @@
               type: 'linear', position: 'left', 
               grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
               ticks: {
+                includeBounds: true,
                 color: '#a1a1aa', stepSize: 200,
                 callback: function(value) {
-                  if (value % 200 === 0 || value === this.max || value === this.min) { return value; }
+                  if (value === this.max || value === this.min) { return value; }
                   return '';
                 }
               },
