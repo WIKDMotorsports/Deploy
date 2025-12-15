@@ -544,7 +544,7 @@
 
                 return `
                 <div class="gallery-card-wrapper" data-brand="${item.brand}" data-wikd="true" data-special-build="${specialBuild}">
-                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}" data-wikd="true" target="_self">
+                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}" data-wikd="true" target="_self" onclick="event.preventDefault(); window.location.href = this.href;">
                         <div class="card-shaker">
                             <div class="card-media-container">
                                 <img src="${item.images.background}" class="media-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
@@ -567,7 +567,7 @@
             } else {
                 return `
                 <div class="gallery-card-wrapper" data-brand="${item.brand}">
-                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}" target="_self">
+                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}" target="_self" onclick="event.preventDefault(); window.location.href = this.href;">
                         <img src="${item.images.background}" class="gallery-card-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
                         <div class="gallery-card-overlay">
                             <div class="card-badge-container">
