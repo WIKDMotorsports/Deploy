@@ -449,6 +449,19 @@
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+
+    /* --- CLICKABLE LINK OVERLAY --- */
+    #wikd-gallery-root .gallery-card-link {
+        position: absolute;
+        inset: 0;
+        z-index: 50; /* Higher than overlay z-index 5 */
+        cursor: pointer;
+    }
+
+    /* Ensure the link is physically in front of 3D elements for WIKD cards */
+    #wikd-gallery-root .gallery-card[data-wikd="true"] .gallery-card-link {
+        transform: translateZ(120px);
+    }
 </style>
 
 <!-- 3. HTML CONTENT -->
@@ -540,8 +553,9 @@
 
                 return `
                 <div class="gallery-card-wrapper" data-brand="${item.brand}" data-wikd="true" data-special-build="${specialBuild}">
-                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}" data-wikd="true">
+                    <div class="gallery-card" data-brand="${item.brand}" data-wikd="true">
                         <div class="card-shaker">
+                            <a href="${cardLink}" class="gallery-card-link" aria-label="${item.title}"></a>
                             <div class="card-media-container">
                                 <img src="${item.images.background}" class="media-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
                                 ${videoHTML}
@@ -558,12 +572,13 @@
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>`;
             } else {
                 return `
                 <div class="gallery-card-wrapper" data-brand="${item.brand}">
-                    <a href="${cardLink}" class="gallery-card" data-brand="${item.brand}">
+                    <div class="gallery-card" data-brand="${item.brand}">
+                        <a href="${cardLink}" class="gallery-card-link" aria-label="${item.title}"></a>
                         <img src="${item.images.background}" class="gallery-card-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
                         <div class="gallery-card-overlay">
                             <div class="card-badge-container">
@@ -574,7 +589,7 @@
                                 ${subtitleHTML}
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>`;
             }
         }
