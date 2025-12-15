@@ -693,8 +693,8 @@
             tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
           },
           scales: {
-            x: { 
-              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
+            x: {
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
@@ -710,14 +710,16 @@
                     return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                   }
                   return '';
-                }
+                },
+                maxRotation: 0,
+                autoSkipPadding: 20
               },
               title: { display: false }
             },
-            yHP: { 
-              type: 'linear', 
-              position: 'left', 
-              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
+            yHP: {
+              type: 'linear',
+              position: 'left',
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
@@ -732,10 +734,13 @@
                   return '';
                 }
               },
-              min: 0, 
-              max: 1200, 
-              title: { display: false } 
+              min: 0,
+              max: 1200,
+              title: { display: false }
             },
+            yTQ: {
+              display: false
+            }
           }
         },
         plugins: [fullBorderPlugin]

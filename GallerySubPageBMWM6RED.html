@@ -528,8 +528,8 @@
             tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
           },
           scales: {
-            x: { 
-              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
+            x: {
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
@@ -545,28 +545,36 @@
                     return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                   }
                   return '';
-                }
+                },
+                maxRotation: 0,
+                autoSkipPadding: 20
               },
               title: { display: false }
             },
-            yHP: { 
-              type: 'linear', position: 'left',
-              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
+            yHP: {
+              type: 'linear',
+              position: 'left',
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
-                const ticks = axis.ticks;
-                if (!ticks.find(t => t.value === axis.min)) ticks.push({value: axis.min});
-                if (!ticks.find(t => t.value === axis.max)) ticks.push({value: axis.max});
-                axis.ticks.sort((a, b) => a.value - b.value);
+                const count = axis.ticks.length;
+                const step = Math.max(1, Math.floor(count / 10));
+                axis.ticks = axis.ticks.filter((t, i) => i === 0 || i === count - 1 || i % step === 0);
               },
               ticks: {
+                autoSkip: false,
+                includeBounds: true,
                 color: '#a1a1aa',
                 callback: function(value) {
                   if (value === this.max || value === this.min) { return value; }
                   return '';
                 }
               },
-              min: 0, max: 1200,
-              title: { display: false } 
+              min: 0,
+              max: 1200,
+              title: { display: false }
+            },
+            yTQ: {
+              display: false
             }
           }
         },

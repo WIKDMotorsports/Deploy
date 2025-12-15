@@ -547,7 +547,7 @@
           },
           scales: {
             x: {
-              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
@@ -563,13 +563,16 @@
                     return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                   }
                   return '';
-                }
+                },
+                maxRotation: 0,
+                autoSkipPadding: 20
               },
               title: { display: false }
             },
             yHP: {
-              type: 'linear', position: 'left',
-              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)' },
+              type: 'linear',
+              position: 'left',
+              grid: { drawTicks: false, color: 'rgba(255, 255, 255, 0.1)', tickColor: (context) => context.tick.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent' },
               afterBuildTicks: axis => {
                 const count = axis.ticks.length;
                 const step = Math.max(1, Math.floor(count / 10));
@@ -584,8 +587,12 @@
                   return '';
                 }
               },
-              min: 0, max: 1000,
+              min: 0,
+              max: 1000,
               title: { display: false }
+            },
+            yTQ: {
+              display: false
             }
           }
         },
