@@ -628,6 +628,7 @@
     const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
     const chartCanvas = document.getElementById('dynoChart');
     if (chartCanvas) {
+      const initChart = () => {
       const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
       let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
       function syncOverlay(chart) { overlayCanvas.width = chart.width; overlayCanvas.height = chart.height; overlayCanvas.style.width = chart.width + 'px'; overlayCanvas.style.height = chart.height + 'px'; const hpMeta = chart.getDatasetMeta(2); const tqMeta = chart.getDatasetMeta(3); if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1); } if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); } }
@@ -679,6 +680,19 @@
         },
         plugins: [fullBorderPlugin]
       });
+      };
+
+      if (window.IntersectionObserver) {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            initChart();
+            observer.disconnect();
+          }
+        }, { rootMargin: '0px 0px 100px 0px' });
+        observer.observe(chartCanvas);
+      } else {
+        initChart();
+      }
     }
   });
   </script>
