@@ -546,9 +546,46 @@
             tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
           },
           scales: {
-            x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } } },
-            yHP: { type: 'linear', position: 'left', grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#ff4747', stepSize: 200 }, min: 0, max: 1000, title: { display: true, text: 'Horsepower (WHP)', color: '#ff4747' } },
-            yTQ: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#ffa500', stepSize: 200 }, min: 0, max: 1000, title: { display: true, text: 'Torque (lb-ft)', color: '#ffa500' } }
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: {
+                color: '#a1a1aa',
+                callback: function(val, index, ticks) {
+                  const tickValue = this.getLabelForValue(val);
+                  if (val === this.min || val === this.max || index === 0 || index === ticks.length - 1) {
+                    return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
+                  }
+                  return (tickValue % 500 === 0) ? `${tickValue / 1000}k` : '';
+                }
+              },
+              title: { display: false }
+            },
+            yHP: {
+              type: 'linear', position: 'left',
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: {
+                color: '#ff4747', stepSize: 200,
+                callback: function(value) {
+                  if (value % 200 === 0 || value === this.max || value === this.min) { return value; }
+                  return '';
+                }
+              },
+              min: 0, max: 1000,
+              title: { display: false }
+            },
+            yTQ: {
+              type: 'linear', position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: {
+                color: '#ffa500', stepSize: 200,
+                callback: function(value) {
+                  if (value % 200 === 0 || value === this.max || value === this.min) { return value; }
+                  return '';
+                }
+              },
+              min: 0, max: 1000,
+              title: { display: false }
+            }
           }
         },
         plugins: [fullBorderPlugin]

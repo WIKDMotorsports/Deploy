@@ -818,8 +818,8 @@
                 color: '#a1a1aa',
                 callback: function(val, index, ticks) {
                   const tickValue = this.getLabelForValue(val);
-                  
-                  if (index === ticks.length - 1) {
+
+                  if (val === this.min || val === this.max || index === 0 || index === ticks.length - 1) {
                     return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
                   }
                   
@@ -831,7 +831,8 @@
                 },
                 maxRotation: 0,
                 autoSkipPadding: 20
-              }
+              },
+              title: { display: false }
             },
             yHP: {
               type: 'linear', position: 'left',
