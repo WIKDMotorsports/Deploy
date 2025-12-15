@@ -522,12 +522,13 @@
             x: { 
               grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
               afterBuildTicks: axis => {
-                const ticks = axis.ticks;
-                if (!ticks.find(t => t.value === axis.min)) ticks.push({value: axis.min});
-                if (!ticks.find(t => t.value === axis.max)) ticks.push({value: axis.max});
-                axis.ticks.sort((a, b) => a.value - b.value);
+                const count = axis.ticks.length;
+                const step = Math.max(1, Math.floor(count / 10));
+                axis.ticks = axis.ticks.filter((t, i) => i === 0 || i === count - 1 || i % step === 0);
               },
               ticks: {
+                autoSkip: false,
+                includeBounds: true,
                 color: '#a1a1aa',
                 callback: function(val) {
                   const tickValue = this.getLabelForValue(val);
@@ -544,12 +545,13 @@
               position: 'left', 
               grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
               afterBuildTicks: axis => {
-                const ticks = axis.ticks;
-                if (!ticks.find(t => t.value === axis.min)) ticks.push({value: axis.min});
-                if (!ticks.find(t => t.value === axis.max)) ticks.push({value: axis.max});
-                axis.ticks.sort((a, b) => a.value - b.value);
+                const count = axis.ticks.length;
+                const step = Math.max(1, Math.floor(count / 10));
+                axis.ticks = axis.ticks.filter((t, i) => i === 0 || i === count - 1 || i % step === 0);
               },
               ticks: {
+                autoSkip: false,
+                includeBounds: true,
                 color: '#a1a1aa',
                 callback: function(value) {
                   if (value === this.max || value === this.min) { return value; }
