@@ -543,11 +543,6 @@
     const chartCanvas = document.getElementById('dynoChart');
     if (chartCanvas) {
       const initChart = () => {
-      const ctx = chartCanvas.getContext('2d');
-      const hpFillGradient = ctx.createLinearGradient(0, 0, 0, 400);
-      hpFillGradient.addColorStop(0, 'rgba(255, 71, 71, 0.5)');
-      hpFillGradient.addColorStop(1, 'rgba(255, 71, 71, 0)');
-
       const chartContainer = document.getElementById('chart-container');
       const overlayCanvas = document.createElement('canvas');
       overlayCanvas.style.position = 'absolute';
@@ -557,7 +552,7 @@
       chartContainer.appendChild(overlayCanvas);
       const overlayCtx = overlayCanvas.getContext('2d');
 
-      let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
+      let hpPoint, tqPoint, hpPathPoints, tqPathPoints, allHpPoints, hpFillGradient;
 
       function syncOverlay(chart) {
         overlayCanvas.width = chart.width;
@@ -567,15 +562,23 @@
 
         const hpMeta = chart.getDatasetMeta(2);
         const tqMeta = chart.getDatasetMeta(3);
+        const fullHpMeta = chart.getDatasetMeta(0);
+        allHpPoints = fullHpMeta.data;
         
         if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) {
           hpPoint = hpMeta.data[peakHpIndex];
-          hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1);
+          hpPathPoints = fullHpMeta.data.slice(0, peakHpIndex + 1);
         }
         if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) {
           tqPoint = tqMeta.data[peakTqIndex];
           tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1);
         }
+
+        const chartArea = chart.chartArea;
+        hpFillGradient = overlayCtx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        hpFillGradient.addColorStop(0, 'rgba(255, 71, 71, 0.5)');
+        hpFillGradient.addColorStop(0.85, 'rgba(255, 71, 71, 0)');
+        hpFillGradient.addColorStop(1, 'rgba(255, 71, 71, 0)');
       }
       
       function getPointOnPath(path, progress) {
@@ -629,8 +632,6 @@
               label: 'Horsepower (WHP)',
               data: chartData.map(d => d.horsepower),
               borderColor: '#ff4747',
-              backgroundColor: hpFillGradient,
-              fill: true,
               borderWidth: 2,
               pointRadius: 0,
               pointStyle: 'triangle',
@@ -699,9 +700,26 @@
               function animatePing(timestamp) {
                 if (!startTime) startTime = timestamp;
                 const progress = ((timestamp - startTime) % duration) / duration;
+                const fillProgress = Math.min(1, (timestamp - startTime) / 2000);
 
                 overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
                 overlayCtx.save();
+
+                // Draw Gradient Fill
+                if (allHpPoints && allHpPoints.length > 0) {
+                    overlayCtx.save();
+                    overlayCtx.globalAlpha = fillProgress;
+                    overlayCtx.beginPath();
+                    overlayCtx.moveTo(allHpPoints[0].x, chartInstance.chartArea.bottom);
+                    for (const p of allHpPoints) {
+                        overlayCtx.lineTo(p.x, p.y);
+                    }
+                    overlayCtx.lineTo(allHpPoints[allHpPoints.length - 1].x, chartInstance.chartArea.bottom);
+                    overlayCtx.closePath();
+                    overlayCtx.fillStyle = hpFillGradient;
+                    overlayCtx.fill();
+                    overlayCtx.restore();
+                }
                 
                 const hpPulsePos = getPointOnPath(hpPathPoints, progress);
                 const tqPulsePos = getPointOnPath(tqPathPoints, progress);
