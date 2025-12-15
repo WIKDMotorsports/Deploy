@@ -1,0 +1,726 @@
+<!-- 
+  Instructions for Shopify:
+  1. Go to your Shopify Admin > Online Store > Pages.
+  2. Select the page where you want to add the gallery.
+  3. In the content editor, click the "Show HTML" button (it looks like </>).
+  4. Delete any previous versions of the code and paste ALL of the code below into the HTML editor.
+  5. Click "Save".
+-->
+
+<!-- 1. FONT STYLES -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- 2. CSS STYLES -->
+<style>
+    /* --- BASE VARIABLES --- */
+    :root {
+        --color-background: #0A0A0A;
+        --color-text: #EAEAEA;
+        --color-text-muted: #888888;
+        --color-primary: #FF3B30;
+        --color-surface: #141414;
+        --color-border: #2A2A2A;
+        --font-heading: 'Rajdhani', sans-serif;
+        --font-body: 'Inter', sans-serif;
+    }
+
+    /* --- SCOPED GALLERY STYLES --- */
+    /* All styles are now scoped to #wikd-gallery-root to prevent conflicts with your Shopify theme. */
+    #wikd-gallery-root {
+        background-color: var(--color-background);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        line-height: 1.6;
+        padding: 60px 5%;
+        margin: 0 -5%; /* Counteract theme padding if necessary */
+    }
+
+    #wikd-gallery-root h3 {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+
+    #wikd-gallery-root img,
+    #wikd-gallery-root video {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    #wikd-gallery-root a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    #wikd-gallery-root .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    #wikd-gallery-root .gallery-filter-menu {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 60px;
+    }
+    
+    #wikd-gallery-root .btn {
+        display: inline-block;
+        font-family: var(--font-heading);
+        font-weight: 600;
+        text-transform: uppercase;
+        background-color: transparent;
+        border: 2px solid var(--color-border);
+        position: relative;
+        overflow: hidden;
+        transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+        cursor: pointer;
+    }
+    #wikd-gallery-root .btn.filter-btn {
+        padding: 10px 24px;
+        font-size: 16px;
+        color: var(--color-text-muted);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 88%);
+    }
+    #wikd-gallery-root .btn span {
+        position: relative;
+        z-index: 2;
+    }
+    #wikd-gallery-root .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--color-primary);
+        z-index: 1;
+        transform: translateX(-101%);
+        transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+    #wikd-gallery-root .btn:hover::before {
+        transform: translateX(0);
+    }
+    #wikd-gallery-root .btn.filter-btn:hover {
+        color: white;
+        border-color: var(--color-primary);
+    }
+    #wikd-gallery-root .btn.filter-btn.active {
+        color: white;
+        border-color: var(--color-primary);
+    }
+    #wikd-gallery-root .btn.filter-btn.active::before {
+        transform: translateX(0);
+    }
+    #wikd-gallery-root .btn.filter-btn.wikd-filter {
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+    #wikd-gallery-root .btn.filter-btn.wikd-filter:hover,
+    #wikd-gallery-root .btn.filter-btn.wikd-filter.active {
+        color: black;
+        box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
+    }
+    #wikd-gallery-root .btn.filter-btn.wikd-filter.active::before {
+        background-color: var(--color-primary);
+    }
+    
+    #wikd-gallery-root .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+        justify-items: center;
+    }
+
+    /* --- CARD STYLES --- */
+    #wikd-gallery-root .gallery-card-wrapper {
+        max-width: 420px;
+        width: 100%;
+    }
+    
+    #wikd-gallery-root .gallery-card-wrapper[data-wikd="true"] {
+        perspective: 1000px;
+    }
+
+    #wikd-gallery-root .gallery-card {
+        display: block;
+        position: relative;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        text-decoration: none;
+        isolation: isolate;
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"] {
+        transform-style: preserve-3d;
+    }
+    
+    #wikd-gallery-root .gallery-card:not([data-wikd="true"]):hover {
+        transform: scale(1.03);
+        border-color: var(--color-text);
+    }
+
+    #wikd-gallery-root .gallery-card:not([data-wikd="true"]):hover .gallery-card-bg {
+        transform: scale(1.1);
+        filter: grayscale(0%);
+    }
+
+    #wikd-gallery-root .gallery-card-bg {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: transform 0.6s cubic-bezier(0.3, 1, 0.4, 1), filter 0.6s ease;
+    }
+    
+    @keyframes wikdPerformanceSubtleShake {
+        0%, 100% { transform: translate(0, 0); }
+        20%, 60% { transform: translate(1px, -1px); }
+        40%, 80% { transform: translate(-1px, 1px); }
+    }
+
+    #wikd-gallery-root .card-shaker {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover .card-shaker {
+        animation: wikdPerformanceSubtleShake 0.3s ease-in-out;
+    }
+
+    #wikd-gallery-root .card-media-container {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 8px;
+        transform-style: preserve-3d;
+    }
+    
+    #wikd-gallery-root .card-media-container img,
+    #wikd-gallery-root .card-media-container video {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover;
+        transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), filter 0.6s ease;
+    }
+    
+    #wikd-gallery-root .media-bg {
+        z-index: 1;
+        filter: grayscale(100%);
+    }
+    
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover .media-bg {
+         filter: grayscale(100%) brightness(0.3);
+    }
+
+    #wikd-gallery-root .gallery-card-video-overlay {
+        z-index: 2;
+        mix-blend-mode: screen;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateZ(40px);
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover .gallery-card-video-overlay {
+        opacity: 1;
+    }
+
+    #wikd-gallery-root .media-fg {
+        z-index: 3;
+        opacity: 0;
+        pointer-events: none;
+        filter: grayscale(100%);
+        transform: translateZ(60px);
+    }
+    
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover .media-fg {
+        opacity: 1;
+    }
+
+    #wikd-gallery-root .gallery-card-overlay {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+        transform-style: preserve-3d;
+    }
+    
+    #wikd-gallery-root .gallery-card[data-wikd="true"] .gallery-card-overlay {
+        position: relative;
+        z-index: 5;
+        transform: translateZ(100px);
+        padding: 15px;
+    }
+    
+    #wikd-gallery-root .gallery-card:not([data-wikd="true"]) .gallery-card-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        padding: 25px;
+    }
+
+    #wikd-gallery-root .gallery-card-title-block, #wikd-gallery-root .card-badge-container {
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    #wikd-gallery-root .gallery-card-title-block {
+        align-self: flex-start;
+    }
+    
+    #wikd-gallery-root .gallery-card-title {
+        font-size: 1.75rem;
+        color: white;
+        margin: 0;
+        line-height: 1.2;
+        text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
+        transition: color 0.3s ease;
+    }
+    
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover .gallery-card-title {
+        background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+        background-size: 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: lavaFlow 4s ease-in-out infinite;
+        text-shadow: none;
+        filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.7));
+    }
+
+    #wikd-gallery-root .gallery-card-subtitle {
+        font-size: 1rem;
+        color: white;
+        font-family: var(--font-body);
+        font-weight: 500;
+        text-transform: none;
+        margin-top: 5px;
+        display: block;
+        text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
+    }
+    
+    #wikd-gallery-root .card-badge-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    #wikd-gallery-root .card-brand-badge {
+        display: inline-block;
+        padding: 6px 15px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: white;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255,255,255,0.1);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
+    }
+    
+    #wikd-gallery-root .wikd-sub-badge {
+        display: inline-block;
+        background-color: rgba(255, 59, 48, 0.7);
+        color: white;
+        padding: 6px 18px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        font-style: italic;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 80%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    #wikd-gallery-root .wikd-sub-badge::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -150%;
+        width: 75%;
+        height: 200%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: rotate(30deg);
+        animation: constant-shine 3s ease-in-out infinite;
+        animation-delay: 0.5s;
+    }
+
+    @keyframes constant-shine {
+        0% { left: -150%; }
+        100% { left: 150%; }
+    }
+    
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="audi"] { background-color: rgba(100, 100, 100, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="bentley"] { background-color: rgba(51, 51, 51, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="bmw"] { background-color: rgba(0, 102, 178, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="cadillac"] { background-color: rgba(175, 141, 45, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="chevrolet"] { background-color: rgba(250, 208, 2, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="ford"] { background-color: rgba(0, 17, 107, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="lamborghini"] { background-color: rgba(255, 140, 0, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="mclaren"] { background-color: rgba(255, 136, 0, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="mercedes-benz"] { background-color: rgba(36, 178, 169, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="pontiac"] { background-color: rgba(206, 24, 30, 0.6); }
+    #wikd-gallery-root .card-brand-badge[data-brand-badge="porsche"] { background-color: rgba(180, 180, 180, 0.6); }
+
+    /* --- WIKD CARD SPECIAL EFFECTS --- */
+    #wikd-gallery-root .gallery-card[data-wikd="true"] {
+        border-color: transparent;
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"]::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 8px;
+        padding: 2px;
+        background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+        background-size: 300%;
+        animation: lavaFlow 4s ease-in-out infinite;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        z-index: 6;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover::before {
+        opacity: 1;
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"]::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: skewX(-25deg);
+        z-index: 4;
+        transition: left 0.6s ease-out;
+    }
+
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover {
+        box-shadow: 0 0 25px rgba(255, 59, 48, 0.5);
+    }
+    
+    #wikd-gallery-root .gallery-card[data-wikd="true"]:hover::after {
+        left: 150%;
+    }
+
+    @keyframes lavaFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* MRS.WIKD Card Specific Styles */
+    #wikd-gallery-root [data-special-build="mrs-wikd"] .wikd-sub-badge {
+        background-color: hsla(322, 100%, 50%, 0.7);
+    }
+
+    #wikd-gallery-root [data-special-build="mrs-wikd"].gallery-card-wrapper .gallery-card[data-wikd="true"]::before {
+        background: linear-gradient(90deg, #B30075, #FF00A6, #FF4DBC, #FF00A6, #B30075);
+        background-size: 300%;
+        animation: lavaFlow 4s ease-in-out infinite;
+    }
+    
+    #wikd-gallery-root [data-special-build="mrs-wikd"].gallery-card-wrapper .gallery-card[data-wikd="true"]:hover {
+        box-shadow: 0 0 25px hsla(322, 100%, 50%, 0.5);
+    }
+
+    #wikd-gallery-root [data-special-build="mrs-wikd"].gallery-card-wrapper .gallery-card[data-wikd="true"]:hover .gallery-card-title {
+        background: linear-gradient(90deg, #B30075, #FF00A6, #FF4DBC, #FF00A6, #B30075);
+        background-size: 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+
+<!-- 3. HTML CONTENT -->
+<div id="wikd-gallery-root">
+    <div class="container">
+        <nav class="gallery-filter-menu" id="galleryFilter">
+            <button class="btn filter-btn active" data-filter="all"><span>All</span></button>
+            <button class="btn filter-btn wikd-filter" data-filter="wikd"><span>WIKD</span></button>
+            <button class="btn filter-btn" data-filter="audi"><span>Audi</span></button>
+            <button class="btn filter-btn" data-filter="bentley"><span>Bentley</span></button>
+            <button class="btn filter-btn" data-filter="bmw"><span>BMW</span></button>
+            <button class="btn filter-btn" data-filter="cadillac"><span>Cadillac</span></button>
+            <button class="btn filter-btn" data-filter="chevrolet"><span>Chevrolet</span></button>
+            <button class="btn filter-btn" data-filter="ford"><span>Ford</span></button>
+            <button class="btn filter-btn" data-filter="lamborghini"><span>Lamborghini</span></button>
+            <button class="btn filter-btn" data-filter="mclaren"><span>McLaren</span></button>
+            <button class="btn filter-btn" data-filter="mercedes-benz"><span>Mercedes-Benz</span></button>
+            <button class="btn filter-btn" data-filter="pontiac"><span>Pontiac</span></button>
+            <button class="btn filter-btn" data-filter="porsche"><span>Porsche</span></button>
+        </nav>
+
+        <div class="gallery-grid" id="galleryGrid">
+            <p style="color: white; text-align: center; grid-column: 1 / -1;">Loading WIKD Builds...</p>
+        </div>
+    </div>
+</div>
+
+<!-- 4. JAVASCRIPT LIBRARIES & LOGIC -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+<script>
+// We wrap the entire script in a function to avoid conflicts with Shopify's other scripts.
+(function() {
+    // This function runs the gallery script.
+    const runWikdGallery = function() {
+        const galleryGrid = document.getElementById('galleryGrid');
+
+        // Early exit if the main container is not found.
+        if (!galleryGrid) {
+            console.error("WIKD Gallery Error: The gallery container with id='galleryGrid' was not found.");
+            return;
+        }
+
+        // Prevent the script from running multiple times if the theme editor reloads it.
+        if (galleryGrid.classList.contains('wikd-gallery-initialized')) {
+            return;
+        }
+        galleryGrid.classList.add('wikd-gallery-initialized');
+
+        const JSON_URL = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Shopandgallerydata.json?v=1755204797';
+
+        function createGalleryCardHTML(item) {
+            const isWikd = item.isWikdBuild;
+            const specialBuild = item.specialBuild || '';
+            const subtitleHTML = item.subtitle ? `<span class="gallery-card-subtitle">${item.subtitle}</span>` : '';
+            const placeholder = `https://placehold.co/800x600/141414/eaeaea?text=${encodeURIComponent(item.title)}`;
+
+            if (isWikd) {
+                const videoHTML = item.video && item.video.overlaySrc 
+                    ? `<video class="gallery-card-video-overlay" ${item.video.style ? `style="${item.video.style}"` : ''} src="${item.video.overlaySrc}" autoplay loop muted playsinline></video>` 
+                    : '';
+                
+                const foregroundHTML = item.images && item.images.foreground
+                    ? `<img src="${item.images.foreground}" class="media-fg" alt="${item.title} Foreground" onerror="this.onerror=null;this.src='${placeholder}';">`
+                    : '';
+                
+                const wikdBadgeText = specialBuild ? specialBuild.replace(/-/g, '.').toUpperCase() : 'WIKD';
+
+                return `
+                <div class="gallery-card-wrapper" data-brand="${item.brand}" data-wikd="true" data-special-build="${specialBuild}">
+                    <a href="${item.link}" class="gallery-card" data-brand="${item.brand}" data-wikd="true">
+                        <div class="card-shaker">
+                            <div class="card-media-container">
+                                <img src="${item.images.background}" class="media-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
+                                ${videoHTML}
+                                ${foregroundHTML}
+                            </div>
+                            <div class="gallery-card-overlay">
+                                <div class="card-badge-container">
+                                    <div class="card-brand-badge" data-brand-badge="${item.brand}">${item.brand}</div>
+                                    <div class="wikd-sub-badge">${wikdBadgeText}</div>
+                                </div>
+                                <div class="gallery-card-title-block">
+                                    <h3 class="gallery-card-title">${item.title}</h3>
+                                    ${subtitleHTML}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>`;
+            } else {
+                return `
+                <div class="gallery-card-wrapper" data-brand="${item.brand}">
+                    <a href="${item.link}" class="gallery-card" data-brand="${item.brand}">
+                        <img src="${item.images.background}" class="gallery-card-bg" alt="${item.images.alt}" onerror="this.onerror=null;this.src='${placeholder}';">
+                        <div class="gallery-card-overlay">
+                            <div class="card-badge-container">
+                                <div class="card-brand-badge" data-brand-badge="${item.brand}">${item.brand}</div>
+                            </div>
+                            <div class="gallery-card-title-block">
+                                <h3 class="gallery-card-title">${item.title}</h3>
+                                ${subtitleHTML}
+                            </div>
+                        </div>
+                    </a>
+                </div>`;
+            }
+        }
+
+        function initializeGalleryScripts() {
+            const filterMenu = document.getElementById('galleryFilter');
+            const galleryItems = gsap.utils.toArray('#wikd-gallery-root .gallery-card-wrapper');
+            
+            gsap.from(galleryItems, {
+                duration: 0.8,
+                opacity: 0,
+                y: 50,
+                stagger: 0.05,
+                ease: 'power3.out',
+                delay: 0.2
+            });
+
+            if (filterMenu) {
+                filterMenu.addEventListener('click', (e) => {
+                    const target = e.target.closest('.filter-btn');
+                    if (!target) return;
+
+                    const activeBtn = filterMenu.querySelector('.active');
+                    if (activeBtn) activeBtn.classList.remove('active');
+                    target.classList.add('active');
+
+                    const filter = target.dataset.filter;
+                    
+                    const itemsToHide = [];
+                    const itemsToShow = [];
+
+                    galleryItems.forEach(item => {
+                        let showItem = false;
+                        if (filter === 'all') {
+                            showItem = true;
+                        } else if (filter === 'wikd') {
+                            if (item.dataset.wikd === 'true') showItem = true;
+                        } else {
+                            if (item.dataset.brand === filter) showItem = true;
+                        }
+
+                        if (showItem) {
+                            itemsToShow.push(item);
+                        } else {
+                            itemsToHide.push(item);
+                        }
+                    });
+
+                    const tl = gsap.timeline();
+
+                    if (itemsToHide.length > 0) {
+                        tl.to(itemsToHide, {
+                            opacity: 0,
+                            scale: 0.9,
+                            duration: 0.3,
+                            stagger: 0.05,
+                            ease: 'power3.in',
+                            onComplete: () => {
+                                itemsToHide.forEach(item => item.style.display = 'none');
+                            }
+                        });
+                    }
+
+                    if (itemsToShow.length > 0) {
+                        itemsToShow.forEach(item => {
+                           item.style.display = 'block';
+                           gsap.set(item, { opacity: 0, scale: 0.9 });
+                        });
+
+                        tl.to(itemsToShow, {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.4,
+                            stagger: 0.05,
+                            ease: 'power3.out'
+                        }, itemsToHide.length > 0 ? ">-0.1" : 0);
+                    }
+                });
+            }
+            
+            const wikdCards = document.querySelectorAll('#wikd-gallery-root .gallery-card[data-wikd="true"]');
+
+            wikdCards.forEach(card => {
+                const mediaFg = card.querySelector('.media-fg');
+                const mediaBg = card.querySelector('.media-bg');
+                const videoOverlay = card.querySelector('.gallery-card-video-overlay');
+                const cardBadge = card.querySelector('.card-badge-container');
+                const cardTitle = card.querySelector('.gallery-card-title-block');
+
+                const ROTATE_INTENSITY = 15;
+                const BG_SCALE_AMOUNT = 1.05;
+                const FG_INTENSITY = 20;
+                const VIDEO_INTENSITY = 8;
+                const BADGE_INTENSITY = 12;
+                const TITLE_INTENSITY = 18;
+
+                const handleMouseMove = (e) => {
+                    const { width, height, left, top } = card.getBoundingClientRect();
+                    const x = (e.clientX - left) / width - 0.5;
+                    const y = (e.clientY - top) / height - 0.5;
+                    const rotateY = x * ROTATE_INTENSITY * 2;
+                    const rotateX = y * -ROTATE_INTENSITY * 2;
+                    const fgTranslateX = x * FG_INTENSITY;
+                    const fgTranslateY = y * FG_INTENSITY;
+                    const videoTranslateX = x * VIDEO_INTENSITY;
+                    const videoTranslateY = y * VIDEO_INTENSITY;
+                    const badgeTranslateX = x * BADGE_INTENSITY;
+                    const badgeTranslateY = y * BADGE_INTENSITY;
+                    const titleTranslateX = x * TITLE_INTENSITY;
+                    const titleTranslateY = y * TITLE_INTENSITY;
+
+                    requestAnimationFrame(() => {
+                        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                        if (mediaBg) mediaBg.style.transform = `scale(${BG_SCALE_AMOUNT})`;
+                        if (videoOverlay) videoOverlay.style.transform = `translateX(${videoTranslateX}px) translateY(${videoTranslateY}px) translateZ(40px)`;
+                        if (mediaFg) mediaFg.style.transform = `translateX(${fgTranslateX}px) translateY(${fgTranslateY}px) translateZ(60px) scale(1.1)`;
+                        if (cardBadge) cardBadge.style.transform = `translateX(${badgeTranslateX}px) translateY(${badgeTranslateY}px) translateZ(30px)`;
+                        if (cardTitle) cardTitle.style.transform = `translateX(${titleTranslateX}px) translateY(${titleTranslateY}px) translateZ(50px)`;
+                    });
+                };
+
+                const handleMouseLeave = () => {
+                    requestAnimationFrame(() => {
+                        card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                        if (mediaBg) mediaBg.style.transform = 'scale(1)';
+                        if (videoOverlay) videoOverlay.style.transform = 'translateX(0px) translateY(0px) translateZ(40px)';
+                        if (mediaFg) mediaFg.style.transform = 'translateX(0px) translateY(0px) translateZ(60px) scale(1)';
+                        if (cardBadge) cardBadge.style.transform = 'translateX(0px) translateY(0px) translateZ(0px)';
+                        if (cardTitle) cardTitle.style.transform = 'translateX(0px) translateY(0px) translateZ(0px)';
+                    });
+                };
+
+                card.addEventListener('mousemove', handleMouseMove);
+                card.addEventListener('mouseleave', handleMouseLeave);
+            });
+        }
+
+        async function loadGallery() {
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+
+                if (data && data.gallery) {
+                    galleryGrid.innerHTML = '';
+                    data.gallery.forEach(item => {
+                        const cardHTML = createGalleryCardHTML(item);
+                        galleryGrid.insertAdjacentHTML('beforeend', cardHTML);
+                    });
+                    initializeGalleryScripts();
+                } else {
+                    throw new Error("JSON data is not in the expected format.");
+                }
+            } catch (error) {
+                console.error('Failed to load gallery data:', error);
+                galleryGrid.innerHTML = `<p style="color: var(--color-primary); text-align: center; grid-column: 1 / -1;">Could not load gallery items. Please try again later.</p>`;
+            }
+        }
+        
+        loadGallery();
+    };
+
+    // This handles Shopify's theme editor and page loads.
+    // It runs the script on the initial load.
+    document.addEventListener('DOMContentLoaded', runWikdGallery);
+
+    // It also runs the script when Shopify's theme editor reloads the section.
+    document.addEventListener('shopify:section:load', runWikdGallery);
+})();
+</script>
