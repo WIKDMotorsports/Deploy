@@ -14,6 +14,12 @@
 
 <!-- 2. CSS STYLES -->
 <style>
+    /* --- WHITE BAR FIX --- */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
     /* --- BASE VARIABLES --- */
     :root {
         --color-background: #0A0A0A;
@@ -62,16 +68,22 @@
         padding: 0 20px;
     }
     
+    /* --- NEW FILTER MENU STYLES --- */
     #wikd-gallery-root .gallery-filter-menu {
         display: flex;
         justify-content: center;
+        align-items: center;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 0; 
         margin-bottom: 60px;
+        transition: all 0.3s ease;
     }
     
+    /* BUTTON BASE STYLES */
     #wikd-gallery-root .btn {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         font-family: var(--font-heading);
         font-weight: 600;
         text-transform: uppercase;
@@ -79,19 +91,103 @@
         border: 2px solid var(--color-border);
         position: relative;
         overflow: hidden;
-        transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
         cursor: pointer;
+        transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        height: 48px;
+        box-sizing: border-box;
+        white-space: nowrap;
     }
+
+    /* --- FILTER BUTTON (The Stack Items) --- */
     #wikd-gallery-root .btn.filter-btn {
-        padding: 10px 24px;
         font-size: 16px;
         color: var(--color-text-muted);
         clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 88%);
+        
+        /* DEFAULT STATE: HIDDEN (Collapsed) */
+        /* These properties make the non-active buttons disappear */
+        max-width: 0;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        border-width: 0;
+        transform: translateX(-20px);
+        pointer-events: none;
+        
+        /* TRANSITION SETTINGS */
+        transition: 
+            max-width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+            padding 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+            margin 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+            opacity 0.3s ease,
+            transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+            border-width 0.1s ease;
     }
+
+    /* --- EXCEPTION: THE SELECTED BUTTON --- */
+    /* The active button is ALWAYS visible, even when menu is collapsed */
+    #wikd-gallery-root .btn.filter-btn.active {
+        max-width: 300px;
+        padding: 0 24px;
+        margin: 0 0 0 10px; /* Small gap from the Filter button */
+        opacity: 1;
+        border-width: 2px;
+        transform: translateX(0);
+        pointer-events: auto;
+        color: white;
+        border-color: var(--color-primary);
+    }
+    
+    /* Active WIKD button styling */
+    #wikd-gallery-root .btn.filter-btn.wikd-filter.active {
+        box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
+    }
+
+    /* --- EXPANDED STATE (Show All) --- */
+    #wikd-gallery-root .gallery-filter-menu.expanded .btn.filter-btn {
+        max-width: 200px;
+        padding: 0 24px;
+        margin: 6px;
+        opacity: 1;
+        border-width: 2px;
+        transform: translateX(0);
+        pointer-events: auto;
+        
+        /* Staggered animation */
+        transition-delay: calc(var(--i) * 0.03s);
+    }
+    
+    /* Remove delay on hover interactions */
+    #wikd-gallery-root .gallery-filter-menu.expanded .btn.filter-btn:hover,
+    #wikd-gallery-root .gallery-filter-menu.expanded .btn.filter-btn.active {
+        transition-delay: 0s;
+    }
+
+    /* --- THE TRIGGER BUTTON (Permanent) --- */
+    #wikd-gallery-root .btn.trigger-btn {
+        padding: 0 32px;
+        opacity: 1;
+        border-width: 2px;
+        transform: none;
+        pointer-events: auto;
+        z-index: 100;
+        color: white;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 15px rgba(255, 59, 48, 0.2);
+    }
+    
+    /* When Expanded, Trigger looks 'Active' to indicate it controls the menu */
+    #wikd-gallery-root .gallery-filter-menu.expanded .btn.trigger-btn {
+        background-color: rgba(255, 59, 48, 0.1);
+    }
+
+    /* SPAN Z-INDEX FIX */
     #wikd-gallery-root .btn span {
         position: relative;
         z-index: 2;
     }
+
+    /* SLIDE HOVER EFFECT */
     #wikd-gallery-root .btn::before {
         content: '';
         position: absolute;
@@ -104,33 +200,33 @@
         transform: translateX(-101%);
         transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
     }
-    #wikd-gallery-root .btn:hover::before {
-        transform: translateX(0);
-    }
+
+    #wikd-gallery-root .btn:hover::before { transform: translateX(0); }
+    
     #wikd-gallery-root .btn.filter-btn:hover {
         color: white;
         border-color: var(--color-primary);
     }
-    #wikd-gallery-root .btn.filter-btn.active {
-        color: white;
-        border-color: var(--color-primary);
-    }
-    #wikd-gallery-root .btn.filter-btn.active::before {
-        transform: translateX(0);
-    }
+
+    #wikd-gallery-root .btn.filter-btn.active::before { transform: translateX(0); }
+
+    /* SPECIAL 'WIKD' BUTTON STYLES */
     #wikd-gallery-root .btn.filter-btn.wikd-filter {
         color: var(--color-primary);
         border-color: var(--color-primary);
     }
+
     #wikd-gallery-root .btn.filter-btn.wikd-filter:hover,
     #wikd-gallery-root .btn.filter-btn.wikd-filter.active {
         color: black;
         box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
     }
+
     #wikd-gallery-root .btn.filter-btn.wikd-filter.active::before {
         background-color: var(--color-primary);
     }
-    
+
+    /* --- GRID STYLES --- */
     #wikd-gallery-root .gallery-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -456,7 +552,12 @@
 <!-- 3. HTML CONTENT -->
 <div id="wikd-gallery-root">
     <div class="container">
+        <!-- UPDATED FILTER MENU STRUCTURE -->
         <nav class="gallery-filter-menu" id="galleryFilter">
+            <!-- TRIGGER BUTTON -->
+            <button class="btn trigger-btn" id="filterTrigger"><span>FILTER</span></button>
+            
+            <!-- STACK BUTTONS -->
             <button class="btn filter-btn active" data-filter="all"><span>All</span></button>
             <button class="btn filter-btn wikd-filter" data-filter="wikd"><span>WIKD</span></button>
             <button class="btn filter-btn" data-filter="audi"><span>Audi</span></button>
@@ -586,7 +687,16 @@
         function initializeGalleryScripts() {
             const filterMenu = document.getElementById('galleryFilter');
             const galleryItems = gsap.utils.toArray('#wikd-gallery-root .gallery-card-wrapper');
+            const triggerBtn = document.getElementById('filterTrigger');
+            const stackBtns = filterMenu ? filterMenu.querySelectorAll('.filter-btn') : [];
+            let isExpanded = false;
+
+            // Set animation delays for filter buttons
+            stackBtns.forEach((btn, index) => {
+                btn.style.setProperty('--i', index);
+            });
             
+            // Initial Gallery Load Animation
             gsap.from(galleryItems, {
                 duration: 0.8,
                 opacity: 0,
@@ -596,65 +706,97 @@
                 delay: 0.2
             });
 
+            // Toggle Menu Function
+            const toggleMenu = () => {
+                isExpanded = !isExpanded;
+                if (isExpanded) {
+                    filterMenu.classList.add('expanded');
+                    triggerBtn.querySelector('span').textContent = 'CLOSE';
+                } else {
+                    filterMenu.classList.remove('expanded');
+                    triggerBtn.querySelector('span').textContent = 'FILTER';
+                }
+            };
+
             if (filterMenu) {
+                // 1. Trigger Button Logic
+                if (triggerBtn) {
+                    triggerBtn.addEventListener('click', (e) => {
+                         e.stopPropagation();
+                         toggleMenu();
+                    });
+                }
+
+                // 2. Filter Button Logic
                 filterMenu.addEventListener('click', (e) => {
                     const target = e.target.closest('.filter-btn');
-                    if (!target) return;
+                    if (!target) return; // Ignore clicks that aren't on filter buttons
 
-                    const activeBtn = filterMenu.querySelector('.active');
-                    if (activeBtn) activeBtn.classList.remove('active');
-                    target.classList.add('active');
+                    if (isExpanded) {
+                        // If menu is expanded, clicking a button selects it and runs logic
+                        const activeBtn = filterMenu.querySelector('.filter-btn.active');
+                        if (activeBtn) activeBtn.classList.remove('active');
+                        target.classList.add('active');
 
-                    const filter = target.dataset.filter;
-                    
-                    const itemsToHide = [];
-                    const itemsToShow = [];
+                        const filter = target.dataset.filter;
+                        
+                        // --- GSAP FILTERING LOGIC ---
+                        const itemsToHide = [];
+                        const itemsToShow = [];
 
-                    galleryItems.forEach(item => {
-                        let showItem = false;
-                        if (filter === 'all') {
-                            showItem = true;
-                        } else if (filter === 'wikd') {
-                            if (item.dataset.wikd === 'true') showItem = true;
-                        } else {
-                            if (item.dataset.brand === filter) showItem = true;
-                        }
+                        galleryItems.forEach(item => {
+                            let showItem = false;
+                            if (filter === 'all') {
+                                showItem = true;
+                            } else if (filter === 'wikd') {
+                                if (item.dataset.wikd === 'true') showItem = true;
+                            } else {
+                                if (item.dataset.brand === filter) showItem = true;
+                            }
 
-                        if (showItem) {
-                            itemsToShow.push(item);
-                        } else {
-                            itemsToHide.push(item);
-                        }
-                    });
-
-                    const tl = gsap.timeline();
-
-                    if (itemsToHide.length > 0) {
-                        tl.to(itemsToHide, {
-                            opacity: 0,
-                            scale: 0.9,
-                            duration: 0.3,
-                            stagger: 0.05,
-                            ease: 'power3.in',
-                            onComplete: () => {
-                                itemsToHide.forEach(item => item.style.display = 'none');
+                            if (showItem) {
+                                itemsToShow.push(item);
+                            } else {
+                                itemsToHide.push(item);
                             }
                         });
-                    }
 
-                    if (itemsToShow.length > 0) {
-                        itemsToShow.forEach(item => {
-                           item.style.display = 'block';
-                           gsap.set(item, { opacity: 0, scale: 0.9 });
-                        });
+                        const tl = gsap.timeline();
 
-                        tl.to(itemsToShow, {
-                            opacity: 1,
-                            scale: 1,
-                            duration: 0.4,
-                            stagger: 0.05,
-                            ease: 'power3.out'
-                        }, itemsToHide.length > 0 ? ">-0.1" : 0);
+                        if (itemsToHide.length > 0) {
+                            tl.to(itemsToHide, {
+                                opacity: 0,
+                                scale: 0.9,
+                                duration: 0.3,
+                                stagger: 0.05,
+                                ease: 'power3.in',
+                                onComplete: () => {
+                                    itemsToHide.forEach(item => item.style.display = 'none');
+                                }
+                            });
+                        }
+
+                        if (itemsToShow.length > 0) {
+                            itemsToShow.forEach(item => {
+                               item.style.display = 'block';
+                               gsap.set(item, { opacity: 0, scale: 0.9 });
+                            });
+
+                            tl.to(itemsToShow, {
+                                opacity: 1,
+                                scale: 1,
+                                duration: 0.4,
+                                stagger: 0.05,
+                                ease: 'power3.out'
+                            }, itemsToHide.length > 0 ? ">-0.1" : 0);
+                        }
+                        // --- END GSAP LOGIC ---
+
+                        // Close the menu after selection
+                        toggleMenu();
+                    } else {
+                        // If menu is collapsed, clicking the visible 'active' button re-opens menu
+                        toggleMenu();
                     }
                 });
             }
