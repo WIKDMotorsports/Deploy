@@ -232,6 +232,7 @@
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 30px;
         justify-items: center;
+        min-height: 100vh;
     }
 
     /* --- CARD STYLES --- */
@@ -871,6 +872,17 @@
                         galleryGrid.insertAdjacentHTML('beforeend', cardHTML);
                     });
                     initializeGalleryScripts();
+
+                    // Lock the height of the gallery grid to prevent layout shifts ("bouncing") when filtering.
+                    // We wait a moment for the DOM to settle (though grid calculation should be immediate).
+                    setTimeout(() => {
+                        const rect = galleryGrid.getBoundingClientRect();
+                        // Only set if we have a valid height
+                        if(rect.height > 0) {
+                             galleryGrid.style.minHeight = rect.height + 'px';
+                        }
+                    }, 100);
+
                 } else {
                     throw new Error("JSON data is not in the expected format.");
                 }
