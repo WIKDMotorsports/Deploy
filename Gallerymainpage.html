@@ -503,21 +503,23 @@
         const JSON_URL = 'https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Shopandgallerydata.json?v=1755204797';
 
         // Mapping of JSON IDs to local subpage HTML files
+        // Updated to absolute URLs for GitHub Pages deployment
+        const baseURL = "https://wikdmotorsports.github.io/Deploy/";
         const urlMapping = {
-            "wikd-z06": "WIKDC7Z06GallerySubPage.html",
-            "wikd-720s": "720GallerySubpage.html",
-            "gray-matter": "GallerySubPageGrayMatter.html",
-            "mrs-wikd": "GallerSubPageMrsWIKD.html",
-            "wikd-v": "GallerySubPageBLACKWINGWIKDV.html",
-            "wikd-f450": "GallerySubpageF450.html",
-            "artemis": "GallerySubPageArtemis.html",
-            "wikd-bull": "GallerySubpageHuracan.html",
-            "z06-2024": "GallerySubPageC8Z06.html",
-            "wikd-c6": "GallerySubpageWIKDC6.html",
-            "m4-2022": "GallerySubPageBMWM6RED.html",
-            "wikd-g": "GallerySubPageGWagon.html",
-            "wikd-ws6": "GallersubpageWS6TransAm.html",
-            "macan-s-2024": "GallerySubPageMacanS.html"
+            "wikd-z06": baseURL + "WIKDC7Z06GallerySubPage.html",
+            "wikd-720s": baseURL + "720GallerySubpage.html",
+            "gray-matter": baseURL + "GallerySubPageGrayMatter.html",
+            "mrs-wikd": baseURL + "GallerSubPageMrsWIKD.html",
+            "wikd-v": baseURL + "GallerySubPageBLACKWINGWIKDV.html",
+            "wikd-f450": baseURL + "GallerySubpageF450.html",
+            "artemis": baseURL + "GallerySubPageArtemis.html",
+            "wikd-bull": baseURL + "GallerySubpageHuracan.html",
+            "z06-2024": baseURL + "GallerySubPageC8Z06.html",
+            "wikd-c6": baseURL + "GallerySubpageWIKDC6.html",
+            "m4-2022": baseURL + "GallerySubPageBMWM6RED.html",
+            "wikd-g": baseURL + "GallerySubPageGWagon.html",
+            "wikd-ws6": baseURL + "GallersubpageWS6TransAm.html",
+            "macan-s-2024": baseURL + "GallerySubPageMacanS.html"
         };
 
         function createGalleryCardHTML(item) {
