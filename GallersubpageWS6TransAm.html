@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html class="scroll-smooth" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>WIKD Build - 2001 Firebird Trans Am WS6</title>
-
   <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <script src="https://cdn.tailwindcss.com">
+  </script>
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <style>
-    /* Custom styles to complement Tailwind */
+   /* Custom styles to complement Tailwind */
     :root {
       --color-primary: #FF3B30;
     }
@@ -53,13 +50,13 @@
     .clip-path-data-section {
       clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%, 0 95%);
     }
-    
+
     /* -- THEME COLOR CORRECTION -- */
     *:focus-visible {
       outline: 2px solid var(--color-primary) !important;
       outline-offset: 2px;
     }
-    .mods-section ul li::before {
+    .mods-list li::before, .mods-section ul li::before {
       content: '■';
       color: var(--color-primary);
       margin-right: 0.75rem;
@@ -68,7 +65,7 @@
     #chart-container {
       position: relative;
     }
-    
+
     /* --- DESKTOP VERTICAL TICKER --- */
     .ticker-wrapper {
       position: relative;
@@ -94,13 +91,12 @@
     }
     .image-ticker-card img, .image-ticker-card video {
       width: 100%;
-      height: 100%;
+      height: auto;
       display: block;
       filter: grayscale(80%);
       transition: filter 0.3s ease-in-out;
-      object-fit: cover; /* Ensures content fills the area */
     }
-    .image-ticker-card:hover img, .image-ticker-card:hover video, .ticker-video.saturation-locked {
+    .image-ticker-card:hover img, .image-ticker-card:hover video {
       filter: grayscale(0%);
     }
     .ticker-inner {
@@ -153,183 +149,223 @@
       z-index: 4;
     }
   </style>
-</head>
-<body class="overflow-x-hidden">
-  
+ </head>
+ <body class="overflow-x-hidden">
   <!-- MOBILE-ONLY: Horizontal Gallery Wrapper -->
-  <div id="mobileGalleryWrapper" class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden">
-    <div id="mobileTickerInner" class="flex h-full will-change-transform">
-      <!-- Mobile gallery items will be populated by JS -->
-    </div>
-    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+  <div class="lg:hidden fixed top-0 left-0 w-full h-[45vh] z-10 overflow-hidden" id="mobileGalleryWrapper">
+   <div class="flex h-full will-change-transform" id="mobileTickerInner">
+    <!-- Mobile gallery items will be populated by JS -->
+   </div>
+   <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0A0A] to-transparent">
+   </div>
   </div>
-
   <div class="build-hero">
-    <!-- Parallax video will be hidden on mobile via JS -->
-    <video autoplay loop muted playsinline class="parallax-video hidden lg:block">
-        <source src="https://videos.pexels.com/video-files/856012/856012-hd.mp4" type="video/mp4">
-    </video>
-
-    <!-- Main Content Container -->
-    <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
-    
-      <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-      <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
-        <div class="gradient-overlay-top"></div>
-        <div id="tickerInner" class="ticker-inner">
-            
-          <!-- SHORT VIDEO -->
-          <a href="https://www.wikdmotorsports.com/pages/domestics" target="_blank" rel="noopener noreferrer" class="image-ticker-card block" data-video-card>
-            <div class="relative group w-full h-full flex justify-center items-center overflow-hidden">
-              <video autoplay loop muted playsinline class="pointer-events-none w-full h-full ticker-video" style="object-fit: cover;">
-                  <source src="https://cdn.shopify.com/videos/c/o/v/8a13b6cf33514ef8994dc3fb99c3a384.mp4" type="video/mp4">
-              </video>
-              <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
-                  <button class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Mute or unmute video">
-                      <i class="fas fa-volume-mute"></i>
-                  </button>
-                  <button class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Lock or unlock ticker scroll">
-                      <i class="fas fa-unlock"></i>
-                  </button>
-              </div>
-            </div>
-          </a>
-
-          <!-- Image Card 1 -->
-          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC07699_1600x.jpg?v=1732127275" alt="WIKD WS6 Gallery Image 1"></div>
-
-          <!-- LONGER VIDEO -->
-          <a href="https://www.wikdmotorsports.com/pages/domestics" target="_blank" rel="noopener noreferrer" class="image-ticker-card block" data-video-card>
-            <div class="relative group w-full h-full flex justify-center items-center overflow-hidden">
-              <video autoplay loop muted playsinline class="pointer-events-none w-full h-full ticker-video" style="object-fit: cover;">
-                  <source src="https://cdn.shopify.com/videos/c/o/v/860fe203643b48dbad952d7d1a6a42cb.mp4" type="video/mp4">
-              </video>
-              <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
-                  <button class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Mute or unmute video">
-                      <i class="fas fa-volume-mute"></i>
-                  </button>
-                  <button class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white" aria-label="Lock or unlock ticker scroll">
-                      <i class="fas fa-unlock"></i>
-                  </button>
-              </div>
-            </div>
-          </a>
-          
-          <!-- Image Card 2 -->
-          <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/DSC07706_1600x.jpg?v=1732127275" alt="WIKD WS6 Gallery Image 2"></div>
+   <!-- Parallax video will be hidden on mobile via JS -->
+   <video autoplay="" class="parallax-video hidden lg:block" loop="" muted="" playsinline="">
+    <source src="https://videos.pexels.com/video-files/856012/856012-hd.mp4" type="video/mp4"/>
+   </video>
+   <!-- Main Content Container -->
+   <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-6 xl:p-24 lg:gap-8 xl:gap-12">
+    <!-- DESKTOP-ONLY: Vertical Image Ticker -->
+    <div class="ticker-wrapper hidden lg:block" id="tickerWrapper">
+     <div class="gradient-overlay-top">
+     </div>
+     <div class="ticker-inner" id="tickerInner">
+      <a class="image-ticker-card block" href="https://www.wikdmotorsports.com/pages/domestics" rel="noopener noreferrer" target="_blank">
+       <div class="relative group">
+        <video autoplay="" class="pointer-events-none w-full h-auto block" loop="" muted="" playsinline="">
+         <source src="https://cdn.shopify.com/videos/c/o/v/8a13b6cf33514ef8994dc3fb99c3a384.mp4" type="video/mp4"/>
+        </video>
+        <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
+         <button aria-label="Mute or unmute video" class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white">
+          <i class="fas fa-volume-mute">
+          </i>
+         </button>
+         <button aria-label="Lock or unlock ticker scroll" class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white">
+          <i class="fas fa-unlock">
+          </i>
+         </button>
         </div>
-        <div class="gradient-overlay-bottom"></div>
+       </div>
+      </a>
+      <div class="image-ticker-card">
+       <img alt="WIKD WS6 Gallery Image 1" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC07699_1600x.jpg?v=1732127275"/>
       </div>
-      
-      <!-- Content Card -->
-      <main id="contentCard" class="relative z-20 w-full lg:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0">
-      
-        <!-- Card Header -->
-        <header class="grid grid-cols-2 gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
-          <div class="overflow-hidden"> 
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">WIKD WS6</h1>
-            <h2 class="text-base sm:text-lg md:text-xl uppercase font-heading text-white whitespace-nowrap">2001 FIREBIRD TRANS AM</h2>
-          </div>
-          <div class="text-right">
-            <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading whitespace-nowrap" data-target="1306" style="color: #ff4747;">0 HP</div>
-            <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading whitespace-nowrap" data-target="974" style="color: #ffa500;">0 TQ</div>
-          </div>
-        </header>
-
-        <!-- Divider -->
-        <div class="h-1 w-full lava-gradient-bg"></div>
-
-        <!-- Main Body Content -->
-        <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
-        
-          <!-- Dyno Section -->
-          <section class="anim-stagger">
-            <div id="chart-container">
-              <canvas id="dynoChart"></canvas>
-            </div>
-            <div class="mt-5 bg-gray-900/50 border border-gray-800 clip-path-data-section">
-              <div class="data-header flex justify-between items-center cursor-pointer p-4 transition-colors hover:bg-gray-800/20">
-                <h4 class="text-sm font-semibold uppercase font-heading">WIKD Tuned Session Report</h4>
-                <i class="fas fa-chevron-down transition-transform duration-300"></i>
-              </div>
-              <div class="data-list-collapsible max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                <div class="p-4 border-t border-gray-800">
-                  <p class="text-sm text-gray-300">(+1026 WHP / +694 WTQ vs. Stock)</p>
-                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Power:</strong> 1306.4 WHP @ 6,900 RPM</p>
-                  <p class="text-sm text-gray-300 mt-2"><strong>Peak Torque:</strong> 973.7 WTQ @ 6,800 RPM</p>
-                  <p class="text-xs text-gray-500 mt-2">Data extracted from SAE J1349 corrected dyno graph. Stock figures estimated.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Specifications & Modifications -->
-          <section class="mt-10 anim-stagger">
-            <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Specifications</h3>
-            <ul class="text-lg">
-              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">YEAR</strong><span>2001</span></li>
-              <li class="flex justify-between py-3 border-b border-gray-800/50"><strong class="text-gray-400 font-medium">MAKE</strong><span>PONTIAC</span></li>
-              <li class="flex justify-between py-3"><strong class="text-gray-400 font-medium">MODEL</strong><span>FIREBIRD TRANS AM WS6</span></li>
-            </ul>
-
-            <div class="mods-section mt-10">
-              <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">Modifications</h3>
-              <div class="mt-4 space-y-6">
-                <ul class="mt-4 space-y-2 text-gray-300">
-                    <li>408 short block</li>
-                    <li>Custom WIKD F-1X Procharger Kit</li>
-                    <li>LSXR intake manifold</li>
-                    <li>Texas Speed ported heads</li>
-                    <li>Speed Engineering headers</li>
-                    <li>Custom WIKD oval exhaust</li>
-                    <li>Custom WIKD fuel system</li>
-                    <li>Snow Performance meth injection</li>
-                    <li>McLeod clutch</li>
-                </ul>
-              </div>
-            </div>
-          </section>
+      <a class="image-ticker-card block" href="https://www.wikdmotorsports.com/pages/domestics" rel="noopener noreferrer" target="_blank">
+       <div class="relative group">
+        <video autoplay="" class="pointer-events-none w-full h-auto block" loop="" muted="" playsinline="">
+         <source src="https://cdn.shopify.com/videos/c/o/v/860fe203643b48dbad952d7d1a6a42cb.mp4" type="video/mp4"/>
+        </video>
+        <div class="video-controls absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-2 flex gap-2 opacity-0 transition-opacity duration-300">
+         <button aria-label="Mute or unmute video" class="video-mute-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white">
+          <i class="fas fa-volume-mute">
+          </i>
+         </button>
+         <button aria-label="Lock or unlock ticker scroll" class="video-lock-button w-10 h-10 bg-black/50 rounded-full flex justify-center items-center text-white">
+          <i class="fas fa-unlock">
+          </i>
+         </button>
         </div>
-      </main>
+       </div>
+      </a>
+      <div class="image-ticker-card">
+       <img alt="WIKD WS6 Gallery Image 2" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC07706_1600x.jpg?v=1732127275"/>
+      </div>
+     </div>
+     <div class="gradient-overlay-bottom">
+     </div>
     </div>
+    <!-- Content Card -->
+    <main class="relative z-20 w-full lg:w-3/4 xl:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0" id="contentCard">
+     <!-- Card Header -->
+     <!-- FIX: Changed grid-cols-2 to grid-cols-[1.5fr_1fr] to give title more width -->
+     <header class="grid grid-cols-[1.5fr_1fr] gap-5 items-center px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 lg:px-8 lg:py-6">
+      <div class="overflow-hidden">
+       <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl font-bold uppercase font-heading lava-gradient-text whitespace-nowrap">
+        WIKD WS6
+       </h1>
+       <!-- FIX: Reduced lg:text-lg to lg:text-base to prevent clipping -->
+       <h2 class="text-base sm:text-lg md:text-xl lg:text-base xl:text-xl uppercase font-heading text-white whitespace-nowrap">
+        2001 FIREBIRD TRANS AM
+       </h2>
+      </div>
+      <div class="text-right">
+       <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl font-bold font-heading whitespace-nowrap" data-target="1306" style="color: #FF3B30;">
+        0 HP
+       </div>
+       <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-5xl font-bold font-heading whitespace-nowrap" data-target="974" style="color: #ffa500;">
+        0 TQ
+       </div>
+      </div>
+     </header>
+     <!-- Divider -->
+     <div class="h-1 w-full lava-gradient-bg">
+     </div>
+     <!-- Main Body Content -->
+     <div class="px-4 sm:px-5 md:px-6 lg:px-8 pt-4 sm:pt-6 lg:pb-10">
+      <!-- Dyno Section -->
+      <section class="anim-stagger">
+       <div id="chart-container">
+        <p class="text-center text-gray-500 py-10">
+         Dyno Data Coming Soon
+        </p>
+       </div>
+      </section>
+      <!-- Specifications & Modifications -->
+      <section class="mt-10 anim-stagger">
+       <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">
+        Specifications
+       </h3>
+       <ul class="text-lg">
+        <li class="flex justify-between py-3 border-b border-gray-800/50">
+         <strong class="text-gray-400 font-medium">
+          YEAR
+         </strong>
+         <span>
+          2001
+         </span>
+        </li>
+        <li class="flex justify-between py-3 border-b border-gray-800/50">
+         <strong class="text-gray-400 font-medium">
+          MAKE
+         </strong>
+         <span>
+          PONTIAC
+         </span>
+        </li>
+        <li class="flex justify-between py-3 border-b border-gray-800/50">
+         <strong class="text-gray-400 font-medium">
+          MODEL
+         </strong>
+         <span>
+          FIREBIRD TRANS AM WS6
+         </span>
+        </li>
+       </ul>
+       <div class="mods-section mt-10">
+        <h3 class="text-3xl font-bold uppercase font-heading border-b border-gray-800 pb-2 mb-4">
+         Modifications
+        </h3>
+        <div class="mt-4 space-y-6">
+         <div>
+          <h4 class="text-xl font-semibold text-red-500 uppercase font-heading border-b border-gray-800 pb-2" style="color: #FF3B30;">
+           Build List
+          </h4>
+          <ul class="mt-4 space-y-2 text-gray-300">
+           <li>
+            408 short block
+           </li>
+           <li>
+            Custom WIKD F-1X Procharger Kit
+           </li>
+           <li>
+            LSXR intake manifold
+           </li>
+           <li>
+            Texas Speed ported heads
+           </li>
+           <li>
+            Speed Engineering headers
+           </li>
+           <li>
+            Custom WIKD oval exhaust
+           </li>
+           <li>
+            Custom WIKD fuel system
+           </li>
+           <li>
+            Snow Performance meth injection
+           </li>
+           <li>
+            McLeod clutch
+           </li>
+          </ul>
+         </div>
+        </div>
+       </div>
+      </section>
+     </div>
+    </main>
+   </div>
   </div>
-
   <!-- Lightbox -->
-  <div id="lightbox" class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="relative max-w-4xl max-h-full">
-      <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
-      <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&lt;</button>
-      <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">&gt;</button>
-      <img src="" alt="Lightbox image" id="lightboxImg" class="max-w-full max-h-[90vh] rounded-lg hidden">
-    </div>
+  <div class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300" id="lightbox">
+   <div class="relative max-w-4xl max-h-full">
+    <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">
+     ×
+    </button>
+    <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">
+     &lt;
+    </button>
+    <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">
+     &gt;
+    </button>
+    <img alt="Lightbox image" class="max-w-full max-h-[90vh] rounded-lg hidden" id="lightboxImg" src=""/>
+    <video class="max-w-full max-h-[90vh] rounded-lg hidden" controls="" id="lightboxVideo" src="">
+    </video>
+   </div>
   </div>
-
   <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js">
+  </script>
   <script>
-  document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function() {
     // --- GLOBAL ELEMENTS & STATE ---
     const contentCard = document.getElementById('contentCard');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxVideo = document.getElementById('lightboxVideo');
 
     const originalItems = Array.from(document.querySelectorAll('#tickerInner .image-ticker-card')).map(card => {
-        const videoEl = card.querySelector('video');
-        if (videoEl) {
-            return { 
-                type: 'video', 
-                src: videoEl.querySelector('source').src, 
-                link: card.href,
-            };
+        const isVideo = card.querySelector('video');
+        if (isVideo) {
+            return { type: 'video', src: isVideo.querySelector('source').src };
         } else {
-            return { 
-                type: 'image', 
-                src: card.querySelector('img').src, 
-                link: card.href 
-            };
+            return { type: 'image', src: card.querySelector('img').src };
         }
     });
 
@@ -343,11 +379,17 @@
       const adjustedIndex = (index + originalItems.length) % originalItems.length;
       const item = originalItems[adjustedIndex];
 
+      // Ensure we don't try to open a video in the lightbox
       if (item.type === 'video') return;
 
       currentIndex = adjustedIndex;
+
       lightboxImg.style.display = 'none';
-      lightboxImg.removeAttribute('src'); 
+      lightboxVideo.style.display = 'none';
+      if (!lightboxVideo.paused) {
+          lightboxVideo.pause();
+      }
+      lightboxVideo.removeAttribute('src');
 
       if (item.type === 'image') {
         lightboxImg.src = item.src;
@@ -355,30 +397,34 @@
       }
       lightbox.classList.remove('opacity-0', 'pointer-events-none');
     };
-    
-    const closeLightbox = () => {
-        lightbox.classList.add('opacity-0', 'pointer-events-none');
-    };
 
     const setupLightboxListeners = (selector) => {
         document.querySelectorAll(selector).forEach((item, index) => {
-            const newItem = item.cloneNode(true);
-            item.parentNode.replaceChild(newItem, item);
-            
-            newItem.addEventListener('click', (e) => {
-              const adjustedIndex = index % originalItems.length;
-              const itemData = originalItems[adjustedIndex];
-              
-              if (itemData.type === 'image') {
-                showLightboxItem(adjustedIndex);
-              } else if (itemData.type === 'video' && isMobile) {
-                e.preventDefault();
-                if (itemData.link) {
-                  window.open(itemData.link, '_blank');
-                }
-              }
-            });
+          const newItem = item.cloneNode(true);
+          item.parentNode.replaceChild(newItem, item);
+
+          newItem.addEventListener('click', (e) => {
+            const adjustedIndex = index % originalItems.length;
+            const itemData = originalItems[adjustedIndex];
+
+            if (itemData.type === 'image') {
+              showLightboxItem(adjustedIndex);
+            } else if (isMobile) {
+              // On mobile, the div isn't a link, so we trigger navigation via JS
+              e.preventDefault();
+              window.open('https://www.wikdmotorsports.com/products/mclaren-720s-titanium-catback-2018-brushed-purple', '_blank');
+            }
+            // On desktop, the video card is an anchor tag, so default browser behavior handles the link.
+          });
         });
+    }
+
+    const closeLightbox = () => {
+        lightbox.classList.add('opacity-0', 'pointer-events-none');
+        if (!lightboxVideo.paused) {
+            lightboxVideo.pause();
+        }
+        lightboxVideo.removeAttribute('src');
     };
 
     if (lightbox) {
@@ -395,7 +441,6 @@
     // --- MOBILE VIEW SETUP ---
     function setupMobileView() {
         if (desktopTickerAnimation) desktopTickerAnimation.kill();
-        
         const mobileTickerInner = document.getElementById('mobileTickerInner');
         if (mobileTickerInner.children.length > 0) return;
 
@@ -410,12 +455,11 @@
                 mediaElement.loop = true;
                 mediaElement.muted = true;
                 mediaElement.playsinline = true;
-                mediaElement.className = 'h-full w-auto object-cover rounded-md';
-            } else { // image
+            } else {
                 mediaElement = document.createElement('img');
                 mediaElement.src = item.src;
-                mediaElement.className = 'h-full w-auto object-cover rounded-md';
             }
+            mediaElement.className = 'h-full w-auto object-cover rounded-md';
             itemContainer.appendChild(mediaElement);
             mobileTickerInner.appendChild(itemContainer);
         });
@@ -425,17 +469,10 @@
             const clone = item.cloneNode(true);
             mobileTickerInner.appendChild(clone);
         });
-        
-        setupLightboxListeners('.mobile-gallery-item');
-        
-        gsap.set(mobileTickerInner, {x: 0});
-        mobileTickerAnimation = gsap.to(mobileTickerInner, {
-            x: '-50%',
-            duration: 40,
-            ease: 'none',
-            repeat: -1,
-        });
 
+        setupLightboxListeners('.mobile-gallery-item');
+        gsap.set(mobileTickerInner, {x: 0});
+        mobileTickerAnimation = gsap.to(mobileTickerInner, { x: '-50%', duration: 40, ease: 'none', repeat: -1 });
         const galleryHeight = document.getElementById('mobileGalleryWrapper').offsetHeight;
         const initialScroll = galleryHeight * 0.85;
         setTimeout(() => window.scrollTo({ top: initialScroll, behavior: 'smooth' }), 100);
@@ -444,24 +481,18 @@
     // --- DESKTOP VIEW SETUP ---
     function setupDesktopView() {
         if (mobileTickerAnimation) mobileTickerAnimation.kill();
-        
         const tickerWrapper = document.getElementById('tickerWrapper');
         const tickerInner = document.getElementById('tickerInner');
         if (!tickerWrapper || tickerInner.querySelectorAll('.cloned').length > 0) return;
 
-        const originalDesktopItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
-        originalDesktopItems.forEach(item => {
+        const originalTickerItems = tickerInner.querySelectorAll('.image-ticker-card:not(.cloned)');
+        originalTickerItems.forEach(item => {
             const clone = item.cloneNode(true);
             clone.classList.add('cloned');
             tickerInner.appendChild(clone);
         });
 
-        const syncHeights = () => {
-            if (contentCard && tickerWrapper) {
-                tickerWrapper.style.height = `${contentCard.offsetHeight}px`;
-            }
-        };
-        
+        const syncHeights = () => { if (contentCard && tickerWrapper) tickerWrapper.style.height = `${contentCard.offsetHeight}px`; };
         syncHeights();
         window.addEventListener('resize', syncHeights);
         const observer = new MutationObserver(syncHeights);
@@ -471,30 +502,32 @@
         let isTickerLocked = false; 
         tickerWrapper.addEventListener('mouseenter', () => isHovering = true);
         tickerWrapper.addEventListener('mouseleave', () => isHovering = false);
-        
+
         function animateScroll() {
             if (!isHovering && !isTickerLocked && tickerWrapper) {
                 tickerWrapper.scrollTop += 0.5;
-                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) {
-                    tickerWrapper.scrollTop = 0;
-                }
+                if (tickerWrapper.scrollTop >= tickerInner.offsetHeight / 2) tickerWrapper.scrollTop = 0;
             }
             desktopTickerAnimation = requestAnimationFrame(animateScroll);
         }
         animateScroll();
         setupLightboxListeners('.image-ticker-card');
+
+        // --- NEW VIDEO CONTROLS LOGIC (Class-based, Auto-Injected) ---
+        const videoCards = document.querySelectorAll('.image-ticker-card');
         
-        // --- DESKTOP VIDEO CONTROLS LOGIC ---
-        const videoCards = document.querySelectorAll('.ticker-inner a[data-video-card]');
-
         videoCards.forEach(card => {
-            const tickerVideo = card.querySelector('.ticker-video');
-            const mediaControls = card.querySelector('.video-controls');
-            const muteButton = card.querySelector('.video-mute-button');
-            const lockButton = card.querySelector('.video-lock-button');
-            let controlsTimeout;
+            // Check if it's a video card
+            const container = card.querySelector('.relative.group');
+            if(!container) return;
 
-            if (!tickerVideo || !mediaControls || !muteButton || !lockButton) return;
+            const tickerVideo = container.querySelector('video');
+            const mediaControls = container.querySelector('.video-controls');
+            if (!tickerVideo || !mediaControls) return;
+
+            const muteButton = mediaControls.querySelector('.video-mute-button');
+            const lockButton = mediaControls.querySelector('.video-lock-button');
+            let controlsTimeout;
 
             const showControls = () => {
                 mediaControls.classList.remove('opacity-0');
@@ -516,37 +549,15 @@
             muteButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-
-                const isCurrentlyMuted = tickerVideo.muted;
-
-                // Mute all videos first and reset their icons.
-                videoCards.forEach(cardEl => {
-                    cardEl.querySelector('.ticker-video').muted = true;
-                    cardEl.querySelector('.video-mute-button i').className = 'fas fa-volume-mute';
-                });
-
-                // If the clicked video was muted, unmute it and update its icon.
-                if (isCurrentlyMuted) {
-                    tickerVideo.muted = false;
-                    muteButton.querySelector('i').className = 'fas fa-volume-high';
-                }
+                tickerVideo.muted = !tickerVideo.muted;
+                muteButton.querySelector('i').className = tickerVideo.muted ? 'fas fa-volume-mute' : 'fas fa-volume-high';
             });
 
             lockButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 isTickerLocked = !isTickerLocked;
-                
-                // Reset saturation on all videos first
-                document.querySelectorAll('.ticker-video.saturation-locked').forEach(vid => {
-                    vid.classList.remove('saturation-locked');
-                });
-
-                if (isTickerLocked) {
-                    tickerVideo.classList.add('saturation-locked');
-                }
-
-                // Apply lock icon state to all lock buttons for visual consistency
+                // Update all lock buttons
                 document.querySelectorAll('.video-lock-button i').forEach(icon => {
                     icon.className = isTickerLocked ? 'fas fa-lock' : 'fas fa-unlock';
                 });
@@ -554,70 +565,22 @@
         });
     }
 
+
     // --- COMMON ANIMATIONS & UI ---
     gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.utils.toArray('.anim-stagger').forEach(elem => {
-      gsap.from(elem, {
-        scrollTrigger: {
-          trigger: elem,
-          start: 'top 95%',
-          toggleActions: 'play none none none',
-        },
-        opacity: 0, y: 50, duration: 0.8, ease: 'power3.out'
-      });
-    });
-
-    gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => {
-      const target = parseInt(stat.dataset.target, 10);
-      const statObject = { val: 0 };
-      gsap.to(statObject, {
-        val: target,
-        duration: 2.5,
-        ease: 'power3.out',
-        delay: 0.5,
-        onUpdate: () => {
-          stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`;
-        }
-      });
-    });
-
+    gsap.utils.toArray('.anim-stagger').forEach(elem => gsap.from(elem, { scrollTrigger: { trigger: elem, start: 'top 95%', toggleActions: 'play none none none', }, opacity: 0, y: 50, duration: 0.8, ease: 'power3.out' }));
+    gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => { const target = parseInt(stat.dataset.target, 10); const statObject = { val: 0 }; gsap.to(statObject, { val: target, duration: 2.5, ease: 'power3.out', delay: 0.5, onUpdate: () => { stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`; } }); });
     const dataHeader = document.querySelector('.data-header');
-    if(dataHeader) {
-      const dataList = document.querySelector('.data-list-collapsible');
-      const icon = dataHeader.querySelector('i');
-      dataHeader.addEventListener('click', () => {
-        const isActive = dataHeader.classList.toggle('active');
-        dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0';
-        icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
-      });
-    }
+    if(dataHeader) { const dataList = document.querySelector('.data-list-collapsible'); const icon = dataHeader.querySelector('i'); dataHeader.addEventListener('click', () => { const isActive = dataHeader.classList.toggle('active'); dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0'; icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)'; }); }
 
     // --- INITIALIZATION & RESIZE HANDLING ---
-    function initializePage() {
-        isMobile = window.innerWidth < 1024;
-        if (isMobile) {
-            setupMobileView();
-        } else {
-            setupDesktopView();
-        }
-    }
-
+    function initializePage() { isMobile = window.innerWidth < 1024; if (isMobile) setupMobileView(); else setupDesktopView(); }
     let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            const newIsMobile = window.innerWidth < 1024;
-            if (newIsMobile !== isMobile) {
-                window.location.reload();
-            }
-        }, 250);
-    });
-
+    window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { const newIsMobile = window.innerWidth < 1024; if (newIsMobile !== isMobile) window.location.reload(); }, 250); });
     initializePage();
-    
+
     // --- CHART SCRIPT ---
-    const chartData = [
+    const fullChartData = [
         { rpm: 2500, horsepower: 300, torque: 630 }, { rpm: 2600, horsepower: 320, torque: 645 },
         { rpm: 2700, horsepower: 340, torque: 660 }, { rpm: 2800, horsepower: 365, torque: 680 },
         { rpm: 2900, horsepower: 390, torque: 705 }, { rpm: 3000, horsepower: 415, torque: 725 },
@@ -643,8 +606,9 @@
         { rpm: 6900, horsepower: 1306.4, torque: 965 }, { rpm: 7000, horsepower: 1290, torque: 950 },
         { rpm: 7100, horsepower: 1270, torque: 920 }, { rpm: 7200, horsepower: 1240, torque: 890 },
     ];
-    const peakHpIndex = chartData.findIndex(d => d.horsepower === 1306.4);
-    const peakTqIndex = chartData.findIndex(d => d.rpm === 6500); // Peak torque is flat, pick a middle point
+    const chartData = fullChartData;
+    const peakHpIndex = chartData.findIndex(d => d.horsepower === 882.59);
+    const peakTqIndex = chartData.findIndex(d => d.rpm === 5200);
     const peakHpData = new Array(chartData.length).fill(null); if (peakHpIndex !== -1) peakHpData[peakHpIndex] = chartData[peakHpIndex].horsepower;
     const peakTqData = new Array(chartData.length).fill(null); if (peakTqIndex !== -1) peakTqData[peakTqIndex] = chartData[peakTqIndex].torque;
     const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
@@ -652,25 +616,60 @@
     if (chartCanvas) {
       const initChart = () => {
       const chartContainer = document.getElementById('chart-container'); const overlayCanvas = document.createElement('canvas'); overlayCanvas.style.position = 'absolute'; overlayCanvas.style.top = '0'; overlayCanvas.style.left = '0'; overlayCanvas.style.pointerEvents = 'none'; chartContainer.appendChild(overlayCanvas); const overlayCtx = overlayCanvas.getContext('2d');
-      let hpPoint, tqPoint, hpPathPoints, tqPathPoints;
-      function syncOverlay(chart) { overlayCanvas.width = chart.width; overlayCanvas.height = chart.height; overlayCanvas.style.width = chart.width + 'px'; overlayCanvas.style.height = chart.height + 'px'; const hpMeta = chart.getDatasetMeta(2); const tqMeta = chart.getDatasetMeta(3); if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = chart.getDatasetMeta(0).data.slice(0, peakHpIndex + 1); } if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); } }
+      let hpPoint, tqPoint, hpPathPoints, tqPathPoints, allHpPoints;
+      function syncOverlay(chart) {
+        overlayCanvas.width = chart.width;
+        overlayCanvas.height = chart.height;
+        overlayCanvas.style.width = chart.width + 'px';
+        overlayCanvas.style.height = chart.height + 'px';
+
+        // FIX: Ensure chartArea exists before accessing properties
+        if (!chart.chartArea) return;
+
+        const hpMeta = chart.getDatasetMeta(2);
+        const tqMeta = chart.getDatasetMeta(3);
+        const fullHpMeta = chart.getDatasetMeta(0);
+        allHpPoints = fullHpMeta.data;
+        if (peakHpIndex !== -1 && hpMeta.data[peakHpIndex]) { hpPoint = hpMeta.data[peakHpIndex]; hpPathPoints = fullHpMeta.data.slice(0, peakHpIndex + 1); }
+        if (peakTqIndex !== -1 && tqMeta.data[peakTqIndex]) { tqPoint = tqMeta.data[peakTqIndex]; tqPathPoints = chart.getDatasetMeta(1).data.slice(0, peakTqIndex + 1); }
+      }
       function getPointOnPath(path, progress) { if (!path || path.length < 2) return null; const lengths = []; let totalLength = 0; for (let i = 1; i < path.length; i++) { const p1 = path[i - 1], p2 = path[i]; const dx = p2.x - p1.x, dy = p2.y - p1.y; const length = Math.sqrt(dx * dx + dy * dy); lengths.push(length); totalLength += length; } if (totalLength === 0) return path.length > 0 ? { x: path[0].x, y: path[0].y } : null; const targetLength = totalLength * progress; let lengthTraversed = 0; for (let i = 0; i < lengths.length; i++) { const segmentLength = lengths[i]; if (lengthTraversed + segmentLength >= targetLength) { const p1 = path[i], p2 = path[i + 1]; if (segmentLength === 0) return { x: p1.x, y: p1.y }; const segmentProgress = (targetLength - lengthTraversed) / segmentLength; const x = p1.x + (p2.x - p1.x) * segmentProgress; const y = p1.y + (p2.y - p1.y) * segmentProgress; return { x, y }; } lengthTraversed += segmentLength; } return { x: path[path.length - 1].x, y: path[path.length - 1].y }; }
       new Chart(chartCanvas, {
         type: 'line',
         data: {
           labels: chartData.map(d => d.rpm),
           datasets: [
-            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#ff4747', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
-            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'yHP', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
-            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#ff4747', yAxisID: 'yHP', showLine: false, order: 0, },
-            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'yHP', showLine: false, order: 0, }
+            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#ff4747', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+            { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
+            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#ff4747', yAxisID: 'y', showLine: false, order: 0, },
+            { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'y', showLine: false, order: 0, }
           ]
         },
         options: {
           animation: {
             onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(255, 71, 71, 0.7)'); hpGradient.addColorStop(1, 'rgba(255, 71, 71, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); tqGradient.addColorStop(1, 'rgba(255, 165, 0, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(255, 71, 71, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(255, 165, 0, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
             x: { type: 'number', easing: 'linear', duration: 50, from: NaN, delay(ctx) { if (ctx.type !== 'data' || ctx.xStarted) return 0; ctx.xStarted = true; return ctx.index * 50; } },
-            y: { type: 'number', easing: 'linear', duration: 50, from: (ctx) => (ctx.index === 0) ? ctx.chart.scales.yHP.getBasePixel() : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y, delay(ctx) { if (ctx.type !== 'data' || ctx.yStarted) return 0; ctx.yStarted = true; return ctx.index * 50; } }
+            y: {
+                type: 'number',
+                easing: 'linear',
+                duration: 50,
+                from: (ctx) => {
+                    // CRITICAL FIX: Skip animation for datasets 2 and 3 (Peak Markers) to prevent crashes
+                    if (ctx.datasetIndex > 1) return undefined;
+
+                    if (ctx.index === 0) return ctx.chart.scales.y.getBasePixel();
+
+                    // Safe access to previous point's data
+                    const datasetMeta = ctx.chart.getDatasetMeta(ctx.datasetIndex);
+                    const prevModel = datasetMeta.data[ctx.index - 1];
+
+                    if (prevModel && !prevModel.skip && !isNaN(prevModel.getProps(['y'], true).y)) {
+                         return prevModel.getProps(['y'], true).y;
+                    }
+                    return ctx.chart.scales.y.getBasePixel();
+                },
+                delay(ctx) { if (ctx.type !== 'data' || ctx.yStarted) return 0; ctx.yStarted = true; return ctx.index * 50; }
+            }
           },
           onResize: (chart) => { syncOverlay(chart); },
           responsive: true, maintainAspectRatio: true, aspectRatio: 1.5,
@@ -680,20 +679,57 @@
             tooltip: { backgroundColor: 'rgba(31, 31, 31, 0.9)', borderColor: '#2A2A2A', borderWidth: 1, titleFont: { weight: 'bold' }, bodySpacing: 4, padding: 10, callbacks: { title: (context) => `RPM: ${context[0].label}` } }
           },
           scales: {
-            x: { 
-              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
-              ticks: { color: '#a1a1aa', callback: function(val) { const tickValue = this.getLabelForValue(val); return (tickValue % 1000 === 0) ? `${tickValue / 1000}k` : ''; } },
-              title: { display: false }
+            x: {
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)',
+                    drawTicks: false
+                },
+                ticks: {
+                    color: '#a1a1aa',
+                    autoSkip: false, // FORCE all ticks to render so we can filter/pick the last one manually
+                    maxRotation: 0,
+                    callback: function(val, index, ticks) {
+                        // FIX: 'val' for category axis is the index of the data point.
+                        // Check if it's the first (0) or last data point index.
+                        const totalLabels = this.chart.data.labels.length;
+                        if (val === 0 || val === totalLabels - 1) {
+                            const tickValue = this.getLabelForValue(val);
+                            return `${(tickValue / 1000).toFixed(1).replace('.0', '')}k`;
+                        }
+                        return '';
+                    }
+                },
+                afterBuildTicks: axis => {
+                    // Manually filter ticks to keep grid lines manageable but ensure first/last exist
+                    const dataLength = axis.chart.data.labels.length;
+                    const step = Math.ceil(dataLength / 10);
+                    axis.ticks = axis.ticks.filter(tick => {
+                        const val = tick.value;
+                        return val === 0 || val === dataLength - 1 || val % step === 0;
+                    });
+                }
             },
-            yHP: { 
-              type: 'linear', 
-              position: 'left', 
-              grid: { color: 'rgba(255, 255, 255, 0.1)' }, 
-              ticks: { color: '#a1a1aa', stepSize: 200 }, 
-              min: 200, 
-              max: 1400, 
-              title: { display: false } 
-            },
+            y: {
+                type: 'linear',
+                position: 'left',
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)',
+                    drawTicks: false // Contained grid
+                },
+                ticks: {
+                    color: '#a1a1aa',
+                    callback: function(val, index, ticks) {
+                        // Only show min and max
+                        if (index === 0 || index === ticks.length - 1) {
+                            return val;
+                        }
+                        return '';
+                    }
+                },
+                min: 0,
+                max: 1000,
+                title: { display: false } // No title
+            }
           }
         },
         plugins: [fullBorderPlugin]
@@ -714,8 +750,5 @@
     }
   });
   </script>
-
-
-</body>
-
+ </body>
 </html>
