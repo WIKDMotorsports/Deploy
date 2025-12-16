@@ -534,8 +534,8 @@
         { rpm: 6800, horsepower: 750, torque: 550 }, { rpm: 7000, horsepower: 740, torque: 525 },
     ];
     const chartData = fullChartData;
-    const peakHpIndex = chartData.findIndex(d => d.horsepower === 882.59);
-    const peakTqIndex = chartData.findIndex(d => d.rpm === 5200);
+    const peakHpIndex = chartData.findIndex(d => d.horsepower === Math.max(...chartData.map(o => o.horsepower)));
+    const peakTqIndex = chartData.findIndex(d => d.torque === Math.max(...chartData.map(o => o.torque)));
     const peakHpData = new Array(chartData.length).fill(null); if (peakHpIndex !== -1) peakHpData[peakHpIndex] = chartData[peakHpIndex].horsepower;
     const peakTqData = new Array(chartData.length).fill(null); if (peakTqIndex !== -1) peakTqData[peakTqIndex] = chartData[peakTqIndex].torque;
     const fullBorderPlugin = { id: 'fullBorder', afterDraw: (chart) => { const { ctx, chartArea: { left, top, width, height } } = chart; ctx.save(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1; ctx.strokeRect(left, top, width, height); ctx.restore(); } };
@@ -653,7 +653,7 @@
                         return '';
                     }
                 },
-                min: 0,
+                // // min: 0,
                 max: 1000,
                 title: { display: false } // No title
             }
