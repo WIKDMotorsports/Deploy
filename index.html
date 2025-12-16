@@ -84,7 +84,7 @@
     }
 
     #wikd-homepage-root .section {
-        padding: 80px 5%;
+        padding: 50px 5%; /* Reduced from 80px */
         overflow: hidden;
     }
 
@@ -96,7 +96,7 @@
     #wikd-homepage-root .section-title {
         text-align: center;
         font-size: clamp(2.5rem, 6vw, 4rem);
-        margin-bottom: 60px;
+        margin-bottom: 30px; /* Reduced from 60px */
         font-weight: 800;
     }
 
@@ -146,7 +146,7 @@
 
     /* --- HERO SLIDESHOW SECTION --- */
     #wikd-homepage-root .hero {
-        padding-top: 40px;
+        padding-top: 100px; /* Increased vertical padding */
         padding-bottom: 50px;
         padding-left: 5%;
         padding-right: 5%;
@@ -323,17 +323,18 @@
 
     #wikd-homepage-root .section-cta {
         text-align: center;
-        margin-top: 50px;
+        margin-top: 30px; /* Reduced from 50px */
     }
 
     /* --- IFRAME SECTIONS --- */
     #wikd-homepage-root #questionnaire-section { padding-top: 0; padding-bottom: 0; }
     #wikd-homepage-root .questionnaire-iframe {
-        border: none;
+        border: none; /* Removed border */
         width: 100%;
         display: block;
         background-color: transparent;
         transition: height 0.2s ease-out;
+        /* Removed box-shadow */
     }
 
     /* --- PACKAGES GRID & CARDS (POLISHED STYLE) --- */
@@ -353,6 +354,8 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         display: block;
         background: #000;
+        /* Increased Shadow Intensity */
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.85);
     }
 
     #wikd-homepage-root .package-card-bg {
@@ -411,7 +414,8 @@
     #wikd-homepage-root .package-card:hover,
     #wikd-homepage-root .package-card.mobile-view {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255, 59, 48, 0.2);
+        /* Increased Shadow & Glow Intensity */
+        box-shadow: 0 35px 70px -15px rgba(0,0,0,1), 0 0 50px -10px rgba(255, 59, 48, 0.45);
         border-color: var(--color-primary);
     }
 
@@ -438,7 +442,7 @@
 
 
     /* --- TICKER SECTION --- */
-    #wikd-homepage-root .ticker-section { padding: 80px 0; background-color: var(--color-surface); }
+    #wikd-homepage-root .ticker-section { padding: 50px 0; background-color: var(--color-surface); } /* Reduced from 80px */
     #wikd-homepage-root .ticker-wrap {
         width: 100%;
         overflow: hidden; position: relative;
@@ -460,14 +464,18 @@
         background-color: #000;
         border-radius: 0px; /* Sharp */
         border: 1px solid var(--color-border);
-        overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease;
+        overflow: hidden; 
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         text-decoration: none; color: var(--color-text);
         width: 380px; margin: 0 15px; flex-shrink: 0;
+        /* Increased Shadow Intensity */
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.85);
     }
     #wikd-homepage-root .exhaust-card:hover { 
         transform: translateY(-5px); 
         border-color: var(--color-primary);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+        /* Increased Shadow & Glow Intensity */
+        box-shadow: 0 35px 70px -15px rgba(0,0,0,1), 0 0 50px -10px rgba(255, 59, 48, 0.45);
     }
     #wikd-homepage-root .exhaust-card-image-wrapper { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
     #wikd-homepage-root .exhaust-card-bg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.3, 1, 0.4, 1); filter: grayscale(100%); }
@@ -489,6 +497,9 @@
         cursor: pointer; 
         border: 1px solid var(--color-border); 
         position: relative;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        /* Increased Shadow Intensity */
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.85);
     }
     #wikd-homepage-root .gallery-item img { 
         transition: transform 0.6s ease, filter 0.6s ease; 
@@ -498,7 +509,11 @@
         display: block;
         filter: grayscale(100%);
     }
-    #wikd-homepage-root .gallery-item:hover { border-color: var(--color-primary); }
+    #wikd-homepage-root .gallery-item:hover { 
+        border-color: var(--color-primary); 
+        /* Increased Shadow & Glow Intensity */
+        box-shadow: 0 35px 70px -15px rgba(0,0,0,1), 0 0 50px -10px rgba(255, 59, 48, 0.45);
+    }
     #wikd-homepage-root .gallery-item:hover img { transform: scale(1.05); filter: grayscale(0%); }
 
     /* --- MAP & LOCATION SECTION --- */
@@ -509,6 +524,8 @@
         background-color: transparent;
         height: 600px;
         border-radius: 0px;
+        /* Increased Shadow Intensity */
+        box-shadow: 0 30px 70px -15px rgba(0,0,0,0.9);
     }
 
     /* --- LIGHTBOX --- */
@@ -541,7 +558,7 @@
     #wikd-homepage-root .wikd-footer {
         background-color: var(--color-surface);
         border-top: 1px solid var(--color-border);
-        padding: 80px 5% 40px;
+        padding: 50px 5% 40px; /* Reduced top padding from 80px */
         color: var(--color-text-muted);
     }
     #wikd-homepage-root .footer-container {
@@ -630,8 +647,8 @@
     }
 
     @media (max-width: 768px) {
-        #wikd-homepage-root .section { padding: 60px 5%; }
-        #wikd-homepage-root .section-title { margin-bottom: 40px; font-size: 2.5rem; }
+        #wikd-homepage-root .section { padding: 40px 5%; } /* Reduced from 60px */
+        #wikd-homepage-root .section-title { margin-bottom: 20px; font-size: 2.5rem; } /* Reduced from 40px */
 
         #wikd-homepage-root .hero {
             padding-top: 20px;
@@ -1013,7 +1030,8 @@
                     fetch(cacheBustedUrl)
                         .then(response => response.ok ? response.text() : Promise.reject(`HTTP error ${response.status}`))
                         .then(html => {
-                            const styles = `<style>body,html{margin:0!important;padding:0!important;overflow:hidden!important}</style>`;
+                            // Reverted to standard cleanup styles since aggressive injection wasn't effective
+                            const styles = `<style>body,html{margin:0!important;padding:0!important;overflow:hidden!important;background-color:transparent!important}</style>`;
                             const scripts = `<script>try{const o=new ResizeObserver(o=>{const t=document.documentElement.offsetHeight;window.parent.postMessage({type:"resize",height:t,frameId:"${frameId}"},"*")});o.observe(document.documentElement),window.addEventListener("load",()=>{const o=document.documentElement.offsetHeight;window.parent.postMessage({type:"resize",height:o,frameId:"${frameId}"},"*");const t=()=>window.parent.postMessage({type:"snapToTop",frameId:"${frameId}"},"*");document.getElementById("nextBtn")?.addEventListener("click",t),document.getElementById("prevBtn")?.addEventListener("click",t)})}catch(o){console.error("Error in iframe scripts:",o)}<\/script>`;
                             let processedHtml = html.replace('</head>', styles + '</head>');
                             processedHtml = processedHtml.replace('</body>', scripts + '</body>');
