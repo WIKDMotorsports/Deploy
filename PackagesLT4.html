@@ -396,7 +396,8 @@
             display: inline-block;
         }
         .hp-meter-fill.hp-wiggle {
-            animation: hp-wiggle var(--hp-wiggle-duration, 0.6s) ease-in-out infinite alternate;
+            /* UPDATED: Now uses the same --wiggle-duration variable as the text */
+            animation: hp-wiggle var(--wiggle-duration, 0.1s) ease-in-out infinite alternate;
         }
     </style>
 </head>
@@ -788,16 +789,29 @@
             const hpPercentage = calculateHpBarWidth(activePackage.adjustedHp);
             hpMeterFill.style.width = `${hpPercentage}%`;
             hpMeterFill.classList.toggle('shake-animation', isWikdMode);
+            // In WIKD mode, gradient is hidden, solid red used with extra intense glow
             hpMeterFill.style.background = isWikdMode ? getCssVariable('--color-primary') : 'linear-gradient(90deg, #FFD700, #f39c12, var(--color-primary))';
-            hpMeterFill.style.boxShadow = isWikdMode ? `0 0 20px ${getCssVariable('--color-primary')}` : '0 0 10px rgba(255, 59, 48, 0.3)';
+            hpMeterFill.style.boxShadow = isWikdMode ? `0 0 30px ${getCssVariable('--color-primary')}` : '0 0 10px rgba(255, 59, 48, 0.3)';
             hpMeterFill.classList.toggle('hp-wiggle', isWikdMode);
             
-            // Update panel shadow with geometry filter
+            // Panel styling changes in WIKD mode
+            budgetPanel.style.transition = 'all 0.5s ease';
             budgetPanel.style.borderColor = isWikdMode ? getCssVariable('--color-primary') : getCssVariable('--color-border');
-            budgetPanel.style.filter = isWikdMode ? `drop-shadow(0 0 20px rgba(255, 59, 48, 0.3))` : 'drop-shadow(0 25px 40px rgba(0,0,0,0.8))';
+            // Dark red gradient background for WIKD mode
+            budgetPanel.style.background = isWikdMode ? 'linear-gradient(145deg, #1a0505 0%, #000000 100%)' : getCssVariable('--color-surface');
+            // Intense red shadow filter for WIKD mode
+            budgetPanel.style.filter = isWikdMode ? `drop-shadow(0 0 40px rgba(255, 59, 48, 0.4))` : 'drop-shadow(0 25px 40px rgba(0,0,0,0.8))';
             
             budgetValue.style.color = isWikdMode ? getCssVariable('--color-primary') : '#ffffff';
+            // Neon text shadow for budget value
+            budgetValue.style.textShadow = isWikdMode ? '0 0 20px rgba(255, 59, 48, 0.8)' : 'none';
             budgetValue.classList.toggle('budget-wiggle', isWikdMode);
+            
+            // Slider styling changes
+            budgetSlider.style.transition = 'all 0.3s ease';
+            budgetSlider.style.borderColor = isWikdMode ? getCssVariable('--color-primary') : '#1f2937';
+            budgetSlider.style.backgroundColor = isWikdMode ? '#2a0505' : '#000000';
+            budgetSlider.style.boxShadow = isWikdMode ? '0 0 15px rgba(255, 59, 48, 0.2)' : 'none';
             
             packageContainer.className = isWikdMode ? 'grid grid-cols-1 gap-8 mb-16' : 'grid grid-cols-1 md:grid-cols-2 gap-8 mb-16';
 
@@ -837,12 +851,12 @@
                 card.classList.toggle('active', isActiveCard);
                 card.classList.toggle('full-width', isActiveCard && isWikdMode);
                 
-                // WIKD Mode Background
+                // WIKD Mode Background for Card
                 card.style.backgroundColor = (isActiveCard && isWikdMode) ? '#0a0505' : '#000';
                 
                 // Geometry specific shadow logic
                 if(isActiveCard && isWikdMode) {
-                    card.style.filter = `drop-shadow(0 0 25px rgba(255, 59, 48, 0.4))`;
+                    card.style.filter = `drop-shadow(0 0 30px rgba(255, 59, 48, 0.5))`;
                 } else if (!isActiveCard) {
                     card.style.filter = `drop-shadow(0 20px 30px rgba(0,0,0,0.5))`;
                 } else {
@@ -877,6 +891,8 @@
 
                 priceEl.classList.toggle('budget-wiggle', isActiveCard && isWikdMode);
                 priceEl.style.color = (isActiveCard && isWikdMode) ? getCssVariable('--color-primary') : '#ffffff';
+                // Neon shadow for card price in WIKD mode
+                priceEl.style.textShadow = (isActiveCard && isWikdMode) ? '0 0 15px rgba(255, 59, 48, 0.7)' : 'none';
                 
                 const noteContainer = card.querySelector('[data-role="note-container"]');
                 noteContainer.classList.toggle('hidden', !packageData.note || !isActiveCard);
@@ -917,18 +933,16 @@
             const rawValue = parseInt(budgetSlider.value);
             const budget = convertSliderValueToBudget(rawValue);
             const minBudget = 2500, maxBudget = 80000;
-            // Faster jiggle speeds
+            
+            // Unified fast jiggle speed calculation
             const minDuration = 0.05, maxDuration = 0.15; 
             let wiggleDuration = maxDuration - ((budget - minBudget) / (maxBudget - minBudget)) * (maxDuration - minDuration);
             wiggleDuration = Math.max(minDuration, Math.min(maxDuration, wiggleDuration));
             
-            // Applied to root so both elements share the variable
+            // Applied to root so both elements share the EXACT same timing variable
             document.documentElement.style.setProperty('--wiggle-duration', `${wiggleDuration}s`);
             
-            const hpMinDuration = 0.2, hpMaxDuration = 1.0;
-            let hpWiggleDuration = hpMaxDuration - ((budget - minBudget) / (maxBudget - minBudget)) * (hpMaxDuration - hpMinDuration);
-            hpWiggleDuration = Math.max(hpMinDuration, Math.min(hpMaxDuration, hpWiggleDuration));
-            hpMeterFill.style.setProperty('--hp-wiggle-duration', `${hpWiggleDuration}s`);
+            // Removed separate HP duration logic to force synchronization
         }
 
         function animateSliderTo(targetValue, duration = 400) {
