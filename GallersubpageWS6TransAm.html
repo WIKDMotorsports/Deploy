@@ -17,6 +17,7 @@
    /* Custom styles to complement Tailwind */
     :root {
       --color-primary: #FF3B30;
+      --color-secondary: #ffa500;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -27,14 +28,14 @@
       font-family: 'Rajdhani', sans-serif;
     }
     .lava-gradient-text {
-      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background: linear-gradient(90deg, #b22921, #FF3B30, #ffa500, #FF3B30, #b22921);
       background-size: 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: lavaFlow 4s ease-in-out infinite;
     }
     .lava-gradient-bg {
-      background: linear-gradient(90deg, #b30000, #ff1a00, #ffaa00, #ff1a00, #b30000);
+      background: linear-gradient(90deg, #b22921, #FF3B30, #ffa500, #FF3B30, #b22921);
       background-size: 300%;
       animation: lavaFlow 4s ease-in-out infinite;
     }
@@ -230,10 +231,10 @@
        </h2>
       </div>
       <div class="text-right">
-       <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl font-bold font-heading whitespace-nowrap" data-target="1306" style="color: #FF3B30;">
+       <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl font-bold font-heading whitespace-nowrap" data-target="1306" style="color: var(--color-primary);">
         0 HP
        </div>
-       <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-5xl font-bold font-heading whitespace-nowrap" data-target="974" style="color: #ffa500;">
+       <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-5xl font-bold font-heading whitespace-nowrap" data-target="974" style="color: var(--color-secondary);">
         0 TQ
        </div>
       </div>
@@ -246,9 +247,7 @@
       <!-- Dyno Section -->
       <section class="anim-stagger">
        <div id="chart-container">
-        <p class="text-center text-gray-500 py-10">
-         Dyno Data Coming Soon
-        </p>
+        <canvas id="dynoChart"></canvas>
        </div>
       </section>
       <!-- Specifications & Modifications -->
@@ -288,7 +287,7 @@
         </h3>
         <div class="mt-4 space-y-6">
          <div>
-          <h4 class="text-xl font-semibold text-red-500 uppercase font-heading border-b border-gray-800 pb-2" style="color: #FF3B30;">
+          <h4 class="text-xl font-semibold uppercase font-heading border-b border-gray-800 pb-2" style="color: var(--color-primary);">
            Build List
           </h4>
           <ul class="mt-4 space-y-2 text-gray-300">
@@ -331,15 +330,9 @@
   <!-- Lightbox -->
   <div class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex justify-center items-center p-4 opacity-0 pointer-events-none transition-opacity duration-300" id="lightbox">
    <div class="relative max-w-4xl max-h-full">
-    <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">
-     ×
-    </button>
-    <button class="lightbox-prev absolute top-1/2 -left-4 sm:-left-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">
-     &lt;
-    </button>
-    <button class="lightbox-next absolute top-1/2 -right-4 sm:-right-12 text-white text-4xl -translate-y-1/2 transition-colors hover:text-red-500">
-     &gt;
-    </button>
+        <button class="lightbox-close absolute -top-10 right-0 text-white text-4xl transition-colors hover:text-red-500">&times;</button>
+    <button class="lightbox-prev absolute left-0 top-1/2 -translate-y-1/2 -ml-12 text-white text-6xl transition-colors hover:text-red-500">&lt;</button>
+    <button class="lightbox-next absolute right-0 top-1/2 -translate-y-1/2 -mr-12 text-white text-6xl transition-colors hover:text-red-500">&gt;</button>
     <img alt="Lightbox image" class="max-w-full max-h-[90vh] rounded-lg hidden" id="lightboxImg" src=""/>
     <video class="max-w-full max-h-[90vh] rounded-lg hidden" controls="" id="lightboxVideo" src="">
     </video>
@@ -639,15 +632,15 @@
         data: {
           labels: chartData.map(d => d.rpm),
           datasets: [
-            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#ff4747', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
+            { label: 'Horsepower (WHP)', data: chartData.map(d => d.horsepower), borderColor: '#FF3B30', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? '#555555' : undefined, borderDash: ctx => (peakHpIndex !== -1 && ctx.p1DataIndex > peakHpIndex) ? [5, 5] : undefined, } },
             { label: 'Torque (lb-ft)', data: chartData.map(d => d.torque), borderColor: '#ffa500', borderWidth: 2, pointRadius: 0, yAxisID: 'y', tension: 0.4, order: 1, segment: { borderColor: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? '#555555' : undefined, borderDash: ctx => (peakTqIndex !== -1 && ctx.p1DataIndex > peakTqIndex) ? [5, 5] : undefined, } },
-            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#ff4747', yAxisID: 'y', showLine: false, order: 0, },
+            { label: 'Peak HP', data: peakHpData, pointStyle: 'triangle', pointRadius: 6, pointBackgroundColor: '#FF3B30', yAxisID: 'y', showLine: false, order: 0, },
             { label: 'Peak TQ', data: peakTqData, pointStyle: 'rect', pointRadius: 6, pointBackgroundColor: '#ffa500', yAxisID: 'y', showLine: false, order: 0, }
           ]
         },
         options: {
           animation: {
-            onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(255, 71, 71, 0.7)'); hpGradient.addColorStop(1, 'rgba(255, 71, 71, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); tqGradient.addColorStop(1, 'rgba(255, 165, 0, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(255, 71, 71, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(255, 165, 0, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
+            onComplete: (animation) => { const chartInstance = animation.chart; syncOverlay(chartInstance); if (chartInstance.pingAnimationId) cancelAnimationFrame(chartInstance.pingAnimationId); let startTime = 0; const duration = 5000; const waves = 3; const maxRadius = 12; const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5); function animatePing(timestamp) { if (!startTime) startTime = timestamp; const progress = ((timestamp - startTime) % duration) / duration; overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height); overlayCtx.save(); const hpPulsePos = getPointOnPath(hpPathPoints, progress); const tqPulsePos = getPointOnPath(tqPathPoints, progress); if (hpPulsePos && isFinite(hpPulsePos.x) && isFinite(hpPulsePos.y)) { overlayCtx.beginPath(); const hpGradient = overlayCtx.createRadialGradient(hpPulsePos.x, hpPulsePos.y, 0, hpPulsePos.x, hpPulsePos.y, 5); hpGradient.addColorStop(0, 'rgba(255, 59, 48, 0.7)'); hpGradient.addColorStop(1, 'rgba(255, 59, 48, 0)'); overlayCtx.fillStyle = hpGradient; overlayCtx.arc(hpPulsePos.x, hpPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } if (tqPulsePos && isFinite(tqPulsePos.x) && isFinite(tqPulsePos.y)) { overlayCtx.beginPath(); const tqGradient = overlayCtx.createRadialGradient(tqPulsePos.x, tqPulsePos.y, 0, tqPulsePos.x, tqPulsePos.y, 5); tqGradient.addColorStop(0, 'rgba(255, 59, 48, 0.7)'); tqGradient.addColorStop(1, 'rgba(255, 59, 48, 0)'); overlayCtx.fillStyle = tqGradient; overlayCtx.arc(tqPulsePos.x, tqPulsePos.y, 5, 0, 2 * Math.PI); overlayCtx.fill(); } overlayCtx.lineWidth = 2; for (let i = 0; i < waves; i++) { const waveProgress = (progress - (i / waves) + 1) % 1; const easedProgress = easeOutQuint(waveProgress); const pingGap = maxRadius * easedProgress; const alpha = 1 - easedProgress; if (hpPoint && !hpPoint.hidden) { const markerCircumradius = hpPoint.options.radius, pingCircumradius = markerCircumradius + pingGap; overlayCtx.strokeStyle = `rgba(255, 59, 48, ${alpha})`; overlayCtx.beginPath(); const angle = -Math.PI / 2; overlayCtx.moveTo(hpPoint.x + pingCircumradius * Math.cos(angle), hpPoint.y + pingCircumradius * Math.sin(angle)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 2 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 2 * Math.PI / 3)); overlayCtx.lineTo(hpPoint.x + pingCircumradius * Math.cos(angle + 4 * Math.PI / 3), hpPoint.y + pingCircumradius * Math.sin(angle + 4 * Math.PI / 3)); overlayCtx.closePath(); overlayCtx.stroke(); } if (tqPoint && !tqPoint.hidden) { const scaledPingGap = pingGap * 0.60, markerRadius = tqPoint.options.radius, pingSideRadius = markerRadius + scaledPingGap; overlayCtx.strokeStyle = `rgba(255, 59, 48, ${alpha})`; const size = pingSideRadius * 2; overlayCtx.strokeRect(tqPoint.x - pingSideRadius, tqPoint.y - pingSideRadius, size, size); } } overlayCtx.restore(); chartInstance.pingAnimationId = requestAnimationFrame(animatePing); } animatePing(performance.now()); },
             x: { type: 'number', easing: 'linear', duration: 50, from: NaN, delay(ctx) { if (ctx.type !== 'data' || ctx.xStarted) return 0; ctx.xStarted = true; return ctx.index * 50; } },
             y: {
                 type: 'number',
