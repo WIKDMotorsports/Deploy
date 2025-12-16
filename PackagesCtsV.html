@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTS-V Tuning Packages - Budget Slider</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Additional Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script src="https://animatedicons.co/scripts/embed-animated-icons.js"></script>
+
+    <!-- 2. CSS STYLES (Required) -->
+    <style>
+        /* --- BASE VARIABLES --- */
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #888888;
+            --color-primary: #FF3B30;
+            --color-surface: #141414;
+            --color-border: #2A2A2A;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* --- GLOBAL STYLES & TAILWIND OVERRIDES --- */
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* --- NOISE TEXTURE OVERLAY --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.08;
+            background-size: 100px 100px;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Override Tailwind's default white background and text colors */
+        .bg-white { background-color: var(--color-surface) !important; }
+        .text-gray-900, .text-gray-800, .text-gray-700 { color: var(--color-text) !important; }
+        .text-gray-600, .text-gray-500, .text-gray-400 { color: var(--color-text-muted) !important; }
+        .border-gray-200 { border-color: var(--color-border) !important; }
+        .bg-gray-100 { background-color: #000 !important; border: 1px solid var(--color-border); }
+        .bg-gray-100:hover { border-color: var(--color-primary) !important; }
+        .bg-gray-200 { background-color: var(--color-border) !important; }
+        .bg-gray-300 { background-color: var(--color-border) !important; }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+        }
+
+        /* --- COMPONENT STYLES --- */
+        /* Styles for the slider thumb */
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 24px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+            /* Inverted Triangle geometry */
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            margin-top: -10px; 
+            /* Use filter for shadow on clipped shapes */
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        
+        .slider-thumb::-moz-range-thumb {
+            width: 28px;
+            height: 24px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+
+        /* --- WIKD GEOMETRY UTILITIES --- */
+        .wikd-clipped {
+            /* 20px cut on bottom right */
+            clip-path: polygon(
+                0 0, 
+                100% 0, 
+                100% calc(100% - 20px), 
+                calc(100% - 20px) 100%, 
+                0 100%
+            );
+        }
+        
+        .wikd-clipped-sm {
+            /* 8px cut on bottom right for small items like badges */
+            clip-path: polygon(
+                0 0, 
+                100% 0, 
+                100% calc(100% - 8px), 
+                calc(100% - 8px) 100%, 
+                0 100%
+            );
+        }
+
+        /* --- PERFORMANCE COLOR CLASSES --- */
+        .text-perf-entry { color: #60a5fa !important; } /* Blue-400 */
+        .text-perf-moderate { color: #4ade80 !important; } /* Green-400 */
+        .text-perf-serious { color: #facc15 !important; } /* Yellow-400 */
+        .text-perf-extreme { color: #fb923c !important; } /* Orange-400 */
+        .text-perf-legendary { color: #c084fc !important; } /* Purple-400 */
+        .text-perf-insane { color: #FF3B30 !important; } /* Primary Red */
+        
+        /* Styles for the package cards */
+        .package-card {
+            transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+            transform: scale(0.98);
+            opacity: 0.6;
+            background-color: #000; 
+            border: 1px solid var(--color-border);
+            /* Apply custom geometry */
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+            /* Drop shadow works with clip-path */
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+        }
+        
+        .package-card.active {
+            transform: scale(1);
+            opacity: 1;
+            /* Active state glow */
+            filter: drop-shadow(0 30px 50px rgba(0,0,0,0.8)) drop-shadow(0 0 15px rgba(255, 59, 48, 0.15));
+            border-color: var(--color-primary) !important;
+        }
+        
+        .package-card.full-width {
+            grid-column: 1 / -1;
+            transform: scale(1) !important;
+            opacity: 1 !important;
+        }
+
+        /* Styles for the horsepower meter */
+        .hp-meter {
+            height: 12px;
+            background: #222;
+            border: 1px solid var(--color-border);
+            border-radius: 0;
+            transition: background 0.3s ease-out;
+            /* Slight skew for speed look */
+            transform: skewX(-15deg);
+        }
+        
+        .hp-meter.hide-gradient {
+            background: transparent;
+        }
+
+        .hp-meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #f39c12, var(--color-primary));
+            border-radius: 0;
+            box-shadow: 0 0 15px rgba(255, 59, 48, 0.3);
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        /* Styles for collapsible sections */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        
+        .collapsible-content.active {
+            max-height: 1000px;
+        }
+        
+        /* Styles for the E85 toggle switch */
+        .e85-toggle {
+            transition: all 0.3s ease;
+            background-color: #000;
+            border: 1px solid var(--color-border);
+            border-radius: 0 !important;
+            /* WIKD Button Geometry: Angled bottom-left cut */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 75%);
+            width: 3.5rem; 
+            height: 1.75rem;
+            position: relative;
+        }
+        
+        .e85-toggle .dot {
+            background-color: var(--color-text-muted);
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease;
+            border-radius: 0 !important;
+            width: 1.25rem;
+            height: 1.25rem;
+            position: absolute;
+            top: 0.2rem;
+            left: 0.2rem;
+            /* Slight clip on the dot itself for extra detail */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 4px 100%, 0 80%);
+        }
+
+        #e85-toggle:checked + .e85-toggle {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        #e85-toggle:checked + .e85-toggle .dot {
+            /* Slide to the right */
+            transform: translateX(1.7rem);
+            background-color: white;
+        }
+
+
+        /* Button styles - WIKD Standard */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--color-text);
+            background-color: transparent;
+            border: 2px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out, transform 0.3s ease;
+            /* WIKD Standard Clip */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 85%);
+            text-decoration: none;
+            width: 100%;
+            border-radius: 0 !important;
+            cursor: pointer;
+        }
+        .btn span { position: relative; z-index: 2; }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            transform: translateX(-101%);
+            transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+            background-color: var(--color-primary);
+        }
+        .btn:hover { 
+            color: white !important; 
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+        .btn:hover::before { transform: translateX(0); }
+        
+        .btn-primary {
+            border-color: var(--color-primary);
+        }
+        .btn-primary::before {
+            background-color: var(--color-primary);
+        }
+        
+        .btn-secondary {
+            border-color: var(--color-text);
+            color: var(--color-text);
+        }
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+        }
+
+        /* Container Overrides */
+        .panel-container {
+            border-radius: 0 !important;
+            border: 1px solid var(--color-border) !important;
+            background-color: var(--color-surface);
+            /* Custom Geometry: Cut bottom right */
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 25px), calc(100% - 25px) 100%, 0 100%);
+            /* Use Filter Drop Shadow for clipped containers */
+            filter: drop-shadow(0 25px 40px rgba(0,0,0,0.8));
+        }
+
+        /* Override specific margin for the panel to account for shadow filter space if needed */
+        #budget-panel {
+            margin-bottom: 3rem; 
+        }
+
+        /* --- Business Hours & Tooltip Styles --- */
+        .qr-tooltip {
+            position: absolute;
+            bottom: 100%; 
+            right: 50%;
+            transform: translateX(50%) translateY(10px);
+            margin-bottom: 12px;
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 0px;
+            padding: 0.75rem;
+            z-index: 10;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            pointer-events: none;
+            width: auto;
+            /* Simple geometry for tooltip */
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+        }
+        .qr-tooltip.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(50%) translateY(0);
+            pointer-events: auto;
+        }
+        .qr-tooltip::before { /* Arrow pointing down */
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--color-border) transparent transparent transparent;
+        }
+        .qr-tooltip::after { /* Inner arrow color */
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: -1px;
+            border-width: 7px;
+            border-style: solid;
+            border-color: var(--color-surface) transparent transparent transparent;
+        }
+        .qr-tooltip .qr-code-canvas {
+            display: block;
+        }
+        .qr-tooltip p {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+            color: var(--color-text-muted);
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, -2px); }
+            50% { transform: translate(2px, 2px); }
+            75% { transform: translate(-2px, 2px); }
+            100% { transform: translate(0, 0); }
+        }
+        .hp-meter-fill.shake-animation {
+            animation: shake 0.2s ease-in-out;
+        }
+        @keyframes wiggle {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-1px, 1px); }
+            50% { transform: translate(1px, -1px); }
+            75% { transform: translate(-1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+        @keyframes hp-wiggle {
+            0% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-1px) translateX(1px); }
+            50% { transform: translateY(1px) translateX(-1px); }
+            75% { transform: translateY(-1px) translateX(-1px); }
+            100% { translateY(0) translateX(0); }
+        }
+        /* Applied to both the main budget and the card price for sync */
+        .budget-wiggle {
+            animation: wiggle var(--wiggle-duration, 0.1s) ease-in-out infinite alternate;
+            display: inline-block;
+        }
+        .hp-meter-fill.hp-wiggle {
+            /* UPDATED: Now uses the same --wiggle-duration variable as the text */
+            animation: hp-wiggle var(--wiggle-duration, 0.1s) ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <!-- Header Image -->
+        <div class="mb-12 relative">
+            <!-- Add a slight technical border frame to the image -->
+            <div class="absolute inset-0 border border-white/10 pointer-events-none z-10"></div>
+            <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/CTS-V-FX.jpg?v=1758052426" alt="Cadillac CTS-V" class="w-full h-auto" style="border: 1px solid var(--color-border); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8));" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/0A0A0A/EAEAEA?text=Cadillac+CTS-V';">
+        </div>
+
+        <!-- Budget Control Panel -->
+        <div class="panel-container p-8 mb-12" id="budget-panel">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-3xl font-bold text-white mb-1 uppercase tracking-tight">Your Budget</h2>
+                    <p class="text-gray-500 text-sm font-semibold uppercase tracking-wider">Slide to adjust your budget range</p>
+                </div>
+                <div class="text-right">
+                    <span id="budget-value" class="text-4xl font-bold text-white tracking-tight font-heading">$3,336</span>
+                    <span class="text-gray-500 font-bold uppercase text-sm ml-1">/package</span>
+                </div>
+            </div>
+            
+            <!-- Budget Slider -->
+            <div class="relative mb-4">
+                <!-- Track background -->
+                <input type="range" min="0" max="1000" step="1" value="0" class="w-full h-3 bg-black border border-gray-800 appearance-none cursor-pointer slider-thumb relative z-10" id="budget-slider">
+                
+                <div id="slider-labels" class="relative mt-4 h-6 font-heading font-bold tracking-wide">
+                    <!-- Labels are generated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- E85 Toggle and Performance Level -->
+            <div class="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center">
+                    <span class="mr-4 text-white font-bold uppercase text-sm tracking-wide">E85 Conversion:</span>
+                    <!-- Updated HTML structure to match new CSS - removed conflicting utility classes -->
+                    <div class="relative inline-block mr-3 align-middle select-none">
+                        <input type="checkbox" name="e85-toggle" id="e85-toggle" class="sr-only">
+                        <label for="e85-toggle" class="e85-toggle block cursor-pointer">
+                            <span class="dot block"></span>
+                        </label>
+                    </div>
+                    <span class="text-primary font-bold text-sm uppercase tracking-wider" style="color: var(--color-primary);">+30 WHP BOOST</span>
+                </div>
+                
+                <div class="text-right flex items-center justify-end">
+                    <span class="text-gray-500 text-sm font-bold uppercase mr-2 tracking-wide">Est. Performance:</span>
+                    <!-- Performance Level text will get specific color classes via JS -->
+                    <span id="performance-level" class="font-heading font-bold text-lg uppercase tracking-wider">Entry Level</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Horsepower Meter -->
+        <div class="mb-12">
+            <div class="flex justify-between mb-2 uppercase font-bold text-xs tracking-widest text-gray-500 font-heading">
+                <span>30 WHP</span>
+                <span>1000+ WHP</span>
+            </div>
+            <div class="hp-meter relative" id="hp-meter-container">
+                <div id="hp-meter-fill" class="hp-meter-fill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Package Cards Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16" id="package-container">
+            <!-- Packages are generated here -->
+        </div>
+        
+        <!-- Important Notes Section -->
+        <div class="panel-container overflow-hidden">
+            <!-- ... existing important notes content ... -->
+            <div class="collapsible-header flex justify-between items-center p-6 cursor-pointer hover:bg-white/5 transition-colors">
+                <h2 class="text-xl font-bold text-white uppercase tracking-wide font-heading">Important Notes &amp; Contact Information</h2>
+                <i class="fas fa-chevron-down text-primary transition-transform duration-300" style="color: var(--color-primary);"></i>
+            </div>
+            
+            <div class="collapsible-content px-8 pb-0">
+                <div class="border-t border-gray-800 pt-6 pb-8">
+                    <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
+                        <li>All prices are estimates. Final pricing may vary based on vehicle inspection and specific requirements.</li>
+                        <li>
+                            <strong class="text-white block mb-1 uppercase text-xs tracking-wider">Estimated Shop Fees:</strong>
+                            <ul class="mt-1 space-y-1 pl-4 border-l border-gray-800">
+                                <li>Shop supplies: $40.00</li>
+                                <li>Hazmat: $25.00</li>
+                                <li>Processing: 3%</li>
+                            </ul>
+                            <p class="mt-2 text-xs italic opacity-70">Please note: The listed package price includes estimated tax. These additional shop fees are typically applied per overall repair order and are separate from the package price.</p>
+                        </li>
+                        <li><strong class="text-white">Vehicle Compatibility:</strong> These packages are designed for the 2016-2019 Cadillac CTS-V 6.2L 8Cyl GAS, LT4 Supercharged.</li>
+                        <li>
+                            <strong class="text-white block mb-2 uppercase text-xs tracking-wider">Contact WIKD MOTORSPORTS:</strong>
+                            <ul class="space-y-2">
+                                <li class="flex items-center gap-2"><i class="fas fa-phone text-primary text-xs"></i> (844) 232-9453</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-envelope text-primary text-xs"></i> sales@wikdmotorsports.com</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-globe text-primary text-xs"></i> <a href="https://www.wikdmotorsports.com/" target="_blank" class="hover:text-white transition-colors">wikdmotorsports.com</a></li>
+                                <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary text-xs"></i> 417 Metro Park Drive, McKinney, TX 75071</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const packages = [
+            { id: 'package-35-ctsv', title: 'CTS-V LT4 +30-40 WHP', baseTitle: 'CTS-V LT4 +30-40 WHP', price: 3335.60, hp: 35, description: 'A great starting point with a Flex Fuel kit, intake, and custom dyno tune focused on E85 power.', note: 'This package requires E85 fuel for stated power gains.', parts: ['Flex Fuel Kit', 'Big Gulp Intake', 'Custom Dyno Tune'], e85Compatible: false, performanceLevel: 'Entry Level' },
+            { id: 'package-75-ctsv', title: 'CTS-V LT4 +75 WHP', baseTitle: 'CTS-V LT4 +75 WHP', price: 4348.56, hp: 75, description: 'Upgrade your intake, pulleys, and spark plugs for a solid performance boost, all tied together with a custom dyno tune.', note: '', parts: ['Big Gulp Intake', 'Spark Plugs', '9.2 Lower Pulley', 'Damper', 'Crank Seal', 'Supercharger Belt', 'Performance Crank Bolt', 'Custom Dyno Tune'], e85Compatible: true, e85HpBoost: 30, e85PriceBoost: 1455, performanceLevel: 'Moderate' },
+            { id: 'package-105-ctsv', title: 'CTS-V LT4 +105 WHP (E85)', baseTitle: 'CTS-V LT4 +105 WHP (E85)', price: 6070.97, hp: 105, description: 'Combine pulley upgrades and long tube headers with the power of E85 for an exhilarating experience.', note: 'This is an E85-focused package.', parts: ['10mm LT Spark Plug Wires', 'Spark Plugs', '9.2 Lower Pulley', 'Damper', 'Crank Seal', 'Supercharger Belt', 'Performance Crank Bolt', 'Flex Fuel Kit', 'Big Gulp Intake', 'Long Tube Headers', 'Custom Dyno Tune'], e85Compatible: false, performanceLevel: 'Serious' },
+            { id: 'package-140-ctsv', title: 'CTS-V LT4 +140 WHP', baseTitle: 'CTS-V LT4 +140 WHP', price: 8194.78, hp: 140, description: 'A comprehensive package with upper and lower pulleys, headers, a catch can, and a fine-tuned custom dyno session.', note: '', parts: ['Big Gulp Intake', '10mm LT Spark Plug Wires', 'Spark Plugs', '9.6 Lower Pulley', 'Damper', 'Crank Seal', 'Supercharger Belt', '2.3 Upper Pulley', 'MLS Manifold Gaskets', 'D140 oil change kit', 'Performance Crank Bolt', 'Long Tube Headers', 'Catch Can', 'Idler Bracket System', 'Custom Dyno Tune'], e85Compatible: true, e85HpBoost: 30, e85PriceBoost: 1455, performanceLevel: 'Serious' },
+            { id: 'package-190-ctsv', title: 'CTS-V LT4 +190 WHP', baseTitle: 'CTS-V LT4 +190 WHP', price: 10534.64, hp: 190, description: 'Push performance further with a ported supercharger snout, upgraded throttle body, and meth injection for consistent power.', note: '', parts: ['10mm LT Spark Plug Wires', 'Spark Plugs', '9.6 Lower Pulley', 'Damper', 'Crank Seal', 'Supercharger Belt', '2.25 Upper Pulley', 'MLS Manifold Gaskets', 'D140 oil change kit', 'Supercharger Snout Ported', 'Throttle Body', 'Meth Injection', 'Performance Crank Bolt', 'Big Gulp Intake', 'Long Tube Headers', 'Catch Can', 'Idler Bracket System', 'Custom Dyno Tune'], e85Compatible: true, e85HpBoost: 30, e85PriceBoost: 1455, performanceLevel: 'Extreme' },
+            { id: 'package-250-ctsv', title: 'CTS-V LT4 +250 WHP', baseTitle: 'CTS-V LT4 +250 WHP', price: 19841.12, hp: 250, description: 'The ultimate bolt-on package featuring a custom camshaft, WIKD Interchiller, and extensive tuning for maximum power.', note: '', parts: ['10mm LT Spark Plug Wires', 'Spark Plugs', '9.6 Lower Pulley', 'Damper', 'Supercharger Belt', '2.25 Upper Pulley', 'MLS Manifold Gaskets', 'D140 oil change kit', '103 Throttle body', 'Blower Camshaft', 'VVT Delete Cover', 'Front Crank Seal', 'Timing Guide', 'Pushrods', 'Trunnion Kit', 'Lifter Set', 'DOD Block Plugs', 'Valve Spring Kit', 'Head Gasket', 'Head Studs', 'Lifter Guide', 'Interchiller', 'Expansion Tank', 'Hub install / snout porting', 'Meth Injection', 'Performance Crank Bolt', 'Big Gulp Intake', 'Long Tube Headers', 'Catch Can', 'Idler Bracket System', 'Custom Dyno Tune'], e85Compatible: true, e85HpBoost: 30, e85PriceBoost: 1455, performanceLevel: 'Legendary' },
+            { id: 'package-1000-whp', title: 'WIKD 1000+ WHP', baseTitle: 'WIKD 1000+ WHP', price: 99999.99, hp: 1000, description: 'A blank check to automotive nirvana. This bespoke build transforms your machine into an absolute force of nature, limited only by the depth of your wallet.', note: 'WARNING: THIS MACHINE WILL BECOME A BEAST UNLIKE ANYTHING YOU\'VE EVER DRIVEN. HANDLE WITH EXTREME CAUTION.', parts: ['Forged Internal Engine Build (custom spec)', 'WIKD Forced Induction System (Twin Turbo/Massive Supercharger - custom setup)', 'Reinforced Transmission & Drivetrain (custom hardened components)', 'Upgraded Fuel System (custom high-flow lines, injectors, pumps)', 'Advanced Cooling System (custom radiators, intercoolers, oil coolers)', 'Standalone Engine Management System (fully custom tuned)', 'Full Exhaust System (custom fabrication)', 'Custom Suspension & Chassis Reinforcements', 'Performance Braking System (modified for extreme loads)', 'Custom Wheels & High-Performance Tires', 'Custom Aero Package (for downforce and stability)', 'Safety Enhancements (roll cage, racing seats - modified for street/track)', 'Anything else you can afford'], e85Compatible: false, performanceLevel: 'Insane' }
+        ];
+
+        // --- DOM ELEMENT REFERENCES ---
+        const budgetSlider = document.getElementById('budget-slider');
+        const budgetValue = document.getElementById('budget-value');
+        const packageContainer = document.getElementById('package-container');
+        const hpMeterContainer = document.getElementById('hp-meter-container');
+        const hpMeterFill = document.getElementById('hp-meter-fill');
+        const performanceLevel = document.getElementById('performance-level');
+        const e85Toggle = document.getElementById('e85-toggle');
+        const collapsibleHeader = document.querySelector('.collapsible-header');
+        const collapsibleContent = document.querySelector('.collapsible-content');
+        const collapsibleIcon = document.querySelector('.collapsible-header i');
+        const budgetPanel = document.getElementById('budget-panel');
+
+        // --- STATE & CONFIG ---
+        const sliderMap = [
+            { slider: 0,    budget: 3335 },
+            { slider: 250,  budget: 5000 },
+            { slider: 500,  budget: 10000 },
+            { slider: 750,  budget: 20000 },
+            { slider: 1000, budget: 100000 }
+        ];
+        let isSliding = false;
+        let animationFrameId = null;
+        let isBusinessOpen = false;
+
+        // --- HELPER FUNCTIONS ---
+        function getCssVariable(variable) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+        }
+
+        function convertSliderValueToBudget(value) {
+            const segment = sliderMap.find((point, index) => {
+                const nextPoint = sliderMap[index + 1];
+                return value >= point.slider && value <= nextPoint.slider;
+            });
+            const nextPoint = sliderMap[sliderMap.indexOf(segment) + 1];
+            const sliderRange = nextPoint.slider - segment.slider;
+            const budgetRange = nextPoint.budget - segment.budget;
+            const sliderProgress = (value - segment.slider) / sliderRange;
+            return segment.budget + (sliderProgress * budgetRange);
+        }
+
+        function convertBudgetToSliderValue(budget) {
+            const segment = sliderMap.find((point, index) => {
+                const nextPoint = sliderMap[index + 1];
+                if (!nextPoint) return true;
+                return budget >= point.budget && budget <= nextPoint.budget;
+            });
+            const nextPoint = sliderMap[sliderMap.indexOf(segment) + 1];
+            if (!nextPoint) {
+                return budget >= sliderMap[sliderMap.length - 1].budget 
+                    ? sliderMap[sliderMap.length - 1].slider 
+                    : segment.slider;
+            }
+            const sliderRange = nextPoint.slider - segment.slider;
+            const budgetRange = nextPoint.budget - segment.budget;
+            if (budgetRange === 0) return segment.slider;
+            const budgetProgress = (budget - segment.budget) / budgetRange;
+            return segment.slider + (budgetProgress * sliderRange);
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderSliderLabels() {
+            const labelsContainer = document.getElementById('slider-labels');
+            labelsContainer.innerHTML = '';
+            
+            let labelValues;
+            if (window.innerWidth < 640) { // Mobile breakpoint
+                labelValues = [3335, 100000];
+            } else { // Desktop
+                labelValues = [3335, 10000, 25000, 50000, 100000];
+            }
+
+            labelsContainer.innerHTML = labelValues.map(budget => {
+                const sliderValue = convertBudgetToSliderValue(budget);
+                const percentage = (sliderValue / 1000) * 100;
+                let text = budget >= 1000 ? `$${(budget / 1000).toFixed(1)}K` : `$${budget}`;
+                if (budget === 100000) text = '$100K+';
+                if (budget === 3335) text = '$3.3K';
+                
+                let style = `left: ${percentage}%; transform: translateX(-50%);`;
+                if (percentage <= 0) style = `left: 0%; transform: translateX(0%);`;
+                if (percentage >= 100) style = `left: 100%; transform: translateX(-100%);`;
+
+                return `<span class="absolute text-xs text-gray-500 font-bold uppercase" style="${style}">${text}</span>`;
+            }).join('');
+        }
+
+        // --- ANIMATION SYNC LOGIC ---
+        let budgetAnimationInterval = null;
+        let budgetAnimationCurrentString = '';
+        let budgetAnimationStep = 0;
+        let originalBudgetForAnimation = 0;
+
+        function calculateHpBarWidth(currentHp) {
+            const minHp = 30, midHp = 300, maxHp = 1000;
+            const midBarPercent = 75, maxBarPercent = 100;
+            let width;
+            if (currentHp <= minHp) width = 0;
+            else if (currentHp <= midHp) width = ((currentHp - minHp) / (midHp - minHp)) * midBarPercent;
+            else width = midBarPercent + ((currentHp - midHp) / (maxHp - midHp)) * (maxBarPercent - midBarPercent);
+            return Math.min(100, Math.max(0, width));
+        }
+
+        function animateBudgetToQuestionMarks(originalValue) {
+            if (budgetAnimationInterval !== null && originalValue === originalBudgetForAnimation) return;
+            
+            clearInterval(budgetAnimationInterval);
+            originalBudgetForAnimation = originalValue;
+            
+            const targetString = "???,???"; 
+            budgetAnimationStep = 0;
+            
+            budgetAnimationInterval = setInterval(() => {
+                const mainBudgetEl = document.getElementById('budget-value');
+                const cardPriceEl = document.querySelector('.package-card[data-package-id="package-1000-whp"] [data-role="price"]');
+
+                if (budgetAnimationStep <= targetString.length) {
+                    let currentDisplay = "";
+                    for(let i=0; i<targetString.length; i++) {
+                       if (i < targetString.length - budgetAnimationStep) {
+                           currentDisplay += Math.floor(Math.random() * 9); 
+                       } else {
+                           currentDisplay += "?";
+                       }
+                    }
+                    if(budgetAnimationStep === targetString.length) currentDisplay = "???,???";
+
+                    if(mainBudgetEl) mainBudgetEl.textContent = '$' + currentDisplay;
+                    if(cardPriceEl) cardPriceEl.textContent = '$' + currentDisplay;
+                    
+                    budgetAnimationStep++;
+                } else {
+                    if(mainBudgetEl) mainBudgetEl.textContent = '$???,???';
+                    if(cardPriceEl) cardPriceEl.textContent = '$???,???';
+                    clearInterval(budgetAnimationInterval);
+                    budgetAnimationInterval = null;
+                }
+            }, 50); 
+        }
+
+        function stopBudgetAnimation() {
+            if (budgetAnimationInterval) {
+                clearInterval(budgetAnimationInterval);
+                budgetAnimationInterval = null;
+            }
+            budgetAnimationStep = 0;
+            originalBudgetForAnimation = 0;
+        }
+        
+        function initializePackages() {
+            packageContainer.innerHTML = '';
+            packages.forEach(pkg => {
+                const packageCard = document.createElement('div');
+                packageCard.dataset.packageId = pkg.id;
+                // Add wikd-clipped geometry class here
+                packageCard.className = 'package-card overflow-hidden hidden wikd-clipped';
+
+                const callButtonHTML = `
+                    <div class="call-link-container relative w-full h-full" data-role="call-button-container">
+                        <a href="tel:844-232-9453" class="btn btn-secondary call-link h-full">
+                            <span class="mr-2 flex items-center">
+                                <animated-icons
+                                    src="https://animatedicons.co/get-icon?name=Calling%20V3&style=minimalistic&token=66ff3706-138c-41fa-a993-dee03566e48c"
+                                    trigger="loop"
+                                    attributes='{"variationThumbColour":"${getCssVariable('--color-primary')}","variationName":"Dark","variationNumber":4,"numberOfGroups":2,"strokeWidth":1.5,"backgroundIsGroup":true,"defaultColours":{"group-1":"${getCssVariable('--color-primary')}","group-2":"${getCssVariable('--color-primary')}","background":"#000000"}}'
+                                    height="20"
+                                    width="20"
+                                ></animated-icons>
+                            </span>
+                            <span>Give us a ring!</span>
+                        </a>
+                        <div class="qr-tooltip">
+                            <canvas class="qr-code-canvas"></canvas>
+                            <p>Scan to call us!</p>
+                        </div>
+                    </div>`;
+
+                packageCard.innerHTML = `
+                    <div class="p-8 h-full flex flex-col">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold font-heading uppercase text-white leading-none" data-role="title"></h3>
+                            <!-- Updated: Removed generic bg classes, added wikd-clipped-sm and dynamic class placeholder -->
+                            <span class="text-xs font-bold uppercase px-3 py-1 bg-gray-900 border border-gray-700 tracking-wider wikd-clipped-sm" data-role="performance-tag"></span>
+                        </div>
+                        <div class="mb-6">
+                            <p class="text-4xl font-bold font-heading text-white tracking-tight" data-role="price"></p>
+                            <p class="text-xs font-bold uppercase tracking-wider mt-1" style="color: var(--color-primary);" data-role="cost-per-hp"></p>
+                        </div>
+                        <p class="mb-6 text-sm text-gray-400 leading-relaxed" data-role="description">${pkg.description}</p>
+                        
+                        <div class="bg-red-900/20 border-l-2 border-primary p-3 mb-6 hidden" data-role="note-container">
+                            <p class="text-red-300 text-xs" data-role="note">${pkg.note || ''}</p>
+                        </div>
+                        
+                        <div class="mb-6 flex-grow">
+                            <button class="parts-toggle-btn w-full flex justify-between items-center py-3 px-4 bg-black border border-gray-800 hover:border-gray-600 transition-colors">
+                                <span class="font-bold text-sm uppercase text-gray-300">Included Parts</span>
+                                <i class="fas fa-chevron-down text-xs text-primary transition-transform"></i>
+                            </button>
+                            <div class="parts-content mt-0 border-x border-b border-gray-800 bg-black/50 p-4 hidden">
+                                <ul class="list-none space-y-2 text-xs text-gray-400" data-role="parts-list">
+                                    ${pkg.parts.map(part => `<li class="flex items-start gap-2"><span class="text-primary mt-1">•</span> ${part}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto grid gap-3" data-role="button-container">
+                            <a href="#" class="btn btn-primary h-full" data-role="book-button"><span>Book Now</span></a>
+                            ${callButtonHTML}
+                        </div>
+                    </div>`;
+                packageContainer.appendChild(packageCard);
+
+                const toggleBtn = packageCard.querySelector('.parts-toggle-btn');
+                const partsContent = packageCard.querySelector('.parts-content');
+                const toggleIcon = packageCard.querySelector('.parts-toggle-btn i');
+                toggleBtn.addEventListener('click', () => {
+                    partsContent.classList.toggle('hidden');
+                    toggleIcon.classList.toggle('fa-chevron-down');
+                    toggleIcon.classList.toggle('fa-chevron-up');
+                });
+            });
+             if (typeof AnimatedIcons !== 'undefined' && AnimatedIcons.process) {
+                AnimatedIcons.process();
+            }
+        }
+
+        function updatePackages() {
+            if (packages.length === 0) return;
+
+            const rawSliderValue = parseInt(budgetSlider.value);
+            const budget = convertSliderValueToBudget(rawSliderValue);
+            const e85Active = e85Toggle.checked;
+            const WIKD_ACTIVATION_BUDGET = 55000;
+            
+            const allAdjustedPackages = packages.map(pkg => {
+                let adjustedPrice = pkg.price;
+                let adjustedHp = pkg.hp;
+                let adjustedTitle = pkg.baseTitle;
+                if (e85Active && pkg.e85Compatible) {
+                    adjustedPrice += pkg.e85PriceBoost;
+                    adjustedHp += pkg.e85HpBoost;
+                    adjustedTitle = pkg.baseTitle.replace(/\+(\d+)\s*WHP/, `+${adjustedHp} WHP`) + ' (E85)';
+                }
+                return { ...pkg, adjustedPrice, adjustedHp, adjustedTitle };
+            });
+
+            let activePackage;
+            const wikdPackage = allAdjustedPackages.find(p => p.id === 'package-1000-whp');
+            
+            if (budget >= WIKD_ACTIVATION_BUDGET) {
+                activePackage = wikdPackage;
+            } else {
+                const affordablePackages = allAdjustedPackages.filter(p => p.adjustedPrice <= budget);
+                activePackage = affordablePackages.length > 0
+                    ? affordablePackages.sort((a, b) => b.adjustedPrice - a.adjustedPrice)[0]
+                    : allAdjustedPackages.sort((a, b) => a.adjustedPrice - b.adjustedPrice)[0];
+            }
+
+            const priceSortedPackages = [...allAdjustedPackages].sort((a, b) => a.adjustedPrice - b.adjustedPrice);
+            const activePackageIndex = priceSortedPackages.findIndex(p => p.id === activePackage.id);
+
+            const packagesToShow = [];
+            if (activePackage) packagesToShow.push(activePackage);
+            if (activePackageIndex < priceSortedPackages.length - 1) {
+                packagesToShow.push(priceSortedPackages[activePackageIndex + 1]);
+            } else if (activePackage.id !== wikdPackage.id) {
+               packagesToShow.push(wikdPackage);
+            }
+            const packagesToShowIds = packagesToShow.map(p => p.id);
+            const isWikdMode = activePackage.id === 'package-1000-whp';
+            
+            // --- UPDATE HP METER AND GLOBAL STYLES ---
+            const hpPercentage = calculateHpBarWidth(activePackage.adjustedHp);
+            hpMeterFill.style.width = `${hpPercentage}%`;
+            hpMeterFill.classList.toggle('shake-animation', isWikdMode);
+            // In WIKD mode, gradient is hidden, solid red used with extra intense glow
+            hpMeterFill.style.background = isWikdMode ? getCssVariable('--color-primary') : 'linear-gradient(90deg, #FFD700, #f39c12, var(--color-primary))';
+            hpMeterFill.style.boxShadow = isWikdMode ? `0 0 30px ${getCssVariable('--color-primary')}` : '0 0 10px rgba(255, 59, 48, 0.3)';
+            hpMeterFill.classList.toggle('hp-wiggle', isWikdMode);
+            
+            // Panel styling changes in WIKD mode
+            budgetPanel.style.transition = 'all 0.5s ease';
+            budgetPanel.style.borderColor = isWikdMode ? getCssVariable('--color-primary') : getCssVariable('--color-border');
+            // Dark red gradient background for WIKD mode
+            budgetPanel.style.background = isWikdMode ? 'linear-gradient(145deg, #1a0505 0%, #000000 100%)' : getCssVariable('--color-surface');
+            // Intense red shadow filter for WIKD mode
+            budgetPanel.style.filter = isWikdMode ? `drop-shadow(0 0 40px rgba(255, 59, 48, 0.4))` : 'drop-shadow(0 25px 40px rgba(0,0,0,0.8))';
+            
+            budgetValue.style.color = isWikdMode ? getCssVariable('--color-primary') : '#ffffff';
+            // Neon text shadow for budget value
+            budgetValue.style.textShadow = isWikdMode ? '0 0 20px rgba(255, 59, 48, 0.8)' : 'none';
+            budgetValue.classList.toggle('budget-wiggle', isWikdMode);
+            
+            // Slider styling changes
+            budgetSlider.style.transition = 'all 0.3s ease';
+            budgetSlider.style.borderColor = isWikdMode ? getCssVariable('--color-primary') : '#1f2937';
+            budgetSlider.style.backgroundColor = isWikdMode ? '#2a0505' : '#000000';
+            budgetSlider.style.boxShadow = isWikdMode ? '0 0 15px rgba(255, 59, 48, 0.2)' : 'none';
+            
+            packageContainer.className = isWikdMode ? 'grid grid-cols-1 gap-8 mb-16' : 'grid grid-cols-1 md:grid-cols-2 gap-8 mb-16';
+
+            if (isWikdMode) {
+                animateBudgetToQuestionMarks(budget);
+                e85Toggle.checked = true;
+                e85Toggle.disabled = true;
+            } else {
+                stopBudgetAnimation();
+                budgetValue.textContent = `$${Math.round(budget).toLocaleString('en-US')}`;
+                e85Toggle.disabled = false;
+            }
+            
+            performanceLevel.textContent = activePackage.performanceLevel;
+            performanceLevel.className = 'font-heading font-bold text-lg uppercase tracking-wider';
+            // UPDATED: Use specific custom classes instead of tailwind utilities
+            switch(activePackage.performanceLevel) {
+                case 'Entry Level': performanceLevel.className += ' text-perf-entry'; break;
+                case 'Moderate': performanceLevel.className += ' text-perf-moderate'; break;
+                case 'Serious': performanceLevel.className += ' text-perf-serious'; break;
+                case 'Extreme': performanceLevel.className += ' text-perf-extreme'; break;
+                case 'Legendary': performanceLevel.className += ' text-perf-legendary'; break;
+                case 'Insane': performanceLevel.className += ' text-perf-insane'; break;
+            }
+
+            // --- UPDATE CARDS IN THE DOM ---
+            const allCards = packageContainer.querySelectorAll('.package-card');
+            allCards.forEach(card => {
+                const cardId = card.dataset.packageId;
+                const packageData = allAdjustedPackages.find(p => p.id === cardId);
+                const isVisible = packagesToShowIds.includes(cardId);
+
+                card.classList.toggle('hidden', !isVisible);
+                if (!isVisible) return;
+
+                const isActiveCard = packageData.id === activePackage.id;
+                card.classList.toggle('active', isActiveCard);
+                card.classList.toggle('full-width', isActiveCard && isWikdMode);
+                
+                // WIKD Mode Background for Card
+                card.style.backgroundColor = (isActiveCard && isWikdMode) ? '#0a0505' : '#000';
+                
+                // Geometry specific shadow logic
+                if(isActiveCard && isWikdMode) {
+                    card.style.filter = `drop-shadow(0 0 30px rgba(255, 59, 48, 0.5))`;
+                } else if (!isActiveCard) {
+                    card.style.filter = `drop-shadow(0 20px 30px rgba(0,0,0,0.5))`;
+                } else {
+                    card.style.filter = `drop-shadow(0 30px 50px rgba(0,0,0,0.8)) drop-shadow(0 0 15px rgba(255, 59, 48, 0.15))`;
+                }
+
+                // Update text content
+                card.querySelector('[data-role="title"]').textContent = packageData.adjustedTitle;
+                
+                // Update Tag Logic with Color Classes
+                const tagEl = card.querySelector('[data-role="performance-tag"]');
+                tagEl.textContent = packageData.performanceLevel;
+                // Reset classes
+                tagEl.className = 'text-xs font-bold uppercase px-3 py-1 bg-gray-900 border border-gray-700 tracking-wider wikd-clipped-sm';
+                // Add specific color class
+                switch(packageData.performanceLevel) {
+                    case 'Entry Level': tagEl.classList.add('text-perf-entry', 'border-blue-500/30'); break;
+                    case 'Moderate': tagEl.classList.add('text-perf-moderate', 'border-green-500/30'); break;
+                    case 'Serious': tagEl.classList.add('text-perf-serious', 'border-yellow-500/30'); break;
+                    case 'Extreme': tagEl.classList.add('text-perf-extreme', 'border-orange-500/30'); break;
+                    case 'Legendary': tagEl.classList.add('text-perf-legendary', 'border-purple-500/30'); break;
+                    case 'Insane': tagEl.classList.add('text-perf-insane', 'border-red-500/50'); break;
+                }
+                
+                const priceEl = card.querySelector('[data-role="price"]');
+                if (packageData.id !== 'package-1000-whp') {
+                     priceEl.textContent = `$${packageData.adjustedPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                }
+                
+                const costPerHpEl = card.querySelector('[data-role="cost-per-hp"]');
+                costPerHpEl.textContent = (packageData.id === 'package-1000-whp' || packageData.adjustedHp <= 0) ? '~$???,???/WHP' : `~$${(packageData.adjustedPrice / packageData.adjustedHp).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}/WHP`;
+
+                priceEl.classList.toggle('budget-wiggle', isActiveCard && isWikdMode);
+                priceEl.style.color = (isActiveCard && isWikdMode) ? getCssVariable('--color-primary') : '#ffffff';
+                // Neon shadow for card price in WIKD mode
+                priceEl.style.textShadow = (isActiveCard && isWikdMode) ? '0 0 15px rgba(255, 59, 48, 0.7)' : 'none';
+                
+                const noteContainer = card.querySelector('[data-role="note-container"]');
+                noteContainer.classList.toggle('hidden', !packageData.note || !isActiveCard);
+                
+                const isMobile = isMobileDevice();
+                let buttonLink, buttonText;
+                 if (isMobile) {
+                    let smsBody = packageData.id === 'package-1000-whp' 
+                        ? `Time to build a monster. I want to schedule a consultation for the WIKD 1000+ WHP package for my CTS-V. 🔥`
+                        : `Ready to unleash my CTS-V with the ${packageData.adjustedTitle} package. Let's get it scheduled! 🚀`;
+                    buttonLink = `sms:4695430600?body=${encodeURIComponent(smsBody)}`;
+                    buttonText = '<span>Book by Text</span>';
+                } else {
+                    const email = 'sales@wikdmotorsports.com';
+                    const subject = `Inquiry for ${packageData.adjustedTitle}`;
+                    const userInfoFields = `\n\n---\nPlease provide your info:\nFirst Name: \nLast Name: \nPhone Number: \nYear: \nMake: Cadillac\nModel: CTS-V`;
+                    let emailCoreMessage = packageData.id === 'package-1000-whp'
+                        ? `Time to build a monster. I want to schedule a consultation for the WIKD 1000+ WHP package for my CTS-V. 🔥`
+                        : `Ready to unleash my CTS-V with the ${packageData.adjustedTitle} package. Let's get it scheduled! 🚀`;
+                    const emailBody = emailCoreMessage + userInfoFields;
+                    buttonLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+                    buttonText = '<span>Book by Email</span>';
+                }
+                const bookButton = card.querySelector('[data-role="book-button"]');
+                bookButton.href = buttonLink;
+                bookButton.innerHTML = buttonText;
+                
+                const callButtonContainer = card.querySelector('[data-role="call-button-container"]');
+                const buttonContainer = card.querySelector('[data-role="button-container"]');
+                callButtonContainer.classList.toggle('hidden', !isBusinessOpen);
+                buttonContainer.classList.toggle('md:grid-cols-2', isBusinessOpen);
+            });
+        }
+
+        // --- RESTORED FUNCTION ---
+        function handleSliderInput() {
+            updatePackages();
+            const rawValue = parseInt(budgetSlider.value);
+            const budget = convertSliderValueToBudget(rawValue);
+            const minBudget = 3335, maxBudget = 100000;
+            
+            // Unified fast jiggle speed calculation
+            const minDuration = 0.05, maxDuration = 0.15; 
+            let wiggleDuration = maxDuration - ((budget - minBudget) / (maxBudget - minBudget)) * (maxDuration - minDuration);
+            wiggleDuration = Math.max(minDuration, Math.min(maxDuration, wiggleDuration));
+            
+            // Applied to root so both elements share the EXACT same timing variable
+            document.documentElement.style.setProperty('--wiggle-duration', `${wiggleDuration}s`);
+            
+            // Removed separate HP duration logic to force synchronization
+            const hpMinDuration = 0.2, hpMaxDuration = 1.0;
+            let hpWiggleDuration = hpMaxDuration - ((budget - minBudget) / (maxBudget - minBudget)) * (hpMaxDuration - hpMinDuration);
+            hpWiggleDuration = Math.max(hpMinDuration, Math.min(hpMaxDuration, hpWiggleDuration));
+            hpMeterFill.style.setProperty('--hp-wiggle-duration', `${hpWiggleDuration}s`);
+        }
+
+        function animateSliderTo(targetValue, duration = 400) {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            const startValue = parseInt(budgetSlider.value);
+            const distance = targetValue - startValue;
+            let startTime = null;
+
+            function step(currentTime) {
+                if (isSliding) {
+                    cancelAnimationFrame(animationFrameId);
+                    return;
+                }
+                if (!startTime) startTime = currentTime;
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                const currentValue = startValue + distance * easedProgress;
+                budgetSlider.value = currentValue;
+                handleSliderInput();
+                if (progress < 1) {
+                    animationFrameId = requestAnimationFrame(step);
+                }
+            }
+            animationFrameId = requestAnimationFrame(step);
+        }
+
+        function handleSliderRelease() {
+            isSliding = false;
+            const rawValue = parseInt(budgetSlider.value);
+            const budget = convertSliderValueToBudget(rawValue);
+            const WIKD_ACTIVATION_BUDGET = 55000;
+
+            if (budget >= WIKD_ACTIVATION_BUDGET) {
+                animateSliderTo(1000);
+            }
+        }
+
+        // --- BUSINESS HOURS & TOOLTIP LOGIC ---
+        function checkBusinessHours() {
+            const options = { timeZone: 'America/Chicago', weekday: 'short', hour: 'numeric', hour12: false };
+            const formatter = new Intl.DateTimeFormat('en-US', options);
+            const parts = formatter.formatToParts(new Date()).reduce((acc, part) => { acc[part.type] = part.value; return acc; }, {});
+            const dayOfWeek = parts.weekday;
+            const hour = parseInt(parts.hour, 10);
+            const openDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+            const shouldBeOpen = openDays.includes(dayOfWeek) && hour >= 8 && hour < 17;
+            
+            if (shouldBeOpen !== isBusinessOpen) {
+                isBusinessOpen = shouldBeOpen;
+                if (document.readyState === "complete") {
+                    updatePackages();
+                }
+            }
+        }
+
+        function isMobileDevice() {
+            return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        }
+
+        function initializeTooltip() {
+            packageContainer.addEventListener('click', function(e) {
+                const callLink = e.target.closest('.call-link');
+                if (callLink && !isMobileDevice()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const tooltip = callLink.parentElement.querySelector('.qr-tooltip');
+                    
+                    document.querySelectorAll('.qr-tooltip.active').forEach(tt => {
+                        if (tt !== tooltip) {
+                            tt.classList.remove('active');
+                        }
+                    });
+                    
+                    const canvas = tooltip.querySelector('.qr-code-canvas');
+                    const phoneNumber = callLink.href;
+                    const isActive = tooltip.classList.toggle('active');
+
+                    if (isActive && !canvas.dataset.rendered) {
+                        QRCode.toCanvas(canvas, phoneNumber, {
+                            width: 150,
+                            margin: 1,
+                            color: {
+                                dark: getCssVariable('--color-primary'),
+                                light: getCssVariable('--color-surface')
+                            }
+                        }, function (error) {
+                            if (error) console.error(error);
+                            canvas.dataset.rendered = 'true';
+                        });
+                    }
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.call-link-container')) {
+                    document.querySelectorAll('.qr-tooltip.active').forEach(tooltip => {
+                        tooltip.classList.remove('active');
+                    });
+                }
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+        budgetSlider.addEventListener('input', handleSliderInput);
+        budgetSlider.addEventListener('mousedown', () => {
+            isSliding = true;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        });
+        budgetSlider.addEventListener('touchstart', () => {
+            isSliding = true;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        });
+        budgetSlider.addEventListener('mouseup', handleSliderRelease);
+        budgetSlider.addEventListener('touchend', handleSliderRelease);
+
+        e85Toggle.addEventListener('change', function() {
+            handleSliderInput();
+            setTimeout(() => {
+                 handleSliderRelease();
+            }, 50);
+        });
+
+        collapsibleHeader.addEventListener('click', () => {
+            collapsibleContent.classList.toggle('active');
+            collapsibleIcon.classList.toggle('rotate-180');
+        });
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            initializePackages();
+            checkBusinessHours();
+            handleSliderInput();
+            renderSliderLabels();
+            initializeTooltip();
+            setInterval(checkBusinessHours, 60000);
+
+            window.addEventListener('resize', () => {
+                renderSliderLabels();
+                updatePackages();
+            }); 
+        };
+    </script>
+</body>
+</html>
