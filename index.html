@@ -1,12 +1,3 @@
-<!--
-  Instructions for Shopify:
-  1. Go to your Shopify Admin > Online Store > Theme editor.
-  2. Add a new "Custom Liquid" section to your homepage.
-  3. Delete any default code in the Custom Liquid block.
-  4. Copy and paste ALL of the code below into the block.
-  5. In the section settings on the right, set "Content width" to "Full width" and "Section padding" to "0px" for top and bottom.
-  6. Click "Save".
--->
 
 <!-- 1. FONT STYLES (Required) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +19,6 @@
     }
 
     /* --- FIX: BROWSER RESET --- */
-    /* This removes the default browser margin that causes the white border */
     body {
         margin: 0;
         padding: 0;
@@ -41,7 +31,6 @@
         font-family: var(--font-body);
         line-height: 1.6;
         overflow-x: hidden;
-        /* These margins handle Shopify's theme padding */
         margin-left: calc(-1 * var(--page-width-margin, 0px));
         margin-right: calc(-1 * var(--page-width-margin, 0px));
     }
@@ -92,7 +81,7 @@
         margin-bottom: 60px;
     }
 
-    /* --- HERO SLIDESHOW SECTION (REPLACED FROM REFERENCE) --- */
+    /* --- HERO SLIDESHOW SECTION --- */
     #wikd-homepage-root .hero {
         padding-top: 80px;
         padding-bottom: 50px;
@@ -304,55 +293,105 @@
         transition: height 0.2s ease-out;
     }
 
-    /* Base Grid: 3 columns wide */
+    /* --- UPDATED PACKAGES GRID & CARDS (FROM PROMPT) --- */
     #wikd-homepage-root .packages-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 30px;
     }
+
+    /* Base Card Structure - Updated */
     #wikd-homepage-root .package-card {
         position: relative;
-        /* Adjusted height slightly for a 3x2 layout */
-        aspect-ratio: 3 / 3.5;
+        aspect-ratio: 4 / 5; /* Updated from 3/3.5 */
         overflow: hidden;
-        border-radius: 8px;
+        border-radius: 0px; /* Updated to square corners per prompt */
         border: 1px solid var(--color-border);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         display: block;
     }
-    #wikd-homepage-root .package-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    }
+
     #wikd-homepage-root .package-card-bg {
         position: absolute; inset: 0; width: 100%; height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
+        filter: grayscale(100%) contrast(110%);
+        transition: transform 0.5s ease, filter 0.5s ease;
     }
-    #wikd-homepage-root .package-card:hover .package-card-bg { transform: scale(1.05); }
+
     #wikd-homepage-root .package-card-overlay {
         position: absolute; inset: 0;
         background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%);
         display: flex; flex-direction: column; justify-content: flex-end;
-        padding: 25px;
-    }
-    #wikd-homepage-root .package-card-title {
-        font-size: 2rem; color: white;
-        transform: translateY(20px); opacity: 0;
-        transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
-    }
-    #wikd-homepage-root .package-card-link {
-        font-size: 1rem; color: var(--color-primary);
-        text-transform: uppercase; font-weight: 600;
-        transform: translateY(20px); opacity: 0;
-        transition: transform 0.4s ease 0.2s, opacity 0.4s ease 0.2s;
-    }
-    #wikd-homepage-root .package-card:hover .package-card-title,
-    #wikd-homepage-root .package-card:hover .package-card-link {
-        transform: translateY(0);
-        opacity: 1;
+        padding: 20px;
     }
 
+    /* Content Reveal Logic */
+    #wikd-homepage-root .package-card-content {
+        transform: translateY(0);
+        opacity: 1;
+        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: flex; flex-direction: column;
+    }
+
+    #wikd-homepage-root .package-card-title {
+        font-family: var(--font-heading);
+        font-size: 1.5rem; color: white;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 0;
+        transition: margin-bottom 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    #wikd-homepage-root .package-card-description {
+        color: var(--color-text-muted);
+        font-size: 0.875rem;
+        line-height: 1.4;
+        max-height: 0; opacity: 0; overflow: hidden;
+        transform: translateY(10px);
+        margin-bottom: 0;
+        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    #wikd-homepage-root .package-card-link {
+        font-size: 0.875rem; color: var(--color-primary);
+        text-transform: uppercase; font-weight: 600;
+        max-height: 0; opacity: 0; overflow: hidden;
+        transform: translateY(10px);
+        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: inline-block;
+    }
+
+    /* Hover & Mobile Trigger States */
+    #wikd-homepage-root .package-card:hover,
+    #wikd-homepage-root .package-card.mobile-view {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 15px rgba(255, 59, 48, 0.3);
+        border-color: var(--color-primary);
+    }
+
+    #wikd-homepage-root .package-card:hover .package-card-bg,
+    #wikd-homepage-root .package-card.mobile-view .package-card-bg {
+        transform: scale(1.05);
+        filter: grayscale(0%) contrast(100%);
+    }
+
+    #wikd-homepage-root .package-card:hover .package-card-title,
+    #wikd-homepage-root .package-card.mobile-view .package-card-title {
+        margin-bottom: 0.5rem;
+    }
+
+    #wikd-homepage-root .package-card:hover .package-card-description,
+    #wikd-homepage-root .package-card.mobile-view .package-card-description {
+        max-height: 100px; opacity: 1; transform: translateY(0); margin-bottom: 0.75rem;
+    }
+
+    #wikd-homepage-root .package-card:hover .package-card-link,
+    #wikd-homepage-root .package-card.mobile-view .package-card-link {
+        max-height: 24px; opacity: 1; transform: translateY(0);
+    }
+
+
+    /* --- TICKER SECTION --- */
     #wikd-homepage-root .ticker-section { padding: 60px 0; }
     #wikd-homepage-root .ticker-wrap {
         max-width: 1400px; margin: 0 auto; width: 100%;
@@ -392,7 +431,7 @@
     #wikd-homepage-root .gallery-item img { transition: transform 0.4s ease; }
     #wikd-homepage-root .gallery-item:hover img { transform: scale(1.05); }
 
-    /* --- MAP & LOCATION SECTION (REPLACED FROM REFERENCE) --- */
+    /* --- MAP & LOCATION SECTION --- */
     #wikd-homepage-root .map-iframe {
         border: none;
         width: 100%;
@@ -491,7 +530,6 @@
     /* --- RESPONSIVE STYLES --- */
 
     @media (max-width: 1200px) {
-        /* Removed .packages-grid here to keep it at 3 columns longer */
         #wikd-homepage-root .gallery-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -530,8 +568,8 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
         }
-        #wikd-homepage-root .package-card { aspect-ratio: 1 / 1; }
-        #wikd-homepage-root .package-card-title { font-size: 1.75rem; }
+        /* Adjusted Aspect ratio for mobile cards if needed, but 4/5 works well */
+        #wikd-homepage-root .package-card-title { font-size: 1.25rem; }
 
         #wikd-homepage-root .ticker-wrap::before,
         #wikd-homepage-root .ticker-wrap::after { width: 50px; }
@@ -555,6 +593,12 @@
         #wikd-homepage-root .slide-content { padding: 20px; }
         #wikd-homepage-root .slide h1 { font-size: clamp(1.8rem, 10vw, 2.5rem); }
         #wikd-homepage-root .btn { padding: 10px 24px; font-size: 15px; }
+
+        /* Single column for very small screens if desired, but 2 column often fits 4/5 ratio ok.
+           Let's keep 2 columns but maybe tighter gap */
+        #wikd-homepage-root .packages-grid {
+            gap: 15px;
+        }
 
         #wikd-homepage-root .exhaust-card { width: 85vw; margin: 0 8px; }
         #wikd-homepage-root .exhaust-card-title { font-size: 1.1rem; }
@@ -584,7 +628,6 @@
                         </div>
                     </div>
                     <div class="slide" data-theme="theme-packages">
-                        <!-- UPDATED IMAGE URL FOR PERFORMANCE PACKAGES -->
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/PerforrmancePackagesHero.png?v=1760992603" alt="Performance Packages" class="slide-background">
                         <div class="slide-content">
                             <div class="slide-title-group">
@@ -594,7 +637,6 @@
                         </div>
                     </div>
                     <div class="slide" data-theme="theme-wheels">
-                        <!-- UPDATED IMAGE URL FOR F450 WHEEL & TIRE -->
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/wmremove-transformed_0_00_00_00_a1b41fae-fb45-4e22-9cc6-486322db3322.png?v=1759764806" alt="F-450 Wheel & Tire Package" class="slide-background">
                         <div class="slide-content">
                             <div class="slide-title-group">
@@ -626,55 +668,70 @@
             <div class="container">
                 <h2 class="section-title">Performance Packages</h2>
                 <div class="packages-grid">
+                    <!-- Updated Card Structure for Animation -->
                     <a href="https://www.wikdmotorsports.com/pages/corvette-c7-lt4-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <!-- C7 LT4 Package -->
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7.png?v=1760989861" alt="Corvette C7 LT4" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
-                            <h3 class="package-card-title">Corvette C7 LT4</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
-                        </div>
-                    </a>
-                    <a href="https://www.wikdmotorsports.com/pages/c8-lt2-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <!-- C8 LT2 Package -->
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8.png?v=1760989863" alt="Corvette C8 LT2" class="package-card-bg" loading="lazy">
-                        <div class="package-card-overlay">
-                            <h3 class="package-card-title">Corvette C8 LT2</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
-                        </div>
-                    </a>
-                    <a href="https://www.wikdmotorsports.com/pages/6th-gen-camaro-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <!-- 6th Gen Camaro Package -->
-                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Camaro.png?v=1760989862" alt="6th Gen Camaro" class="package-card-bg" loading="lazy">
-                        <div class="package-card-overlay">
-                            <h3 class="package-card-title">6th Gen Camaro</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
+                            <div class="package-card-content">
+                                <h3 class="package-card-title">Corvette C7 LT4</h3>
+                                <p class="package-card-description">Expert tuning and performance upgrades tailored for the Z06 platform.</p>
+                                <span class="package-card-link">View Packages &rarr;</span>
+                            </div>
                         </div>
                     </a>
 
-                    <!-- NEW: CTS-V Tuning Packages -->
+                    <a href="https://www.wikdmotorsports.com/pages/c8-lt2-packages" class="package-card" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C8.png?v=1760989863" alt="Corvette C8 LT2" class="package-card-bg" loading="lazy">
+                        <div class="package-card-overlay">
+                            <div class="package-card-content">
+                                <h3 class="package-card-title">Corvette C8 LT2</h3>
+                                <p class="package-card-description">Unleash the full potential of your C8 Stingray with our proven packages.</p>
+                                <span class="package-card-link">View Packages &rarr;</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="https://www.wikdmotorsports.com/pages/6th-gen-camaro-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Camaro.png?v=1760989862" alt="6th Gen Camaro" class="package-card-bg" loading="lazy">
+                        <div class="package-card-overlay">
+                            <div class="package-card-content">
+                                <h3 class="package-card-title">6th Gen Camaro</h3>
+                                <p class="package-card-description">Track-ready modifications and tuning for the 6th Generation Camaro.</p>
+                                <span class="package-card-link">View Packages &rarr;</span>
+                            </div>
+                        </div>
+                    </a>
+
                     <a href="https://www.wikdmotorsports.com/pages/cts-v-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/CTS-V.png?v=1760989861" alt="Cadillac CTS-V Tuning" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
-                            <h3 class="package-card-title">CTS-V Tuning</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
+                            <div class="package-card-content">
+                                <h3 class="package-card-title">CTS-V Tuning</h3>
+                                <p class="package-card-description">High-performance solutions to elevate your Cadillac CTS-V experience.</p>
+                                <span class="package-card-link">View Packages &rarr;</span>
+                            </div>
                         </div>
                     </a>
 
                     <a href="https://www.wikdmotorsports.com/pages/ct5-blackwing-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
-                        <!-- CTS/CT5-V Blackwing Package -->
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/BW.png?v=1760989861" alt="CTS V & CT5 V Blackwing" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
-                            <h3 class="package-card-title">CTS/CT5-V Blackwing</h3>
-                            <span class="package-card-link">View Packages &rarr;</span>
+                            <div class="package-card-content">
+                                <h3 class="package-card-title">CTS/CT5-V Blackwing</h3>
+                                <p class="package-card-description">Precision tuning and upgrades for the ultimate driving machines.</p>
+                                <span class="package-card-link">View Packages &rarr;</span>
+                            </div>
                         </div>
                     </a>
 
-                    <!-- NEW: All Tuning/Services -->
                     <a href="https://www.wikdmotorsports.com/pages/tuning" class="package-card" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_6804.jpg?v=1752528576" alt="All Tuning Services" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
-                            <h3 class="package-card-title">All Tuning/Services</h3>
-                            <span class="package-card-link">View Services &rarr;</span>
+                            <div class="package-card-content">
+                                <h3 class="package-card-title">All Tuning/Services</h3>
+                                <p class="package-card-description">Comprehensive dyno tuning and service options for all supported platforms.</p>
+                                <span class="package-card-link">View Services &rarr;</span>
+                            </div>
                         </div>
                     </a>
                 </div>
@@ -872,6 +929,32 @@
             }
         } catch (error) {
             console.error("WIKD Homepage Error in Slideshow:", error);
+        }
+
+        // --- MOBILE CARD OBSERVER LOGIC (NEW) ---
+        try {
+            if (window.matchMedia('(max-width: 768px)').matches && 'IntersectionObserver' in window) {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.5 // Triggers when 50% of card is visible
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('mobile-view');
+                        } else {
+                            entry.target.classList.remove('mobile-view');
+                        }
+                    });
+                }, observerOptions);
+
+                const cards = rootElement.querySelectorAll('.package-card');
+                cards.forEach(card => observer.observe(card));
+            }
+        } catch (error) {
+            console.error("WIKD Homepage Error in Card Observer:", error);
         }
 
         // --- DYNAMIC IFRAME LOADER ---
