@@ -201,12 +201,8 @@
        </h2>
       </div>
       <div class="text-right">
-       <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl font-bold font-heading whitespace-nowrap" data-target="0" style="color: var(--color-primary);">
-        0 HP
-       </div>
-       <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-5xl font-bold font-heading whitespace-nowrap" data-target="0" style="color: var(--color-secondary);">
-        0 TQ
-       </div>
+       <div class="stats-hp text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl font-bold font-heading whitespace-nowrap" style="color: var(--color-primary);">??? HP</div>
+       <div class="stats-tq text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-5xl font-bold font-heading whitespace-nowrap" style="color: var(--color-secondary);">??? TQ</div>
       </div>
      </header>
      <!-- Divider -->
@@ -508,7 +504,7 @@
     // --- COMMON ANIMATIONS & UI ---
     gsap.registerPlugin(ScrollTrigger);
     gsap.utils.toArray('.anim-stagger').forEach(elem => gsap.from(elem, { scrollTrigger: { trigger: elem, start: 'top 95%', toggleActions: 'play none none none', }, opacity: 0, y: 50, duration: 0.8, ease: 'power3.out' }));
-    gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => { const target = parseInt(stat.dataset.target, 10); const statObject = { val: 0 }; gsap.to(statObject, { val: target, duration: 2.5, ease: 'power3.out', delay: 0.5, onUpdate: () => { stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`; } }); });
+    gsap.utils.toArray('.stats-hp, .stats-tq').forEach(stat => { const target = parseInt(stat.dataset.target, 10); if(isNaN(target)) return; const statObject = { val: 0 }; gsap.to(statObject, { val: target, duration: 2.5, ease: 'power3.out', delay: 0.5, onUpdate: () => { stat.textContent = `${Math.round(statObject.val)} ${stat.classList.contains('stats-hp') ? 'HP' : 'TQ'}`; } }); });
     const dataHeader = document.querySelector('.data-header');
     if(dataHeader) { const dataList = document.querySelector('.data-list-collapsible'); const icon = dataHeader.querySelector('i'); dataHeader.addEventListener('click', () => { const isActive = dataHeader.classList.toggle('active'); dataList.style.maxHeight = isActive ? dataList.scrollHeight + 'px' : '0'; icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)'; }); }
 
