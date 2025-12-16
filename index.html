@@ -1,8 +1,8 @@
-
 <!-- 1. FONT STYLES (Required) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <!-- 2. CSS STYLES (Required) -->
 <style>
@@ -18,10 +18,11 @@
         --font-body: 'Inter', sans-serif;
     }
 
-    /* --- FIX: BROWSER RESET --- */
+    /* --- BROWSER RESET & BASE --- */
     body {
         margin: 0;
         padding: 0;
+        background-color: var(--color-background);
     }
 
     /* --- SCOPED STYLES FOR SHOPIFY --- */
@@ -33,6 +34,22 @@
         overflow-x: hidden;
         margin-left: calc(-1 * var(--page-width-margin, 0px));
         margin-right: calc(-1 * var(--page-width-margin, 0px));
+        position: relative;
+    }
+
+    /* --- NOISE TEXTURE OVERLAY --- */
+    #wikd-homepage-root::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.08;
+        background-size: 100px 100px;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
     #wikd-homepage-root *,
@@ -50,6 +67,7 @@
         font-weight: 700;
         line-height: 1.2;
         text-transform: uppercase;
+        color: white;
     }
 
     #wikd-homepage-root img,
@@ -66,7 +84,7 @@
     }
 
     #wikd-homepage-root .section {
-        padding: 60px 5%;
+        padding: 80px 5%;
         overflow: hidden;
     }
 
@@ -79,11 +97,56 @@
         text-align: center;
         font-size: clamp(2.5rem, 6vw, 4rem);
         margin-bottom: 60px;
+        font-weight: 800;
     }
+
+    /* --- BUTTON STYLES (MATCHING WRAPS) --- */
+    #wikd-homepage-root .btn {
+        display: inline-block;
+        padding: 14px 32px;
+        font-family: var(--font-heading);
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--color-text);
+        background-color: transparent;
+        border: 2px solid var(--color-border);
+        position: relative;
+        overflow: hidden;
+        transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out, transform 0.3s ease;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 85%);
+        text-decoration: none;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+    #wikd-homepage-root .btn span { position: relative; z-index: 2; }
+    #wikd-homepage-root .btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 1;
+        transform: translateX(-101%);
+        transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+        background-color: var(--color-primary);
+    }
+    #wikd-homepage-root .btn:hover { 
+        color: white; 
+        border-color: var(--color-primary);
+        transform: translateY(-3px); 
+    }
+    #wikd-homepage-root .btn:hover::before { transform: translateX(0); }
+    
+    #wikd-homepage-root .btn-primary {
+        border-color: var(--color-primary);
+    }
+    #wikd-homepage-root .btn-primary::before {
+        background-color: var(--color-primary);
+    }
+
 
     /* --- HERO SLIDESHOW SECTION --- */
     #wikd-homepage-root .hero {
-        padding-top: 80px;
+        padding-top: 40px;
         padding-bottom: 50px;
         padding-left: 5%;
         padding-right: 5%;
@@ -97,14 +160,15 @@
         width: 100%;
         max-width: 1400px;
         aspect-ratio: 16 / 7;
-        border-radius: 16px;
+        border-radius: 0px; /* SHARP CORNERS */
         transition: box-shadow 0.8s ease-in-out;
     }
 
-    #wikd-homepage-root .hero-wrapper.theme-exhaust { box-shadow: 0 0 60px -10px #8A2BE2; }
-    #wikd-homepage-root .hero-wrapper.theme-packages { box-shadow: 0 0 60px -10px #ff1a00; }
-    #wikd-homepage-root .hero-wrapper.theme-wheels { box-shadow: 0 0 60px -10px #008000; }
-    #wikd-homepage-root .hero-wrapper.theme-cooling { box-shadow: 0 0 60px -10px #00c5ff; }
+    /* Keep theme shadows but update them slightly */
+    #wikd-homepage-root .hero-wrapper.theme-exhaust { box-shadow: 0 0 60px -20px #8A2BE2; }
+    #wikd-homepage-root .hero-wrapper.theme-packages { box-shadow: 0 0 60px -20px #ff1a00; }
+    #wikd-homepage-root .hero-wrapper.theme-wheels { box-shadow: 0 0 60px -20px #008000; }
+    #wikd-homepage-root .hero-wrapper.theme-cooling { box-shadow: 0 0 60px -20px #00c5ff; }
 
     #wikd-homepage-root .slideshow-container {
         position: absolute;
@@ -112,23 +176,22 @@
         left: 0;
         width: 100%;
         height: 100%;
-        border-radius: 16px;
+        border-radius: 0px; /* SHARP CORNERS */
         overflow: hidden;
         z-index: 1;
         background: #000;
+        border: 1px solid var(--color-border);
     }
 
     #wikd-homepage-root .slideshow-container::before {
         content: "";
         position: absolute;
         inset: 0;
-        border-radius: 16px;
+        border-radius: 0px;
         padding: 2px;
         background-size: 300%;
         animation: colorFlow 4s ease-in-out infinite;
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
         z-index: 4;
@@ -159,7 +222,7 @@
         justify-content: flex-end;
         align-items: flex-start;
         text-align: left;
-        padding: 40px;
+        padding: 60px;
         height: 100%;
     }
 
@@ -167,7 +230,7 @@
         content: '';
         position: absolute;
         bottom: 0; left: 0; width: 100%; height: 70%;
-        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
         z-index: -1;
     }
 
@@ -179,10 +242,17 @@
         height: 100%;
         object-fit: cover;
         z-index: 1;
+        filter: grayscale(100%) contrast(110%); /* Desaturated base look */
+        transition: filter 0.8s ease;
+    }
+    
+    #wikd-homepage-root .slide.active .slide-background {
+        filter: grayscale(20%) contrast(110%);
     }
 
     #wikd-homepage-root video.slide-background {
         object-fit: contain;
+        filter: none;
     }
 
     #wikd-homepage-root .slide.active {
@@ -199,14 +269,16 @@
     }
 
     #wikd-homepage-root .slide h1 {
-        font-weight: 700;
-        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
         background-size: 300%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         animation: colorFlow 4s ease-in-out infinite;
         margin: 0;
         transition: background-image 0.8s ease-in-out;
+        text-transform: uppercase;
+        line-height: 1;
     }
 
     #wikd-homepage-root .slide.active .slide-title-group {
@@ -221,6 +293,7 @@
         100% { background-position: 0% 50%; }
     }
 
+    /* Slide specific theme colors */
     #wikd-homepage-root .slideshow-container.theme-exhaust::before,
     #wikd-homepage-root .slideshow-container.theme-exhaust .slide.active h1 {
         background-image: linear-gradient(90deg, #4B0082, #800000, #8A2BE2, #800000, #4B0082);
@@ -238,35 +311,7 @@
         background-image: linear-gradient(90deg, #00c5ff, #ffffff, #afeeee, #ffffff, #00c5ff);
     }
 
-    #wikd-homepage-root .btn {
-        display: inline-block;
-        padding: 14px 32px;
-        font-family: var(--font-heading);
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: var(--color-text);
-        background-color: transparent;
-        border: 2px solid var(--color-border);
-        position: relative;
-        overflow: hidden;
-        transition: color 0.4s ease-in-out, border-color 0.4s ease-in-out;
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 85%);
-        text-decoration: none;
-        flex-shrink: 0;
-    }
-    #wikd-homepage-root .btn span { position: relative; z-index: 2; }
-    #wikd-homepage-root .btn::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        z-index: 1;
-        transform: translateX(-101%);
-        transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1), background-color 0.4s ease-in-out;
-    }
-    #wikd-homepage-root .btn:hover { color: white; }
-    #wikd-homepage-root .btn:hover::before { transform: translateX(0); }
-
+    /* Button overrides for themes */
     #wikd-homepage-root .slide[data-theme="theme-exhaust"] .btn:hover { border-color: #8A2BE2; }
     #wikd-homepage-root .slide[data-theme="theme-exhaust"] .btn::before { background-color: #8A2BE2; }
     #wikd-homepage-root .slide[data-theme="theme-packages"] .btn:hover { border-color: #ff1a00; }
@@ -278,12 +323,10 @@
 
     #wikd-homepage-root .section-cta {
         text-align: center;
-        margin-top: 40px;
+        margin-top: 50px;
     }
-    #wikd-homepage-root .btn-primary:hover { border-color: var(--color-primary); }
-    #wikd-homepage-root .btn-primary::before { background-color: var(--color-primary); }
 
-
+    /* --- IFRAME SECTIONS --- */
     #wikd-homepage-root #questionnaire-section { padding-top: 0; padding-bottom: 0; }
     #wikd-homepage-root .questionnaire-iframe {
         border: none;
@@ -293,22 +336,23 @@
         transition: height 0.2s ease-out;
     }
 
-    /* --- UPDATED PACKAGES GRID & CARDS (FROM PROMPT) --- */
+    /* --- PACKAGES GRID & CARDS (POLISHED STYLE) --- */
     #wikd-homepage-root .packages-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 30px;
     }
 
-    /* Base Card Structure - Updated */
+    /* Polished Card Structure */
     #wikd-homepage-root .package-card {
         position: relative;
-        aspect-ratio: 4 / 5; /* Updated from 3/3.5 */
+        aspect-ratio: 4 / 5;
         overflow: hidden;
-        border-radius: 0px; /* Updated to square corners per prompt */
+        border-radius: 0px; /* Sharp corners */
         border: 1px solid var(--color-border);
         transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         display: block;
+        background: #000;
     }
 
     #wikd-homepage-root .package-card-bg {
@@ -322,7 +366,7 @@
         position: absolute; inset: 0;
         background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%);
         display: flex; flex-direction: column; justify-content: flex-end;
-        padding: 20px;
+        padding: 30px;
     }
 
     /* Content Reveal Logic */
@@ -335,16 +379,17 @@
 
     #wikd-homepage-root .package-card-title {
         font-family: var(--font-heading);
-        font-size: 1.5rem; color: white;
+        font-size: 1.75rem; color: white;
         text-transform: uppercase;
-        font-weight: 700;
+        font-weight: 800;
         margin-bottom: 0;
         transition: margin-bottom 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        line-height: 1;
     }
 
     #wikd-homepage-root .package-card-description {
         color: var(--color-text-muted);
-        font-size: 0.875rem;
+        font-size: 0.95rem;
         line-height: 1.4;
         max-height: 0; opacity: 0; overflow: hidden;
         transform: translateY(10px);
@@ -354,18 +399,19 @@
 
     #wikd-homepage-root .package-card-link {
         font-size: 0.875rem; color: var(--color-primary);
-        text-transform: uppercase; font-weight: 600;
+        text-transform: uppercase; font-weight: 700;
         max-height: 0; opacity: 0; overflow: hidden;
         transform: translateY(10px);
         transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         display: inline-block;
+        margin-top: 4px;
     }
 
     /* Hover & Mobile Trigger States */
     #wikd-homepage-root .package-card:hover,
     #wikd-homepage-root .package-card.mobile-view {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 15px rgba(255, 59, 48, 0.3);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255, 59, 48, 0.2);
         border-color: var(--color-primary);
     }
 
@@ -392,83 +438,110 @@
 
 
     /* --- TICKER SECTION --- */
-    #wikd-homepage-root .ticker-section { padding: 60px 0; }
+    #wikd-homepage-root .ticker-section { padding: 80px 0; background-color: var(--color-surface); }
     #wikd-homepage-root .ticker-wrap {
-        max-width: 1400px; margin: 0 auto; width: 100%;
+        width: 100%;
         overflow: hidden; position: relative;
     }
     #wikd-homepage-root .ticker-wrap::before,
     #wikd-homepage-root .ticker-wrap::after {
         content: ''; position: absolute; top: 0;
-        width: 100px; height: 100%; z-index: 2;
+        width: 150px; height: 100%; z-index: 2;
+        pointer-events: none;
     }
-    #wikd-homepage-root .ticker-wrap::before { left: 0; background: linear-gradient(to right, var(--color-background) 0%, transparent 100%); }
-    #wikd-homepage-root .ticker-wrap::after { right: 0; background: linear-gradient(to left, var(--color-background) 0%, transparent 100%); }
-    #wikd-homepage-root .ticker-move { display: inline-flex; animation: ticker 60s linear infinite; }
+    #wikd-homepage-root .ticker-wrap::before { left: 0; background: linear-gradient(to right, var(--color-surface) 0%, transparent 100%); }
+    #wikd-homepage-root .ticker-wrap::after { right: 0; background: linear-gradient(to left, var(--color-surface) 0%, transparent 100%); }
+    
+    #wikd-homepage-root .ticker-move { display: inline-flex; animation: ticker 40s linear infinite; }
+    #wikd-homepage-root .ticker-move:hover { animation-play-state: paused; }
+
     #wikd-homepage-root .exhaust-card {
         display: flex; flex-direction: column;
-        background-color: var(--color-surface);
-        border-radius: 8px; border: 1px solid var(--color-border);
-        overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #000;
+        border-radius: 0px; /* Sharp */
+        border: 1px solid var(--color-border);
+        overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease;
         text-decoration: none; color: var(--color-text);
-        width: 380px; margin: 0 20px; flex-shrink: 0;
+        width: 380px; margin: 0 15px; flex-shrink: 0;
     }
-    #wikd-homepage-root .exhaust-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    #wikd-homepage-root .exhaust-card:hover { 
+        transform: translateY(-5px); 
+        border-color: var(--color-primary);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+    }
     #wikd-homepage-root .exhaust-card-image-wrapper { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
-    #wikd-homepage-root .exhaust-card-bg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.3, 1, 0.4, 1); }
-    #wikd-homepage-root .exhaust-card:hover .exhaust-card-bg { transform: scale(1.05); }
-    #wikd-homepage-root .exhaust-card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-    #wikd-homepage-root .exhaust-card-title { font-size: 1.2rem; line-height: 1.4; margin: 0 0 10px 0; flex-grow: 1; text-transform: none; color: var(--color-text); }
-    #wikd-homepage-root .exhaust-card-price { font-size: 1.6rem; font-weight: 700; color: var(--color-primary); margin-top: auto; font-family: var(--font-heading); }
+    #wikd-homepage-root .exhaust-card-bg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.3, 1, 0.4, 1); filter: grayscale(100%); }
+    #wikd-homepage-root .exhaust-card:hover .exhaust-card-bg { transform: scale(1.05); filter: grayscale(0%); }
+    #wikd-homepage-root .exhaust-card-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+    #wikd-homepage-root .exhaust-card-title { font-size: 1.1rem; line-height: 1.4; margin: 0 0 15px 0; flex-grow: 1; text-transform: none; color: var(--color-text); font-weight: 600; }
+    #wikd-homepage-root .exhaust-card-price { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); margin-top: auto; font-family: var(--font-heading); }
     @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
+    /* --- GALLERY SECTION --- */
     #wikd-homepage-root .gallery-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 20px;
     }
-    #wikd-homepage-root .gallery-item { overflow: hidden; border-radius: 8px; cursor: pointer; border: 1px solid var(--color-border); }
-    #wikd-homepage-root .gallery-item img { transition: transform 0.4s ease; }
-    #wikd-homepage-root .gallery-item:hover img { transform: scale(1.05); }
+    #wikd-homepage-root .gallery-item { 
+        overflow: hidden; 
+        border-radius: 0px; /* Sharp */
+        cursor: pointer; 
+        border: 1px solid var(--color-border); 
+        position: relative;
+    }
+    #wikd-homepage-root .gallery-item img { 
+        transition: transform 0.6s ease, filter 0.6s ease; 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        display: block;
+        filter: grayscale(100%);
+    }
+    #wikd-homepage-root .gallery-item:hover { border-color: var(--color-primary); }
+    #wikd-homepage-root .gallery-item:hover img { transform: scale(1.05); filter: grayscale(0%); }
 
     /* --- MAP & LOCATION SECTION --- */
     #wikd-homepage-root .map-iframe {
-        border: none;
+        border: 1px solid var(--color-border);
         width: 100%;
         display: block;
         background-color: transparent;
         height: 600px;
-        border-radius: 16px;
+        border-radius: 0px;
     }
 
+    /* --- LIGHTBOX --- */
     #wikd-homepage-root .lightbox {
         position: fixed; inset: 0;
-        background: rgba(0,0,0,0.9); z-index: 99999;
+        background: rgba(0,0,0,0.95); z-index: 99999;
         display: flex; justify-content: center; align-items: center;
         opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        backdrop-filter: blur(5px);
     }
     #wikd-homepage-root .lightbox.active { opacity: 1; pointer-events: all; }
     #wikd-homepage-root .lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
-    #wikd-homepage-root .lightbox-content img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+    #wikd-homepage-root .lightbox-content img { max-width: 100%; max-height: 90vh; border: 1px solid var(--color-border); box-shadow: 0 0 50px rgba(0,0,0,0.8); }
     #wikd-homepage-root .lightbox-close,
     #wikd-homepage-root .lightbox-prev,
     #wikd-homepage-root .lightbox-next {
         position: absolute; background: none; border: none;
         color: white; font-size: 3rem; cursor: pointer; z-index: 1;
         transition: color 0.3s ease;
+        text-shadow: 0 2px 10px black;
     }
     #wikd-homepage-root .lightbox-close:hover,
     #wikd-homepage-root .lightbox-prev:hover,
     #wikd-homepage-root .lightbox-next:hover { color: var(--color-primary); }
-    #wikd-homepage-root .lightbox-close { top: 20px; right: 30px; }
-    #wikd-homepage-root .lightbox-prev { top: 50%; left: 20px; transform: translateY(-50%); }
-    #wikd-homepage-root .lightbox-next { top: 50%; right: 20px; transform: translateY(-50%); }
+    #wikd-homepage-root .lightbox-close { top: -40px; right: -40px; }
+    #wikd-homepage-root .lightbox-prev { top: 50%; left: -60px; transform: translateY(-50%); }
+    #wikd-homepage-root .lightbox-next { top: 50%; right: -60px; transform: translateY(-50%); }
 
     /* --- FOOTER STYLES --- */
     #wikd-homepage-root .wikd-footer {
         background-color: var(--color-surface);
         border-top: 1px solid var(--color-border);
-        padding: 60px 5% 30px;
+        padding: 80px 5% 40px;
         color: var(--color-text-muted);
     }
     #wikd-homepage-root .footer-container {
@@ -483,23 +556,30 @@
         flex: 1 1 300px;
     }
     #wikd-homepage-root .footer-logo {
-        width: 120px;
+        width: 180px;
         height: auto;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
     }
+    #wikd-homepage-root .footer-logo:hover { filter: grayscale(0%); }
+    
     #wikd-homepage-root .footer-about p {
         font-size: 15px;
         line-height: 1.7;
+        max-width: 350px;
     }
     #wikd-homepage-root .footer-links {
         flex: 1 1 200px;
     }
     #wikd-homepage-root .footer-title {
         font-family: var(--font-heading);
-        font-size: 1.5rem;
-        color: var(--color-text);
-        margin-bottom: 20px;
+        font-size: 1.25rem;
+        color: white;
+        margin-bottom: 25px;
         text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
     }
     #wikd-homepage-root .footer-nav {
         list-style: none;
@@ -512,19 +592,23 @@
     #wikd-homepage-root .footer-nav a {
         color: var(--color-text-muted);
         text-decoration: none;
-        font-size: 15px;
-        transition: color 0.3s ease;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        display: inline-block;
     }
     #wikd-homepage-root .footer-nav a:hover {
         color: var(--color-primary);
+        transform: translateX(5px);
     }
     #wikd-homepage-root .footer-bottom {
         border-top: 1px solid var(--color-border);
-        margin-top: 40px;
+        margin-top: 60px;
         padding-top: 30px;
         text-align: center;
-        font-size: 14px;
+        font-size: 13px;
         width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     /* --- RESPONSIVE STYLES --- */
@@ -536,74 +620,44 @@
     }
 
     @media (max-width: 900px) {
-        #wikd-homepage-root .hero { padding-top: 100px; }
+        #wikd-homepage-root .hero { padding-top: 40px; }
         #wikd-homepage-root .hero-wrapper,
-        #wikd-homepage-root .slideshow-container { aspect-ratio: 16 / 9; }
+        #wikd-homepage-root .slideshow-container { aspect-ratio: 16 / 10; }
 
         #wikd-homepage-root .map-iframe {
-            height: 1000px;
+            height: 400px;
         }
     }
 
     @media (max-width: 768px) {
-        #wikd-homepage-root .section { padding: 40px 5%; }
-        #wikd-homepage-root .section-title { margin-bottom: 40px; }
+        #wikd-homepage-root .section { padding: 60px 5%; }
+        #wikd-homepage-root .section-title { margin-bottom: 40px; font-size: 2.5rem; }
 
         #wikd-homepage-root .hero {
-            padding-top: 80px;
+            padding-top: 20px;
             padding-bottom: 40px;
         }
 
-        #wikd-homepage-root .hero-wrapper { aspect-ratio: 4 / 3; }
+        #wikd-homepage-root .hero-wrapper { aspect-ratio: 1 / 1; }
         #wikd-homepage-root .slide-content { padding: 25px; }
-        #wikd-homepage-root .slide-title-group { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+        #wikd-homepage-root .slide-title-group { flex-direction: column; align-items: flex-start; gap: 1rem; }
         #wikd-homepage-root .btn { padding: 12px 28px; font-size: 16px; }
 
-        /* Grid drops to 2 columns here for tablets/mobile */
+        /* Grid drops to 1 column for clean mobile experience, or 2 if preferred. 1 is safer for cards this detailed. */
         #wikd-homepage-root .packages-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
         #wikd-homepage-root .gallery-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
         }
-        /* Adjusted Aspect ratio for mobile cards if needed, but 4/5 works well */
-        #wikd-homepage-root .package-card-title { font-size: 1.25rem; }
-
+       
         #wikd-homepage-root .ticker-wrap::before,
         #wikd-homepage-root .ticker-wrap::after { width: 50px; }
-        #wikd-homepage-root .exhaust-card { width: 80vw; max-width: 320px; margin: 0 10px; }
+        #wikd-homepage-root .exhaust-card { width: 85vw; max-width: 320px; margin: 0 10px; }
 
-        #wikd-homepage-root .map-iframe {
-            height: 1000px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        #wikd-homepage-root .section { padding: 30px 4%; }
-
-        #wikd-homepage-root .hero {
-            padding-left: 4%;
-            padding-right: 4%;
-        }
-
-        #wikd-homepage-root .hero-wrapper { aspect-ratio: 1 / 1; }
-
-        #wikd-homepage-root .slide-content { padding: 20px; }
-        #wikd-homepage-root .slide h1 { font-size: clamp(1.8rem, 10vw, 2.5rem); }
-        #wikd-homepage-root .btn { padding: 10px 24px; font-size: 15px; }
-
-        /* Single column for very small screens if desired, but 2 column often fits 4/5 ratio ok.
-           Let's keep 2 columns but maybe tighter gap */
-        #wikd-homepage-root .packages-grid {
-            gap: 15px;
-        }
-
-        #wikd-homepage-root .exhaust-card { width: 85vw; margin: 0 8px; }
-        #wikd-homepage-root .exhaust-card-title { font-size: 1.1rem; }
-        #wikd-homepage-root .exhaust-card-price { font-size: 1.4rem; }
-        #wikd-homepage-root .lightbox-close { top: 10px; right: 15px; font-size: 2.5rem; }
+        #wikd-homepage-root .lightbox-close { top: 10px; right: 10px; font-size: 2rem; color: white; }
         #wikd-homepage-root .lightbox-prev { left: 10px; }
         #wikd-homepage-root .lightbox-next { right: 10px; }
     }
@@ -668,7 +722,8 @@
             <div class="container">
                 <h2 class="section-title">Performance Packages</h2>
                 <div class="packages-grid">
-                    <!-- Updated Card Structure for Animation -->
+                    <!-- Polished Cards with Reveal Effect -->
+                    
                     <a href="https://www.wikdmotorsports.com/pages/corvette-c7-lt4-tuning-packages" class="package-card" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7.png?v=1760989861" alt="Corvette C7 LT4" class="package-card-bg" loading="lazy">
                         <div class="package-card-overlay">
@@ -793,7 +848,6 @@
                     <div class="gallery-item"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_EngineBay_1_46d7c3ca-66f2-42ea-972a-9daabcca666c_1600x.jpg?v=1732120285" alt="WIKD Z06 Gallery Image 3" loading="lazy"></div>
                     <div class="gallery-item"><img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/C7_Black_Trunk_1t_758d6f66-d172-4b2f-9e7f-af893f46d7cf_1600x.jpg?v=1732120284" alt="WIKD Z06 Gallery Image 4" loading="lazy"></div>
                 </div>
-                <!-- FIX: Added "Visit Gallery" button -->
                 <div class="section-cta">
                     <a href="https://www.wikdmotorsports.com/pages/gallery" class="btn btn-primary" target="_blank"><span>Visit Gallery</span></a>
                 </div>
@@ -844,23 +898,13 @@
 <!-- 4. JAVASCRIPT LOGIC (Required) -->
 <script>
 (function() {
-    // This is the master initialization function. It's designed to be idempotent,
-    // meaning it can be called multiple times without breaking anything. This is crucial
-    // for the Shopify theme editor, which can reload sections unpredictably.
+    // This is the master initialization function. It's designed to be idempotent.
     const runWikdHomepage = function() {
         const rootElement = document.getElementById('wikd-homepage-root');
 
-        // Guard clause: If the main container isn't in the DOM yet, stop.
-        if (!rootElement) {
-            return;
-        }
+        if (!rootElement) return;
+        if (rootElement.classList.contains('wikd-homepage-initialized')) return;
 
-        // Guard clause: If this script has already run successfully, stop.
-        if (rootElement.classList.contains('wikd-homepage-initialized')) {
-            return;
-        }
-
-        // Mark as initialized so it doesn't run again.
         rootElement.classList.add('wikd-homepage-initialized');
 
         // --- HERO SLIDESHOW LOGIC ---
@@ -931,13 +975,13 @@
             console.error("WIKD Homepage Error in Slideshow:", error);
         }
 
-        // --- MOBILE CARD OBSERVER LOGIC (NEW) ---
+        // --- MOBILE CARD OBSERVER LOGIC ---
         try {
             if (window.matchMedia('(max-width: 768px)').matches && 'IntersectionObserver' in window) {
                 const observerOptions = {
                     root: null,
                     rootMargin: '0px',
-                    threshold: 0.5 // Triggers when 50% of card is visible
+                    threshold: 0.5 
                 };
 
                 const observer = new IntersectionObserver((entries) => {
@@ -1041,11 +1085,6 @@
         }
     };
 
-    // --- ROBUST INITIALIZATION ---
-    // This is the new, foolproof way to run the script. It waits for the browser to be ready
-    // to paint, then checks if our root element exists. If not, it waits for the next frame
-    // and checks again. This is the most reliable way to handle unpredictable script loading
-    // in environments like the Shopify theme editor.
     const ensureReady = () => {
         if (document.getElementById('wikd-homepage-root')) {
             runWikdHomepage();
@@ -1054,13 +1093,9 @@
         }
     };
 
-    // Kick off the check.
     requestAnimationFrame(ensureReady);
 
-    // Also listen for Shopify's specific event for when a section is reloaded in the editor.
     document.addEventListener('shopify:section:load', () => {
-        // When Shopify reloads the section, the old 'initialized' class is gone,\
-        // so our script will re-run correctly for the new content.
         requestAnimationFrame(ensureReady);
     });
 })();
