@@ -122,16 +122,16 @@
             position: sticky;
             left: 0;
             width: 100%;
-            height: 10rem;
+            height:  20rem;
             pointer-events: none;
             z-index: 10;
         }
         .gradient-overlay-top {
-            top: 0;
+            top: -1px;
             background: linear-gradient(to bottom, #0A0A0A, rgba(10, 10, 10, 0));
         }
         .gradient-overlay-bottom {
-            bottom: 0;
+            bottom: -1px;
             background: linear-gradient(to top, #0A0A0A, rgba(10, 10, 10, 0));
         }
 
@@ -216,9 +216,10 @@
         <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-start lg:min-h-screen lg:p-24 lg:gap-12">
         
             <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-            <div id="tickerWrapper" class="ticker-wrapper hidden lg:block">
+            <div class="relative hidden lg:block w-full max-w-[40rem] flex-shrink-0 h-screen">
                 <div class="gradient-overlay-top"></div>
-                <div id="tickerInner" class="ticker-inner">
+                <div id="tickerWrapper" class="ticker-wrapper">
+                    <div id="tickerInner" class="ticker-inner">
                     <!-- Gallery items populated here with your original Shopify CDN links -->
                     <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4623.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4623.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 1" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
                     <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4637.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4637.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 2" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
@@ -231,6 +232,7 @@
                     <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4627.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4627.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 9" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
                     <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4638.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4638.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 10" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
                     <div class="image-ticker-card"><img src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4631.jpg?v=1733425432&width=1000" data-src="https://www.wikdmotorsports.com/cdn/shop/files/IMG_4631.jpg?v=1733425432&width=1000" alt="C8 Exhaust Image 11" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII';"></div>
+                    </div>
                 </div>
                 <div class="gradient-overlay-bottom"></div>
             </div>
