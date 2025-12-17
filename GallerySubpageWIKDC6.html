@@ -66,11 +66,8 @@
     
     /* --- DESKTOP VERTICAL TICKER --- */
     .ticker-wrapper {
-      position: relative;
-      flex-shrink: 0;
       width: 100%;
-      max-width: 40rem;
-      height: 100vh;
+      height: 100%;
       overflow-y: scroll;
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
@@ -103,7 +100,7 @@
       will-change: transform;
     }
     .gradient-overlay-top, .gradient-overlay-bottom {
-      position: sticky;
+      position: absolute;
       left: 0;
       width: 100%;
       height: 10rem;
@@ -164,8 +161,9 @@
 <!-- Main Content Container -->
 <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
 <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-<div class="ticker-wrapper hidden lg:block" id="tickerWrapper">
+<div class="relative hidden lg:block flex-shrink-0 w-full max-w-[40rem] h-screen">
 <div class="gradient-overlay-top"></div>
+<div class="ticker-wrapper w-full h-full" id="tickerWrapper">
 <div class="ticker-inner" id="tickerInner"><div class="image-ticker-card"><img alt="WIKD C6 Gallery Image 1" src="https://www.wikdmotorsports.com/cdn/shop/files/BANNER_2.jpg?v=1705419525"/></div>
 <a class="image-ticker-card block" data-video-card="" href="https://www.wikdmotorsports.com/pages/domestic-tune" rel="noopener noreferrer" target="_blank">
 <div class="relative group">
@@ -198,6 +196,7 @@
 </div>
 </div>
 </a>
+</div>
 </div>
 <div class="gradient-overlay-bottom"></div>
 </div>

@@ -66,11 +66,8 @@
     
     /* --- DESKTOP VERTICAL TICKER --- */
     .ticker-wrapper {
-      position: relative;
-      flex-shrink: 0;
       width: 100%;
-      max-width: 40rem;
-      height: 100vh;
+      height: 100%;
       overflow-y: scroll;
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
@@ -103,7 +100,7 @@
       will-change: transform;
     }
     .gradient-overlay-top, .gradient-overlay-bottom {
-      position: sticky;
+      position: absolute;
       left: 0;
       width: 100%;
       height: 10rem;
@@ -164,8 +161,9 @@
 <!-- Main Content Container -->
 <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
 <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-<div class="ticker-wrapper hidden lg:block" id="tickerWrapper">
+<div class="relative hidden lg:block flex-shrink-0 w-full max-w-[40rem] h-screen">
 <div class="gradient-overlay-top"></div>
+<div class="ticker-wrapper w-full h-full" id="tickerWrapper">
 <div class="ticker-inner" id="tickerInner">
 <a class="image-ticker-card block" data-video-card="" href="https://www.wikdmotorsports.com/products/mclaren-720s-titanium-catback-2018-brushed-purple" rel="noopener noreferrer" target="_blank">
 <div class="relative group">
@@ -183,6 +181,7 @@
 </div>
 </a>
 <div class="image-ticker-card"><img alt="WIKD 720s Gallery Image 7" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4669.jpg?v=1759177502"/></div><div class="image-ticker-card"><img alt="WIKD 720s Build Screenshot 1" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Screenshot_2025-09-29_150227.png?v=1759177906"/></div><div class="image-ticker-card"><img alt="WIKD 720s Build Screenshot 2" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Screenshot_2025-09-29_152945.png?v=1759177915"/></div><div class="image-ticker-card"><img alt="WIKD 720s Build Screenshot 3" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/Screenshot_2025-09-29_152918.png?v=1759177915"/></div><div class="image-ticker-card"><img alt="WIKD 720s Gallery Image 1" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_6804.jpg?v=1752528576"/></div></div>
+</div>
 <div class="gradient-overlay-bottom"></div>
 </div>
 <!-- Content Card -->

@@ -70,11 +70,8 @@
 
     /* --- DESKTOP VERTICAL TICKER --- */
     .ticker-wrapper {
-      position: relative;
-      flex-shrink: 0;
       width: 100%;
-      max-width: 40rem;
-      height: 100vh;
+      height: 100%;
       overflow-y: scroll;
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
@@ -107,7 +104,7 @@
       will-change: transform;
     }
     .gradient-overlay-top, .gradient-overlay-bottom {
-      position: sticky;
+      position: absolute;
       left: 0;
       width: 100%;
       height: 10rem;
@@ -169,10 +166,10 @@
    <!-- Main Content Container -->
    <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-6 xl:p-24 lg:gap-8 xl:gap-12">
     <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-    <div class="ticker-wrapper hidden lg:block" id="tickerWrapper">
-     <div class="gradient-overlay-top">
-     </div>
-     <div class="ticker-inner" id="tickerInner">
+    <div class="relative hidden lg:block flex-shrink-0 w-full max-w-[40rem] h-screen">
+<div class="gradient-overlay-top"></div>
+<div class="ticker-wrapper w-full h-full" id="tickerWrapper">
+<div class="ticker-inner" id="tickerInner">
       <div class="image-ticker-card">
        <img alt="WIKD F-450 Gallery Image 1" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4585_1.jpg?v=1752529624"/>
       </div>
@@ -183,9 +180,9 @@
        <img alt="WIKD F-450 Gallery Image 3" src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/IMG_4585_1.jpg?v=1752529624"/>
       </div>
      </div>
-     <div class="gradient-overlay-bottom">
-     </div>
-    </div>
+</div>
+<div class="gradient-overlay-bottom"></div>
+</div>
     <!-- Content Card -->
     <main class="relative z-20 w-full lg:w-3/4 xl:w-1/2 max-w-4xl bg-[#0A0A0A] lg:bg-black/75 border-t border-gray-800 lg:border-t-0 lg:border border-gray-800 shadow-2xl lg:clip-path-custom flex flex-col mt-[45vh] lg:mt-0" id="contentCard">
      <!-- Card Header -->
