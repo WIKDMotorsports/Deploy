@@ -36,11 +36,21 @@
 
         /* --- GLOBAL STYLES & TAILWIND OVERRIDES --- */
         body {
-            background-color: var(--color-background);
+            background-color: transparent !important;
+            margin: 0;
+            padding: 0;
             color: var(--color-text);
             font-family: var(--font-body);
             overflow-y: auto;
             position: relative;
+        }
+
+        #main-wrapper {
+            background-color: var(--color-background);
+            width: 100%;
+            min-height: 100vh;
+            padding-top: 30px;
+            box-sizing: border-box;
         }
 
         /* --- NOISE TEXTURE OVERLAY --- */
@@ -403,6 +413,7 @@
 </head>
 <body>
 
+    <main id="main-wrapper">
     <div class="max-w-7xl mx-auto px-4 py-12">
         <!-- Header Image -->
         <div class="mb-12 relative">
@@ -508,6 +519,7 @@
             </div>
         </div>
     </div>
+    </main>
 
     <script>
         // --- DATA ---
