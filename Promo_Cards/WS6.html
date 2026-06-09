@@ -163,9 +163,10 @@
                     </div>
                     
                     <div class="card-content-layer w-full h-full relative" style="transform-style: preserve-3d;">
-                        
+                        <div id="step-1-hitbox" style="position:absolute; inset:0; z-index:10000; cursor:pointer;"></div>
+                        <div id="step-2-hitbox" style="position:absolute; inset:0; z-index:10000; cursor:pointer; display:none;"></div>
+
                         <div id="step-1-content" class="w-full h-full flex flex-col items-center justify-between transition-all duration-500 transform opacity-100 z-10" style="transform-style: preserve-3d;">
-                            <div id="step-1-hitbox" class="absolute inset-0 w-full h-full z-[9999] cursor-pointer" ontouchstart=""></div>
                             <p id="message-text" class="h1 text-white tracking-widest leading-tight text-center w-full">YOU'VE UNLOCKED <br> <span class="text-[var(--color-primary)] text-2xl md:text-3xl block mt-2">10% OFF</span></p>
                             <p class="text-[10px] md:text-xs text-gray-300 font-heading uppercase tracking-widest final-step-item mt-3 text-center px-2 leading-relaxed max-w-[90%]">Exclusive offer - PPF & Ceramic Coating, tuning labor.</p>
                             <div id="intro-composite-tint" class="viper-composite-container w-full flex justify-center mb-8">
@@ -184,7 +185,6 @@
                         </div>
 
                         <div id="step-2-warning" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 transform translate-y-8 z-20 cursor-pointer">
-                            <div id="step-2-hitbox" class="absolute inset-0 w-full h-full z-[9999] cursor-pointer" ontouchstart=""></div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mb-4 animate-pulse" style="filter: drop-shadow(0 0 20px rgba(255,59,48,0.6)); transform: translateZ(40px);">
                                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="#FF3B30" stroke-width="1.5"></path>
                                 <line x1="12" y1="9" x2="12" y2="13" stroke="#EAEAEA" stroke-width="2"></line>
@@ -354,7 +354,6 @@
                 // Attach the listener to both the button and the entire step-2-warning container card
                 // This ensures that even if iOS Safari misaligns the hit-box, tapping anywhere on the final screen will work.
                 ui.finalOpenSmsBtn.addEventListener('click', triggerSms);
-                ui.step2Warning.addEventListener('click', triggerSms);
                 if (ui.step2Hitbox) {
                     ui.step2Hitbox.addEventListener('click', triggerSms);
                 }
@@ -365,11 +364,13 @@
                     e.preventDefault();
                     
                     ui.step1Content.style.opacity = '0';
+                    ui.step1Hitbox.style.display = 'none';
                     ui.step1Content.style.pointerEvents = 'none';
                     ui.step1Content.style.transform = 'translateY(-20px) scale(0.95)';
                     
                     setTimeout(() => {
                         ui.step2Warning.style.opacity = '1';
+                        ui.step2Hitbox.style.display = 'block';
                         ui.step2Warning.style.pointerEvents = 'auto';
                         ui.step2Warning.style.transform = 'translateY(0) scale(1)';
                     }, 300);
