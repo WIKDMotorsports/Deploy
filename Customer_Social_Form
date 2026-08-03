@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Feature Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-background: #0A0A0A;
+            --color-text: #EAEAEA;
+            --color-text-muted: #a1a1aa;
+            --color-primary: #FF3B30;
+            --color-success: #22c55e;
+            --color-surface: #141414;
+            --color-surface-hover: #1c1c1c;
+            --color-border: #2A2A2A;
+            --color-danger: #ef4444;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        
+        html { box-sizing: border-box; }
+        *, *:before, *:after { box-sizing: inherit; }
+        
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 42rem; /* Slightly narrower for a form */
+            margin: 0 auto; 
+        }
+        
+        .bg-surface { background-color: var(--color-surface); }
+        .border { border: 1px solid var(--color-border); }
+        .rounded-2xl { border-radius: 1rem; }
+        .shadow-lg { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+        .p-8 { padding: 2rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        
+        .text-center { text-align: center; }
+        .text-white { color: #fff; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .font-bold { font-weight: 700; }
+        .uppercase { text-transform: uppercase; }
+        
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .gap-4 { gap: 1rem; }
+        .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+        
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-element {
+            background-color: #0A0A0A;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+            font-family: var(--font-body);
+        }
+        
+        .form-element:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 59, 48, 0.2);
+            border-color: var(--color-primary);
+        }
+        
+        .form-element::placeholder { color: #555; }
+
+        .section-divider {
+            height: 1px;
+            background-color: var(--color-border);
+            margin: 1.5rem 0;
+        }
+
+        .btn {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            width: 100%;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: #E03024;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-text);
+            border-color: var(--color-border);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            border-color: var(--color-text-muted);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .hidden { display: none !important; }
+
+        .success-state {
+            text-align: center;
+            padding: 2rem 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--color-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            font-size: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-text {
+            color: var(--color-danger);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            min-height: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bg-surface border rounded-2xl shadow-lg p-8">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-white uppercase" style="font-family: var(--font-heading);">Vehicle Feature Info</h1>
+                <p class="mt-2 text-sm" style="color: var(--color-text-muted);">Optional form to drop your IG and mods so we can tag you when we post your car!</p>
+            </div>
+
+            <!-- Main Form -->
+            <form id="intakeForm" class="space-y-4">
+                
+                <!-- Customer Info Section -->
+                <div class="form-group">
+                    <label class="form-label">Contact Info</label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="custName" placeholder="First Name" required class="form-element">
+                    <input type="text" id="custIg" placeholder="@Your_Instagram" class="form-element">
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Vehicle Info Section -->
+                <div class="form-group">
+                    <label class="form-label">Vehicle Details</label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <input type="number" id="vehYear" placeholder="Year" min="1900" max="2030" required class="form-element">
+                    <input type="text" id="vehMake" placeholder="Make" required class="form-element">
+                    <input type="text" id="vehModel" placeholder="Model" required class="form-element">
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Mods Section -->
+                <div class="form-group">
+                    <label class="form-label">Current Mods</label>
+                    <textarea id="priorMods" placeholder="List your current modifications..." rows="3" class="form-element"></textarea>
+                </div>
+                
+                <div class="form-group mt-4">
+                    <label class="form-label">Future Goals</label>
+                    <textarea id="futureGoals" placeholder="Any future plans for the build?" rows="3" class="form-element"></textarea>
+                </div>
+
+                <div id="errorMsg" class="error-text"></div>
+
+                <button type="submit" id="submitBtn" disabled class="btn btn-primary mt-6">Submit Info</button>
+            </form>
+
+            <!-- Success State (Hidden by default) -->
+            <div id="successState" class="success-state hidden">
+                <div class="success-icon">✓</div>
+                <h2 class="text-3xl font-bold text-white uppercase mb-2" style="font-family: var(--font-heading);">Info Received</h2>
+                <p style="color: var(--color-text-muted);" class="mb-6">Thanks! If we post your run, we'll make sure to tag you and list your mods.</p>
+                <button type="button" id="resetBtn" class="btn btn-outline text-sm">Submit Another Vehicle</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Setup Firebase config depending on environment (platform vs standalone)
+        const isPlatform = typeof __firebase_config !== 'undefined';
+        
+        const firebaseConfig = isPlatform 
+            ? JSON.parse(__firebase_config) 
+            : {
+                // Fallback to the user's original config if run independently outside the platform
+                apiKey: "AIzaSyD27xD4cCvzYFbdKLOdtF3sxLAPnPpQLo8",
+                authDomain: "activity-log-7d4d6.firebaseapp.com",
+                projectId: "activity-log-7d4d6",
+                storageBucket: "activity-log-7d4d6.appspot.com",
+                messagingSenderId: "751457913972",
+                appId: "1:751457913972:web:ce8972d2aa78c215039521",
+                measurementId: "G-VJEJDWM1NW"
+            };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Define strict data paths compliant with platform rules
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const collectionName = 'customer_mod_requests';
+        const dbPath = isPlatform 
+            ? `artifacts/${appId}/public/data/${collectionName}` 
+            : collectionName;
+
+        // UI Elements
+        const intakeForm = document.getElementById('intakeForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const successState = document.getElementById('successState');
+        const resetBtn = document.getElementById('resetBtn');
+
+        async function authenticate() {
+            try {
+                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (token) {
+                    await signInWithCustomToken(auth, token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                submitBtn.disabled = false;
+            } catch (err) {
+                console.error("Auth error:", err);
+                errorMsg.textContent = 'Unable to connect to the database. Please try refreshing.';
+            }
+        }
+
+        intakeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Ensure auth is complete before proceeding
+            if (!auth.currentUser) {
+                errorMsg.textContent = "Still connecting to server. Please wait a moment.";
+                return;
+            }
+
+            // Gather inputs
+            const custName = document.getElementById('custName').value.trim();
+            const custIg = document.getElementById('custIg').value.trim();
+            const vehYear = document.getElementById('vehYear').value.trim();
+            const vehMake = document.getElementById('vehMake').value.trim();
+            const vehModel = document.getElementById('vehModel').value.trim();
+            const priorMods = document.getElementById('priorMods').value.trim();
+            const futureGoals = document.getElementById('futureGoals').value.trim();
+
+            if (!custName || !vehMake || !vehModel) {
+                errorMsg.textContent = "Please fill out your first name and vehicle details.";
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            errorMsg.textContent = '';
+
+            try {
+                // Write directly to the database
+                await addDoc(collection(db, dbPath), {
+                    customerName: custName,
+                    customerInstagram: custIg,
+                    vehicleYear: vehYear,
+                    vehicleMake: vehMake,
+                    vehicleModel: vehModel,
+                    priorMods: priorMods,
+                    futureGoals: futureGoals,
+                    status: 'feature_info', 
+                    createdAt: serverTimestamp()
+                });
+
+                // Show success screen
+                intakeForm.classList.add('hidden');
+                successState.classList.remove('hidden');
+                intakeForm.reset();
+
+            } catch (err) {
+                console.error("Error saving request:", err);
+                errorMsg.textContent = "Failed to send request. " + err.message;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Info';
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            successState.classList.add('hidden');
+            intakeForm.classList.remove('hidden');
+        });
+
+        // Start the process
+        authenticate();
+
+    </script>
+</body>
+</html>
