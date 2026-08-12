@@ -68,11 +68,8 @@
     
     /* --- DESKTOP VERTICAL TICKER --- */
     .ticker-wrapper {
-      position: relative;
-      flex-shrink: 0;
       width: 100%;
-      max-width: 40rem;
-      height: 100vh;
+      height: 100%;
       overflow-y: scroll;
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
@@ -105,20 +102,20 @@
       will-change: transform;
     }
     .gradient-overlay-top, .gradient-overlay-bottom {
-      position: sticky;
+      position: absolute;
       left: 0;
       width: 100%;
-      height: 10rem;
+      height:  20rem;
       pointer-events: none;
       z-index: 10;
     }
     .gradient-overlay-top {
-      top: 0;
+      top: -1px;
       background: linear-gradient(to bottom, #0A0A0A, rgba(10, 10, 10, 0));
     }
     .gradient-overlay-bottom {
-      bottom: 0;
-      background: linear-gradient(to top, #0A0A0A, rgba(10, 10, 10, 0));
+      bottom: -1px;
+      background: linear-gradient(to top, #0A0A0A 0%, #0A0A0A 15%, rgba(10, 10, 10, 0) 100%);
     }
 
     /* --- HERO & PARALLAX (Desktop Only) --- */
@@ -166,9 +163,11 @@
 <!-- Main Content Container -->
 <div class="relative z-10 flex flex-col lg:flex-row justify-end lg:justify-center items-end lg:items-center lg:min-h-screen lg:p-24 lg:gap-12">
 <!-- DESKTOP-ONLY: Vertical Image Ticker -->
-<div class="ticker-wrapper hidden lg:block" id="tickerWrapper">
+<div class="relative hidden lg:block flex-shrink-0 w-full max-w-[40rem] h-screen">
 <div class="gradient-overlay-top"></div>
+<div class="ticker-wrapper w-full h-full" id="tickerWrapper">
 <div class="ticker-inner" id="tickerInner"><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 1" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0455_copy_1600x.jpg?v=1705072623"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 2" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0480_copy_1600x.jpg?v=1705072622"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 3" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0484_copy_1600x.jpg?v=1705072622"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 4" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0472_copy_1600x.jpg?v=1705072622"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 5" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0486_copy_1600x.jpg?v=1705072622"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 6" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0476_copy_1600x.jpg?v=1705072622"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 7" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0465_copy_1600x.jpg?v=1705072622"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 8" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0469_copy_1600x.jpg?v=1705072621"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 9" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0462_copy_1600x.jpg?v=1705072623"/></div><div class="image-ticker-card"><img alt="BMW M3 F80 Gallery Image 10" src="https://www.wikdmotorsports.com/cdn/shop/files/DSC_0464_copy_1600x.jpg?v=1705072621"/></div></div>
+</div>
 <div class="gradient-overlay-bottom"></div>
 </div>
 <!-- Content Card -->
