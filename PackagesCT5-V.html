@@ -376,6 +376,16 @@
         }
 
         /* --- ANIMATIONS --- */
+        @keyframes fadeInFromZero {
+            0% { opacity: 0; }
+        }
+        .fade-in-load {
+            animation: fadeInFromZero 1.5s ease-out;
+        }
+        .opacity-0-force {
+            opacity: 0 !important;
+        }
+
         @keyframes shake {
             0% { transform: translate(0, 0); }
             25% { transform: translate(-2px, -2px); }
@@ -419,7 +429,7 @@
         <div class="mb-12 relative">
             <!-- Add a slight technical border frame to the image -->
             <div class="absolute inset-0 border border-white/10 pointer-events-none z-10"></div>
-            <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/BW.jpg?v=1758055597" alt="CT5-V Blackwing" class="w-full h-auto" style="border: 1px solid var(--color-border); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8));" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/0A0A0A/EAEAEA?text=CT5-V+Blackwing';">
+            <img src="https://cdn.shopify.com/s/files/1/0671/4635/0805/files/BW.jpg?v=1758055597" alt="CT5-V Blackwing" class="w-full h-auto opacity-0-force" style="border: 1px solid var(--color-border); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8));" onload="this.classList.remove('opacity-0-force'); this.classList.add('fade-in-load');" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/0A0A0A/EAEAEA?text=CT5-V+Blackwing';">
         </div>
 
         <!-- Budget Control Panel -->
