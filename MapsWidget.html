@@ -186,19 +186,40 @@
         /* --- END MAP MARKER STYLES --- */
 
         /* --- RADAR OVERLAY STYLES --- */
-        #scanline {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px;
-            z-index: 1000; pointer-events: none; opacity: 0.15;
+        .radar-rings {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1200px;
+            height: 1200px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 59, 48, 0.3);
+            /* Draws repeating concentric circles automatically */
+            background: repeating-radial-gradient(circle, transparent 0, transparent 148px, rgba(255, 59, 48, 0.3) 148px, rgba(255, 59, 48, 0.3) 150px);
+            pointer-events: none;
+            z-index: 0;
         }
-        #radar-sweep {
-            position: absolute; top: -100%; left: 0; right: 0; height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(255, 59, 48, 0.08), transparent);
-            animation: sweep 5s infinite linear;
-            z-index: 1000; pointer-events: none;
+
+        .radar-sweep-circle {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            width: 1200px;
+            height: 1200px;
+            border-radius: 50%;
+            /* The sweeping fade effect using a conic gradient */
+            background: conic-gradient(from 0deg, rgba(255, 59, 48, 0) 0%, rgba(255, 59, 48, 0.05) 75%, rgba(255, 59, 48, 0.5) 100%);
+            animation: radar-spin 4s linear infinite;
+            pointer-events: none;
+            z-index: 1;
         }
-        @keyframes sweep { 0% { top: -100%; } 100% { top: 100%; } }
+        
+        /* Must preserve the -50% translation while rotating */
+        @keyframes radar-spin { 
+            0% { transform: translate(-50%, -50%) rotate(0deg); } 
+            100% { transform: translate(-50%, -50%) rotate(360deg); } 
+        }
 
         /* Override MapLibre default cursor when hovered */
         .maplibregl-canvas-container.maplibregl-interactive { cursor: default; }
@@ -271,9 +292,6 @@
         <!-- Map wrapper uses flexbox to automatically fill space -->
         <div id="map-wrapper">
             <div id="map"></div>
-            <!-- Tactical Radar Overlays -->
-            <div id="scanline"></div>
-            <div id="radar-sweep"></div>
             <!-- Border overlay -->
             <div id="map-border-overlay"></div>
         </div>
@@ -651,6 +669,10 @@
 
             el.innerHTML = `
                 <div class="ping-container ${visualClass}" style="${pingStyle}" data-location-key="${config.name.split(' ')[1].toLowerCase()}">
+                    <!-- New Circular Radar Attached to the Location -->
+                    <div class="radar-rings"></div>
+                    <div class="radar-sweep-circle"></div>
+
                     <a href="${mapsUrl}" target="_blank" class="custom-tooltip">
                         ${config.name}
                     </a>
