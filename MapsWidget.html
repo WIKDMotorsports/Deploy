@@ -94,6 +94,16 @@
             pointer-events: none;
             z-index: 1001; /* MapLibre controls sit around z-index 2-10 */
         }
+
+        /* Mobile-specific thicker bottom bezel */
+        @media (max-width: 768px) {
+            #map-border-overlay {
+                box-shadow: 
+                    inset 20px 0 0 0 rgba(0, 0, 0, 1), /* Left side */
+                    inset -20px 0 0 0 rgba(0, 0, 0, 1), /* Right side */
+                    inset 0 -100px 0 0 rgba(0, 0, 0, 1); /* Expanded bottom bezel for mobile */
+            }
+        }
         /* --- END CORE PAGE LAYOUT STYLES --- */
 
         /* --- NEW TOP BAR CUSTOM STYLES --- */
@@ -175,6 +185,21 @@
         .ping-container:hover .custom-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); transition: opacity 0.2s, transform 0.2s; }
         /* --- END MAP MARKER STYLES --- */
 
+        /* --- RADAR OVERLAY STYLES --- */
+        #scanline {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            z-index: 1000; pointer-events: none; opacity: 0.15;
+        }
+        #radar-sweep {
+            position: absolute; top: -100%; left: 0; right: 0; height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 59, 48, 0.08), transparent);
+            animation: sweep 5s infinite linear;
+            z-index: 1000; pointer-events: none;
+        }
+        @keyframes sweep { 0% { top: -100%; } 100% { top: 100%; } }
+
         /* Override MapLibre default cursor when hovered */
         .maplibregl-canvas-container.maplibregl-interactive { cursor: default; }
     </style>
@@ -246,6 +271,9 @@
         <!-- Map wrapper uses flexbox to automatically fill space -->
         <div id="map-wrapper">
             <div id="map"></div>
+            <!-- Tactical Radar Overlays -->
+            <div id="scanline"></div>
+            <div id="radar-sweep"></div>
             <!-- Border overlay -->
             <div id="map-border-overlay"></div>
         </div>
@@ -525,7 +553,7 @@
         // Center directly on Motorsports
         const targetLocation = locations.motorsports.lnglat;
         const defaultZoom = 15;
-        const hoverZoom = 17;
+        const hoverZoom = 16.5;
         const punchInZoom = 18;
 
         // Initialize the Vector Map
@@ -676,13 +704,14 @@
 
                 pingContainer.classList.add('crosshair-active');
                 
-                // MapLibre flyTo uses duration in milliseconds
-                map.flyTo({ center: targetLngLat, zoom: hoverZoom, speed: 1.5, duration: 250 });
+                // Tilt the camera to 45 degrees as it begins to zoom
+                map.flyTo({ center: targetLngLat, zoom: hoverZoom, speed: 1.5, duration: 250, pitch: 45 });
 
                 punchInTimeout = setTimeout(() => {
                     if (isMapHovered && activeMarker === targetMarker) {
                         pingContainer.classList.add('punch-in-active');
-                        map.flyTo({ center: targetLngLat, zoom: punchInZoom, speed: 1.2, duration: 400 });
+                        // Maximum tilt (60 degrees) for the final punch-in
+                        map.flyTo({ center: targetLngLat, zoom: punchInZoom, speed: 1.2, duration: 400, pitch: 60 });
                     }
                 }, 600);
 
@@ -695,7 +724,8 @@
 
                     document.querySelectorAll('.ping-circle').forEach(c => c.style.animationPlayState = 'running');
 
-                    map.flyTo({ center: targetLocation, zoom: defaultZoom, speed: 1.5, duration: 250 });
+                    // Reset camera pitch back to 0 (straight down)
+                    map.flyTo({ center: targetLocation, zoom: defaultZoom, speed: 1.5, duration: 250, pitch: 0 });
                 }
             }
         }
@@ -711,7 +741,8 @@
                 clearTimeout(punchInTimeout);
                 document.querySelectorAll('.ping-container').forEach(c => c.classList.remove('crosshair-active', 'punch-in-active'));
                 document.querySelectorAll('.ping-circle').forEach(c => c.style.animationPlayState = 'running');
-                map.flyTo({ center: targetLocation, zoom: defaultZoom, speed: 1.5, duration: 250 });
+                // Reset camera pitch back to 0
+                map.flyTo({ center: targetLocation, zoom: defaultZoom, speed: 1.5, duration: 250, pitch: 0 });
             }
         });
 
